@@ -2,15 +2,22 @@
 /* (c) 2023 Etienne Bagnoud */
 namespace BizCuit;
 
+require('bxquery.php');
+require('bxobject.php');
+
+use BizCuit\BXObject\BXObject;
 use Exception;
 use stdClass;
 
+
+
 class BexioAPI {
-	private $endpoint = 'https://api.bexio.com/';
-	private $c;
-	private $userid = null;
-    private $ownerid = null;
-	private $headers;
+	protected $endpoint = 'https://api.bexio.com/';
+	protected $c;
+	protected $userid = null;
+    protected $ownerid = null;
+	protected $headers;
+	protected $class;
 
 	function __construct(String $token) {
 		$this->c = curl_init();
@@ -20,15 +27,23 @@ class BexioAPI {
 		];
 	}
 
-	private function init() {
+	function getHeaders() {
+		return $this->headers;
+	}
+
+	function getCurl() {
+		return $this->c;
+	}
+
+	protected function init() {
 		curl_reset($this->c);
 		curl_setopt($this->c, CURLOPT_HTTPHEADER, $this->headers);
 		curl_setopt($this->c, CURLOPT_RETURNTRANSFER, true);
 	}
-    private function error(String $msg) {
+    protected function error(String $msg) {
         error_log($msg);
     }
-	private function do() {
+	protected function do() {
 		$data = curl_exec($this->c);
 		$code = curl_getinfo($this->c,  CURLINFO_HTTP_CODE);
 		if (!$data) { error_log("ERROR: $code => $data\n"); return null; }
@@ -51,7 +66,11 @@ class BexioAPI {
 				return null;
 		}
         try {
-		    return json_decode($data);
+		    $result = json_decode($data);
+			if (is_array($result)) { 
+				return array_map(function ($e) { return new $this->class($e); }, $result);
+			}
+			return new $this->class($result);
         } catch (Exception $e) {
             error_log("ERROR " . $e->getMessage() . "\n");
             return null;
@@ -77,85 +96,51 @@ class BexioAPI {
     function setCurrentOwner (Int $ownerid) {
         $this->ownerid = $ownerid;
     }
+}
 
-    /*** Contacts  ***/
-    function initContact(): Array {
-        return [
-            'contact_type_id' => 1,
-            'name_1' => '',
-            'name_2' => null,
-            'salutation_id' => null,
-            'salutation_form' => null,
-            'titel_id' => null,
-            'birthday' => null,
-            'address' => null,
-            'postcode' => null,
-            'city' => null,
-            'country_id' => null,
-            'mail' => null,
-            'mail_second' => null,
-            'phone_fixed' => null,
-            'phone_fixed_second' => null,
-            'phone_mobile' => null,
-            'fax' => null,
-            'url' => null,
-            'skype_name' => null,
-            'remarks' => null,
-            'language_id' => null,
-            'contact_group_ids' => null,
-            'contact_branch_ids' => null
-        ];
-    }
+trait tBexioV2Api {
+	protected $api_version = '2.0';
+}
 
-	function createContact (Array $contact): False|Int {
-		if (empty($contact['owner_id']) && ($this->ownerid || $this->userid)) { $contact['owner_id'] = $this->userid ? $this->userid : $this->ownerid; }
-		if (empty($contact['user_id'])  && $this->userid) { $contact['user_id'] = $this->userid; }
+trait tBexioV3Api {
+	protected $api_version = '3.0';
+}
 
-        if (empty($contact['name_1']) || empty($contact['contact_type_id']) || empty($contact['user_id']) || empty($contact['owner_id'])) {
-            return $this->error("Missing required fiedl for note");
-        }
+trait tBexioV4Api {
+	protected $api_version = '4.0';
+}
 
+trait tBexioCollection {
+	function search (BXQuery\BXQuery $query, Int $offset = 0, Int $limit = 500) {
 		$this->init();
-		curl_setopt($this->c, CURLOPT_URL, $this->endpoint . '2.0/contact');
+		curl_setopt($this->c, CURLOPT_URL, $this->endpoint . $this->api_version . '/' . $this->type . sprintf('?limit=%d&offset=%d', $limit, $offset));
 		curl_setopt($this->c, CURLOPT_POST, true);
-		$body = json_encode($contact);
-		curl_setopt($this->c, CURLOPT_POSTFIELDS, $body);
-		$result = $this->do();
-		if ($result === null) { return false; }
-		return $result->id;
-	}
-
-	function createContactRelation(Int $sup, Int $sub, String $description = 'Contact'): False|Int {
-		$this->init();
-		curl_setopt($this->c, CURLOPT_URL, $this->endpoint . '2.0/contact_relation');
-		curl_setopt($this->c, CURLOPT_POST, true);
-		curl_setopt($this->c, CURLOPT_POSTFIELDS, json_encode([
-			'contact_id' => $sup,
-			'contact_sub_id' => $sub,
-			'description' => $description
-		]));
+		curl_setopt($this->c, CURLOPT_POSTFIELDS, $query->toJson());
 
 		$result = $this->do();
 		if ($result === null) { return false; }
-		return $result->id;
+		return $result;
 	}
 
-    /*** NOTE  ***/
-    /* return an empty note */
-    function initNote (): Array {
-        return [
-            'subject' => '',
-            'info' => '',
-		    'contact_id' => null,
-		    'pr_project_id' => null,
-		    'entry_id' => null,
-		    'module_id' => null
-	    ];
-    }
-
-	function deleteNote(Int $noteid): Bool {
+	function list (Int $offset = 0, Int $limit = 500) {
 		$this->init();
-		curl_setopt($this->c, CURLOPT_URL, $this->endpoint . '2.0/note/' . $noteid);
+		curl_setopt($this->c, CURLOPT_URL, $this->endpoint . $this->api_version . '/' . $this->type . sprintf('?limit=%d&offset=%d', $limit, $offset));
+
+		$result = $this->do();
+        if ($result === null) { return false; }
+        return $result;
+	}
+}
+
+trait tBexioObject {
+	function __construct (BexioAPI $from) {
+		$this->c = $from->getCurl();
+		$this->headers = $from->getHeaders();
+	}
+
+	function delete(Int|String $id): Bool {
+		$this->init();
+		curl_setopt($this->c, CURLOPT_URL, $this->endpoint . $this->api_version . '/' . $this->type . '/' . strval($id));
 		curl_setopt($this->c, CURLOPT_CUSTOMREQUEST, 'DELETE');
 
 		$result = $this->do();
@@ -163,50 +148,114 @@ class BexioAPI {
         return $result->succes;
 	}
 
-    /* Create a note, return id */
-	function createNote(Array $note): False|Int {
-		if (empty($note['user_id']) && $this->userid) { $note['user_id'] = $this->userid; }
-		if (empty($note['event_start']) && $this->userid) { $note['event_start'] = (new \DateTime())->format('Y-m-d H:m:s'); }
-
-        if (empty($note['user_id']) || empty($note['event_start']) || empty($note['subject'])) {
-            return $this->error("Missing required field for note");
-        }
-
+	function get (Int|String $id) {
 		$this->init();
-		curl_setopt($this->c, CURLOPT_URL, $this->endpoint . '2.0/note');
-		curl_setopt($this->c, CURLOPT_POST, true);
-		curl_setopt($this->c, CURLOPT_POSTFIELDS, json_encode($note));
+		curl_setopt($this->c, CURLOPT_URL, $this->endpoint . $this->api_version .'/' . $this->type . '/' .  strval($id));
 
 		$result = $this->do();
 		if ($result === null) { return false; }
-		return intval($result->id);
+		error_log('kb_status ::: ' . $result->kb_item_status_id);
+		return $result;
 	}
 
-    /* A note with specific subject exists */
-	function hasNote(String $subject): False|Int {
+	function set (BXObject $content) {
 		$this->init();
-		curl_setopt($this->c, CURLOPT_URL, $this->endpoint . '2.0/note/search');
+		echo $this->endpoint . $this->api_version .'/' . $this->type . '/' .  $content->getId() . "\n";
+		curl_setopt($this->c, CURLOPT_URL, $this->endpoint . $this->api_version .'/' . $this->type . '/' .  $content->getId());
 		curl_setopt($this->c, CURLOPT_POST, true);
-		$body = json_encode(
-			[[
-				'field' => 'subject',
-				'value' => $subject,
-				'criteria' => '='
-			]]
-		);
+		curl_setopt($this->c, CURLOPT_POSTFIELDS, $content->toJson());
 
-		curl_setopt($this->c, CURLOPT_POSTFIELDS, $body);
-		$data = $this->do();
-		if ($data === null) { return false; }
-		return is_array($data) ? (count($data) > 0 ? $data[0]->id : false) : false;
-	}
-
-    /* Get a note by id */
-	function getNote(Int $noteid): False|stdClass {
-		$this->init();
-		curl_setopt($this->c, CURLOPT_URL, $this->endpoint . '2.0/note/'. $noteid);
 		$result = $this->do();
-        if ($result === null) { return false; }
-        return $result;
+		if ($result === null) { return false; }
+		return $result;
 	}
+}
+
+trait tBexioNumberObject {
+	function getByNumber (Int|String $id) {
+		$this->init();
+		curl_setopt($this->c, CURLOPT_URL, $this->endpoint . $this->api_version . '/' . $this->type . '/search');
+		curl_setopt($this->c, CURLOPT_POST, true);
+		curl_setopt($this->c, CURLOPT_POSTFIELDS, json_encode([[
+			'field' => $this->class::NR,
+			'value' => strval($id),
+			'criteria' => '='
+		]]));
+
+		$result = $this->do();
+		if ($result === null) { return false; }
+		return $result[0];
+	}
+}
+
+trait tBexioPDFObject {
+	protected $pdf = 'pdf';
+
+	function getPDF(Int|String $id): False|BXObject {
+		$this->init();
+		curl_setopt($this->c, CURLOPT_URL, $this->endpoint . $this->api_version . '/' . $this->type . '/' . strval($id) . '/' . $this->pdf);
+		$result = $this->do();
+		error_log(var_export($result, true));
+		if ($result === null) { return false; }
+		return $result;
+	}
+}
+
+trait tBexioProjectObject {
+	protected $project_attr_name = 'project_id';
+	function listByProject (Int $projectId): False|Array {
+		$this->init();
+		/* too bad, can't search by project_id */
+		curl_setopt($this->c, CURLOPT_URL, $this->endpoint . $this->api_version . '/' . $this->type); 
+
+		$result = $this->do();
+		if ($result === null) { return false; }
+		$out = [];
+		foreach($result as $object) {
+			if ($object->{$this->project_attr_name} === $projectId) { $out[] = $object; }
+		}
+		return $out;
+	}
+}
+
+class BexioCountry extends BexioAPI {
+	protected $type = 'country';
+	protected $class = 'BizCuit\BXObject\Country';
+
+	use tBexioV2Api, tBexioObject, tBexioCollection;
+}
+
+class BexioQuote extends BexioAPI {
+	protected $type = 'kb_offer';
+	protected $class = 'BizCuit\BXObject\Quote';
+
+	use tBexioV2Api, tBexioObject, tBexioPDFObject, tBexioProjectObject, tBexioCollection, tBexioNumberObject;
+}
+
+class BexioInvoice extends BexioAPI {
+	protected $type = 'kb_invoice';
+	protected $class = 'BizCuit\BXObject\Invoice';
+
+	use tBexioV2Api, tBexioObject, tBexioPDFObject, tBexioProjectObject, tBexioCollection, tBexioNumberObject;
+}
+
+class BexioOrder extends BexioAPI {
+	protected $type = 'kb_order';
+	protected $class = 'BizCuit\BXObject\Order';
+
+	use tBexioV2Api, tBexioObject, tBexioPDFObject, tBexioProjectObject, tBexioCollection, tBexioNumberObject;
+}
+
+class BexioContact extends BexioAPI {
+	protected $type = 'contact';
+	protected $class = 'BizCuit\BXObject\Contact';
+
+	use tBexioV2Api, tBexioObject, tBexioCollection;
+}
+
+class BexioProject extends BexioAPI {
+	protected $type = 'pr_project';
+	protected $class = 'BizCuit\BXObject\Project';
+
+	use tBexioV2Api, tBexioObject, tBexioCollection, tBexioNumberObject;
 }
