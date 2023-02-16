@@ -12,6 +12,7 @@ abstract class BXObject {
     const NR = 'nr';
     const createProperties = [];
     const nullableProperties = [];
+    const readonly = false;
 
 	function __construct(stdClass $object) {
 		$this->content = $object;		
@@ -48,6 +49,11 @@ abstract class BXObject {
 		$this->content->{$name} = $value;
 		return $this->content->{$name};
 	}
+}
+
+class ROObject extends BXObject {
+    const NR = null;
+    const readonly = true; 
 }
 
 class Country extends BXObject {
@@ -91,6 +97,42 @@ class Contact extends BXObject {
 
     const nullableProperties = [
         'salutation_id'
+    ];
+}
+
+class ContactRelation extends BXObject {
+    const NR = null;
+    const createProperties = [
+        'contact_id',
+        'contact_sub_id',
+        'description'
+    ];
+}
+
+class AdditionalAddress extends BXObject {
+    const NR = null;
+    const createProperties = [
+        'name',
+        'address',
+        'postcode',
+        'city',
+        'country_id',
+        'subject',
+        'description'
+    ];
+}
+
+class Note extends BXObject {
+    const NR = null;
+    const createProperties = [
+        'user_id',
+        'event_start',
+        'subject',
+        'info',
+        'contact_id',
+        'pr_project_id',
+        'entry_id',
+        'module_id'
     ];
 }
 

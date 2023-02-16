@@ -159,6 +159,8 @@ trait tBexioObject {
 	}
 
 	function set (BXObject $content) {
+		if ($content::readonly) { return false; }
+
 		$this->init();
 		echo $this->endpoint . $this->api_version .'/' . $this->type . '/' .  $content->getId() . "\n";
 		curl_setopt($this->c, CURLOPT_URL, $this->endpoint . $this->api_version .'/' . $this->type . '/' .  $content->getId());
@@ -258,4 +260,32 @@ class BexioProject extends BexioAPI {
 	protected $class = 'BizCuit\BXObject\Project';
 
 	use tBexioV2Api, tBexioObject, tBexioCollection, tBexioNumberObject;
+}
+
+class BexioContactRelation extends BexioAPI {
+	protected $type = 'contact_relation';
+	protected $class = 'BizCuit\BXObject\ContactRelation';
+
+	use tBexioV2Api, tBexioObject, tBexioCollection;
+}
+
+class BexioAdditionalAddress extends BexioAPI {
+	protected $type = 'additional_address';
+	protected $class = 'BizCuit\BXObject\AdditionalAddress';
+
+	use tBexioV2Api, tBexioObject, tBexioCollection;
+}
+
+class BexioNote extends BexioAPI {
+	protected $type = 'note';
+	protected $class = 'BizCuit\BXObject\Note';
+
+	use tBexioV2Api, tBexioObject, tBexioCollection;
+}
+
+class BexioUser extends BexioAPI {
+	protected $type = 'users';
+	protected $class = 'BizCuit\BXObject\ROObject';
+
+	use tBexioV3Api, tBexioObject, tBexioCollection;
 }
