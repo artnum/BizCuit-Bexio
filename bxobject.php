@@ -12,16 +12,23 @@ abstract class BXObject {
     const NR = 'nr';
     const createProperties = [];
     const nullableProperties = [];
+    const mapProperties = [];
     const readonly = false;
+    protected $changes = [];
 
-	function __construct(stdClass $object) {
-		$this->content = $object;		
-        foreach ($this::createProperties as $prop) {
-            if (!property_exists($this->content, $prop)) { $this->content->{$prop} = null; }
+	function __construct(stdClass $object = new stdClass()) {
+        $this->content = new stdClass();
+        foreach($this::createProperties as $prop) {
+            $this->{$prop} = null;
         }
+        foreach ($object as $prop => $value) {
+            $this->{$prop} = $value;
+        }
+        $this->changes = [];
 	}
 
 	function getId() {
+        if (!isset($this->content->{$this::ID})) { return null; }
 		return $this->content->{$this::ID};
 	}
 
@@ -40,13 +47,28 @@ abstract class BXObject {
 		return json_encode($outClass);
 	}
 
+    function changesToJson() {
+        $outClass = new stdClass();
+        foreach($this->changes as $key) {
+            $outClass->{$key} = $this->{$key};
+        }
+        return json_encode($outClass);
+    }
+
 	function __get($name) {
+        if (isset($this::mapProperties[$name])) {
+            $name = $this::mapProperties[$name];
+        }
 		if (property_exists($this->content, $name))  { return $this->content->{$name}; }
 		return false;
 	}
 
 	function __set($name, $value) {
+        if (isset($this::mapProperties[$name])) {
+            $name = $this::mapProperties[$name];
+        }
 		$this->content->{$name} = $value;
+        if (!in_array($name, $this->changes)) { $this->changes[] = $name; }
 		return $this->content->{$name};
 	}
 }
@@ -61,7 +83,10 @@ class Country extends BXObject {
     const createProperties = [
         'name',
         'name_short',
-        'iso_3166_alpha2'
+        'iso3166_alpha2'
+    ];
+    const mapProperties = [
+        'iso_3166_alpha2' => 'iso3166_alpha2'
     ];
 }
 

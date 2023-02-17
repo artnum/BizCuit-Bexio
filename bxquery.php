@@ -36,7 +36,7 @@ abstract class BXQuery {
 		$field = strtolower($field);
 		$criteria = strtolower($criteria);
 
-		if (!in_array($criteria, BXQuery::allowedCriteria)) { return false; }
+		if (!in_array($criteria, $this::allowedCriteria)) { return false; }
 		if (!in_array($field, $this->allowedField)) { return false; }
 		
 		$q = new stdClass();
