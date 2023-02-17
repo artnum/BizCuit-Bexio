@@ -32,7 +32,6 @@ class BexioCTX {
 		while(substr($url, 0, 1) === '/') { $url = substr($url, 1); }
 		// remove double slashes (bexio api return an error else)
 		$url = str_replace('//', '/', $url);
-
 		curl_setopt($this->c, CURLOPT_URL, $this::endpoint . $url);
 	}
 
@@ -123,7 +122,7 @@ class BexioCTX {
 			curl_setopt($this->c, CURLOPT_RETURNTRANSFER, true);
 			$this->set_method($this->method);
 			$this->set_url($this->url);
-			$this->set_body($this->body);
+			if ($this->method !== 'get' && $this->method !== 'head') { $this->set_body($this->body); }
 			$data = curl_exec($this->c);
 			$code = curl_getinfo($this->c,  CURLINFO_HTTP_CODE);
 			$type = curl_getinfo($this->c, CURLINFO_CONTENT_TYPE);
@@ -225,15 +224,21 @@ trait tBexioObject {
 	function set (BXObject $content) {
 		if ($content::readonly) { return false; }
 
-		if (empty($content->user_id) && in_array('user_id', $content::createProperties)) { $this->ctx->user_id; }
-		if (empty($content->owner_id) && in_array('owner_id', $content::createProperties)) { $this->ctx->owner_id; }
+		if ((empty($content->user_id) || is_null($content->user_id)) && in_array('user_id', $content::createProperties)) { 
+			$content->user_id = $this->ctx->user_id; 
+		}
+		if ((empty($content->owner_id) || is_null($content->owner_id)) && in_array('owner_id', $content::createProperties)) {
+			$content->owner_id = $this->ctx->owner_id; 
+		}
 
 		if (!$content->getId()) {
 			$this->ctx->url = $this->api_version .'/' . $this->type;
+			$this->ctx->method = 'post';
 		} else {
 			$this->ctx->url = $this->api_version .'/' . $this->type . '/' .  $content->getId();
+			$this->ctx->method = 'put';
 		}
-		$this->ctx->method = 'post';
+
 		$this->ctx->body = $content->toJson();
 		return new $this->class($this->ctx->fetch());
 	}
@@ -243,7 +248,11 @@ trait tBexioObject {
 
 		if (!$content->getId()) { return $this->set($content); }
 		$this->ctx->url = $this->api_version .'/' . $this->type . '/' .  $content->getId();
-		$this->ctx->method = 'post';
+		/* API BUG according to documentation it should be "patch" but when 
+		 * using "patch", I get error 404 as when use "post" with partial data 
+		 * it update
+		 */
+		$this->ctx->method = 'post'; 
 		$this->ctx->body = $content->changesToJson();
 		return new $this->class($this->ctx->fetch());
 	}

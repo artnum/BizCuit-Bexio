@@ -85,6 +85,12 @@ class Country extends BXObject {
         'name_short',
         'iso3166_alpha2'
     ];
+
+    /* API BUG when requesting a country, iso_3166_alpha2 is set with the value
+     * you expect to be in iso3166_alpha2 (which is what the documentation 
+     * describe). If you create a country with the attribute iso_3166_alpha2,
+     * the server return an error, so you have to map that property
+     */
     const mapProperties = [
         'iso_3166_alpha2' => 'iso3166_alpha2'
     ];
@@ -93,6 +99,7 @@ class Country extends BXObject {
 class Contact extends BXObject {
     const NR = null;
     const createProperties = [
+        'nr',
         'contact_type_id',
         'name_1',
         'name_2',
@@ -120,6 +127,11 @@ class Contact extends BXObject {
         'owner_id'
     ];
 
+    /* API BUG when requesting a contact, if no salutation are set, the result
+     * will have salutation_id = 0, but when sending back to update, edit or
+     * replace the contact, the server complains with this value not being to
+     * "null", so this is to fix that.
+     */
     const nullableProperties = [
         'salutation_id'
     ];
