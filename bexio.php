@@ -202,6 +202,10 @@ trait tBexioCollection {
 }
 
 trait tBexioObject {
+	function new ():BXObject {
+		return new $this->class();
+	}
+
 	function delete(Int|BXObject $id): Bool {
 		if ($id instanceof BXObject) {
 			$id = $id->getId();
