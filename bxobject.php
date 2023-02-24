@@ -7,7 +7,6 @@ use BizCuit\BXQuery\BXQuery;
 use stdClass;
 
 abstract class BXObject {
-	protected $content;
     const ID = 'id';
     const NR = 'nr';
     const createProperties = [];
@@ -15,6 +14,7 @@ abstract class BXObject {
     const mapProperties = [];
     const readonly = false;
     protected $changes = [];
+	protected $content;
 
 	function __construct(stdClass $object = new stdClass()) {
         $this->content = new stdClass();
@@ -269,4 +269,57 @@ class Quote extends BXObject {
         'template_slug',
         'positions'
     ];
+}
+
+class File extends BXObject {
+    const createProperties = [
+        'name',
+        'size',
+        'mime',
+        'content'
+    ];
+
+    function __construct(stdClass $object = new stdClass()) {
+        $this->content = new stdClass();
+        foreach($this::createProperties as $prop) {
+            $this->{$prop} = null;
+        }
+        foreach ($object as $prop => $value) {
+            if ($prop === 'content') {
+                $this->{$prop} = base64_decode($value);
+                continue;
+            }
+            $this->{$prop} = $value;
+        }
+        $this->changes = [];
+    }
+
+    function toJson() {
+		$outClass = new stdClass();
+        foreach ($this->content as $k => $v) {
+            if ($k === 'content') {
+                $outClass->{$k} = base64_encode($v);
+                continue;
+            }
+            $outClass->{$k} = $v;
+        }
+        foreach ($outClass as $k => $v) {
+            if (!in_array($k, $this::createProperties)) { unset($outClass->{$k}); }
+            /* when requesting data, it appears that null properties are set to 0 and fail to write back */
+            if (in_array($k, $this::nullableProperties) && $outClass->{$k} === 0) { $outClass->{$k} = null; } 
+        }
+        
+		return json_encode($outClass);
+	}
+
+    function changesToJson() {
+        $outClass = new stdClass();
+        foreach($this->changes as $key) {
+            if ($key === 'content') {
+                $outClass->{$key} = base64_encode($this->{$key});
+            }
+            $outClass->{$key} = $this->{$key};
+        }
+        return json_encode($outClass);
+    }
 }

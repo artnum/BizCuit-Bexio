@@ -277,15 +277,21 @@ trait tBexioNumberObject {
 }
 
 trait tBexioPDFObject {
-	function getPDF(Int|String $id): False|BXObject {
+	function getPDF(Int|BXObject $id):BXObject  {
+		if ($id instanceof BXObject) {
+			$id = $id->getId();
+		}
 		$this->ctx->url = $this->api_version . '/' . $this->type . '/' . strval($id) . '/pdf';
-		return $this->ctx->fetch();
+		return new \BizCuit\BXObject\File($this->ctx->fetch());
 	}
 }
 
 
 trait tBexioProjectObject {
-	function listByProject (Int $projectId): Array {
+	function listByProject (Int|BXObject $projectId): Array {
+		if ($projectId instanceof BXObject) {
+			$projectId = $projectId->getId();
+		}
 		$results = [];
 		$offset = 0;
 		$count = 500;
