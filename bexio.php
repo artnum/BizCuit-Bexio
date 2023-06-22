@@ -188,6 +188,15 @@ trait tBexioV4Api {
 }
 
 trait tBexioCollection {
+	function getIdName ():string {
+		$c = $this->class;
+		return $c::ID;
+	}
+
+	function newQuery ():BXquery {
+		return new $this->query();
+	}
+
 	function search (BXQuery $query, Int $offset = 0, Int $limit = 500) {
 		$this->ctx->url = $this->api_version . '/' . $this->type .'/search' . sprintf('?limit=%d&offset=%d', $limit, $offset);
 		$this->ctx->body = $query->toJson();
@@ -313,6 +322,7 @@ trait tBexioProjectObject {
 class BexioCountry extends BexioAPI {
 	protected $type = 'country';
 	protected $class = 'BizCuit\BXObject\Country';
+	protected $query = 'BizCuit\BXQuery\Coutry';
 
 	use tBexioV2Api, tBexioObject, tBexioCollection;
 }
@@ -320,6 +330,7 @@ class BexioCountry extends BexioAPI {
 class BexioQuote extends BexioAPI {
 	protected $type = 'kb_offer';
 	protected $class = 'BizCuit\BXObject\Quote';
+	protected $query = 'BizCuit\BXQuery\Quote';
 
 	use tBexioV2Api, tBexioObject, tBexioPDFObject, tBexioProjectObject, tBexioCollection, tBexioNumberObject;
 }
@@ -327,6 +338,7 @@ class BexioQuote extends BexioAPI {
 class BexioInvoice extends BexioAPI {
 	protected $type = 'kb_invoice';
 	protected $class = 'BizCuit\BXObject\Invoice';
+	protected $query = 'BizCuit\BXQuery\Invoice';
 
 	use tBexioV2Api, tBexioObject, tBexioPDFObject, tBexioProjectObject, tBexioCollection, tBexioNumberObject;
 }
@@ -334,6 +346,7 @@ class BexioInvoice extends BexioAPI {
 class BexioOrder extends BexioAPI {
 	protected $type = 'kb_order';
 	protected $class = 'BizCuit\BXObject\Order';
+	protected $query = 'BizCuit\BXQuery\Order';
 
 	use tBexioV2Api, tBexioObject, tBexioPDFObject, tBexioProjectObject, tBexioCollection, tBexioNumberObject;
 }
@@ -341,6 +354,8 @@ class BexioOrder extends BexioAPI {
 class BexioContact extends BexioAPI {
 	protected $type = 'contact';
 	protected $class = 'BizCuit\BXObject\Contact';
+	protected $query = 'BizCuit\BXQuery\Contact';
+
 
 	use tBexioV2Api, tBexioObject, tBexioCollection;
 }
@@ -348,6 +363,7 @@ class BexioContact extends BexioAPI {
 class BexioProject extends BexioAPI {
 	protected $type = 'pr_project';
 	protected $class = 'BizCuit\BXObject\Project';
+	protected $query = 'BizCuit\BXQuery\Project';
 
 	use tBexioV2Api, tBexioObject, tBexioCollection, tBexioNumberObject;
 }
@@ -355,6 +371,7 @@ class BexioProject extends BexioAPI {
 class BexioContactRelation extends BexioAPI {
 	protected $type = 'contact_relation';
 	protected $class = 'BizCuit\BXObject\ContactRelation';
+	protected $query = 'BizCuit\BXQuery\ContactRelation';
 
 	use tBexioV2Api, tBexioObject, tBexioCollection;
 }
@@ -362,6 +379,7 @@ class BexioContactRelation extends BexioAPI {
 class BexioAdditionalAddress extends BexioAPI {
 	protected $type = 'additional_address';
 	protected $class = 'BizCuit\BXObject\AdditionalAddress';
+	protected $query = 'BizCuit\BXQuery\AdditionalAddress';
 
 	use tBexioV2Api, tBexioObject, tBexioCollection;
 }
@@ -369,13 +387,15 @@ class BexioAdditionalAddress extends BexioAPI {
 class BexioNote extends BexioAPI {
 	protected $type = 'note';
 	protected $class = 'BizCuit\BXObject\Note';
+	protected $query = 'BizCuit\BXQuery\Note';
 
 	use tBexioV2Api, tBexioObject, tBexioCollection;
 }
 
 class BexioUser extends BexioAPI {
 	protected $type = 'users';
-	protected $class = 'BizCuit\BXObject\ROObject';
+	protected $class = 'BizCuit\BXObject\User';
+	protected $query = 'BizCuit\BXQuery\User';
 
 	use tBexioV3Api, tBexioObject, tBexioCollection;
 }
@@ -383,6 +403,7 @@ class BexioUser extends BexioAPI {
 class BexioBusinessActivity extends BexioAPI {
 	protected $type = 'client_service';
 	protected $class = 'BizCuit\BXObject\ROObject';
+	protected $query = 'BizCuit\BXQuery\ROObject';
 
 	use tBexioV2Api, tBexioObject, tBexioCollection;
 }

@@ -310,3 +310,16 @@ class Task extends BXQuery {
 		]);
 	}
 }
+
+class User extends BXQuery {
+	function __construct() {
+		parent::__construct([
+			'salutation_type',
+			'firstname',
+			'lastname',
+			'email',
+			'is_superadmin',
+			'is_accountant'
+		]);
+	}
+}

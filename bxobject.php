@@ -40,7 +40,7 @@ abstract class BXObject {
 	function toJson() {
 		$outClass = clone $this->content;
         foreach ($outClass as $k => $v) {
-            if (!in_array($k, $this::createProperties)) { unset($outClass->{$k}); }
+            if (!in_array($k, $this::createProperties) && $k !== $this::ID) { unset($outClass->{$k}); }
             /* when requesting data, it appears that null properties are set to 0 and fail to write back */
             if (in_array($k, $this::nullableProperties) && $outClass->{$k} === 0) { $outClass->{$k} = null; } 
         }
@@ -268,6 +268,18 @@ class Quote extends BXObject {
         'kb_terms_of_payment_template_id',
         'template_slug',
         'positions'
+    ];
+}
+
+class User extends BXObject {
+    const NR = null;
+    const createProperties = [
+        'salutation_type',
+        'firstname',
+        'lastname',
+        'email',
+        'is_superadmin',
+        'is_accountant'
     ];
 }
 
