@@ -75,7 +75,15 @@ abstract class BXObject {
 
 class ROObject extends BXObject {
     const NR = null;
-    const readonly = true; 
+    const readonly = true;
+
+	function toJson() {
+		return json_encode(clone $this->content);
+	}
+
+    function changesToJson() {
+        return json_encode(new stdClass());
+    }
 }
 
 class Country extends BXObject {
