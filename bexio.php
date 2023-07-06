@@ -237,11 +237,16 @@ trait tBexioObject {
 	function set (BXObject $content) {
 		if ($content::readonly) { return false; }
 
-		if ((empty($content->user_id) || is_null($content->user_id)) && in_array('user_id', $content::createProperties)) { 
-			$content->user_id = $this->ctx->user_id; 
+		/* try to fix user_id and owner_id if possible */
+		if (!is_null($this->ctx->user_id)) {
+			if ((!is_numeric($content->user_id) || is_null($content->user_id)) && in_array('user_id', $content::createProperties)) { 
+				$content->user_id = $this->ctx->user_id; 
+			}
 		}
-		if ((empty($content->owner_id) || is_null($content->owner_id)) && in_array('owner_id', $content::createProperties)) {
-			$content->owner_id = $this->ctx->owner_id; 
+		if (!is_null($this->ctx->owner_id)) {
+			if ((!is_numeric($content->owner_id) || is_null($content->owner_id)) && in_array('owner_id', $content::createProperties)) {
+				$content->owner_id = $this->ctx->owner_id; 
+			}
 		}
 
 		if (!$content->getId()) {
