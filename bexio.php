@@ -407,3 +407,19 @@ class BexioBusinessActivity extends BexioAPI {
 
 	use tBexioV2Api, tBexioObject, tBexioCollection;
 }
+
+class BexioSalutation extends BexioAPI {
+	protected $type = 'salutation';
+	protected $class = 'BizCuit\BXObject\ROObject';
+	protected $query = 'BizCuit\BXQuery\ROObject';
+
+	use tBexioV2Api, tBexioObject, tBexioCollection;
+}
+
+class BexioTitle extends BexioAPI {
+	protected $type = 'title';
+	protected $class = 'BizCuit\BXObject\ROObject';
+	protected $query = 'BizCuit\BXQuery\ROObject';
+
+	use tBexioV2Api, tBexioObject, tBexioCollection;
+}
