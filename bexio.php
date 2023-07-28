@@ -118,8 +118,34 @@ class BexioCTX {
 
 	function fetch () {
 		try {
+			$ratelimits = [
+				'remaining' => 0,
+				'limit' => 0,
+				'reset' => 0
+			];
 			curl_setopt($this->c, CURLOPT_HTTPHEADER, $this->headers);
 			curl_setopt($this->c, CURLOPT_RETURNTRANSFER, true);
+			curl_setopt($this->c, CURLOPT_HEADERFUNCTION, 
+				function ($curl, $header) use (&$ratelimits) {
+					$len = strlen($header);
+					$parts = explode(':', $header);
+					if (count($parts) < 2) { return $len; }					
+					$parts[0] = strtolower(trim($parts[0]));
+					
+					switch($parts[0]) {
+						default: return $len;
+
+						case 'ratelimit-limit': 
+						case 'ratelimit-remaining':
+						case 'ratelimit-reset':
+							$value = explode('-', $parts[0]);
+							$type = array_pop($value);
+							$ratelimits[$type] = intval(trim($parts[1]));
+							break;
+					}
+					return $len;
+				}
+			);
 			$this->set_method($this->method);
 			$this->set_url($this->url);
 			if ($this->method !== 'get' && $this->method !== 'head') { $this->set_body($this->body); }
@@ -226,11 +252,18 @@ trait tBexioObject {
 		
 	}
 
-	function get (Int|BXObject $id) {
+	function get (Int|BXObject $id, array $options = []) {
 		if ($id instanceof BXObject) {
 			$id = $id->getId();
 		}
 		$this->ctx->url = $this->api_version .'/' . $this->type . '/' .  strval($id);
+		$query = [];
+		foreach ($options as $name => $value) {
+			$query[] = urlencode(strval($name)) . '=' . urlencode(strval($value));
+		}
+		if (!empty($query)) {
+			$this->ctx->url .= '?' . join('&', $query);
+		}
 		return new $this->class($this->ctx->fetch());
 	}
 
