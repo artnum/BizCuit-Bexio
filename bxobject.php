@@ -32,6 +32,11 @@ abstract class BXObject {
 		return $this->content->{$this::ID};
 	}
 
+    function getType ():string {
+        $parts = explode('\\', get_class($this));
+        return array_pop($parts);
+    }
+
 	function getNumber() {
         if ($this::NR === null) { return null; }
 		return $this->content->{$this::NR};

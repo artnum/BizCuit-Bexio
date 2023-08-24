@@ -62,6 +62,23 @@ abstract class BXQuery {
 	}
 }
 
+class ROObject extends BXQuery {
+	function add(String $field, String $term, string $criteria = '=') {
+		$field = strtolower($field);
+		$criteria = strtolower($criteria);
+
+		if (!in_array($criteria, $this::allowedCriteria)) { return false; }
+		
+		$q = new stdClass();
+		$q->field = $field;
+		$q->value = $term;
+		$q->criteria = $criteria;
+
+		$this->query[] = $q;
+		return true;
+	}
+}
+
 class ContactGroup extends BXQuery { }
 class ContactSector extends BXQuery { }
 class Salutation extends BXQuery { }

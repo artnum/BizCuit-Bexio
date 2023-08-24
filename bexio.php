@@ -174,7 +174,7 @@ class BexioCTX {
             case 429: throw new Exception('Too many requests', $code, new Exception($data));
             case 500: throw new Exception('An unexpected condition was encountered', $code, new Exception($data));
             case 503: throw new Exception('The server is not available (maintenance work)', $code, new Exception($data));
-			default: throw new Exception('Error', $code, new Exception($data));
+			default: throw new Exception('Error with code ' . $code, $code, new Exception($data));
 		}
 	}
 }
@@ -187,6 +187,7 @@ class BexioAPI {
 	protected $headers;
 	protected $class;
 	protected $ctx;
+	protected $type;
 
 	function __construct(BexioCTX $ctx) {
 		$this->ctx = $ctx;
@@ -199,6 +200,10 @@ class BexioAPI {
     function setCurrentOwner (Int $ownerid) {
         $this->ownerid = $ownerid;
     }
+	function getType():string {
+		$parts = explode('\\', $this->class);
+		return array_pop($parts);
+	}
 }
 
 trait tBexioV2Api {
@@ -310,6 +315,24 @@ trait tBexioObject {
 
 }
 
+trait tBexioArchiveable {
+	function archive (BXObject $content) {
+		if ($content::readonly) { return false; }
+		if (!$content->getId()) { return false; }
+		$this->ctx->url = $this->api_version .'/' . $this->type . '/' .  $content->getId() . '/archive';
+		$this->ctx->method = 'post';
+		return $this->ctx->fetch()->success;
+	}
+
+	function unarchive (BXObject $content) {
+		if ($content::readonly) { return false; }
+		if (!$content->getId()) { return false; }
+		$this->ctx->url = $this->api_version .'/' . $this->type . '/' .  $content->getId() . '/reactivate';
+		$this->ctx->method = 'post';
+		return $this->ctx->fetch()->success;
+	}
+}
+
 trait tBexioNumberObject {
 	function getByNumber (Int|String $id) {
 		$this->ctx->url = $this->api_version . '/' . $this->type . '/search';
@@ -403,7 +426,7 @@ class BexioProject extends BexioAPI {
 	protected $class = 'BizCuit\BXObject\Project';
 	protected $query = 'BizCuit\BXQuery\Project';
 
-	use tBexioV2Api, tBexioObject, tBexioCollection, tBexioNumberObject;
+	use tBexioV2Api, tBexioObject, tBexioCollection, tBexioNumberObject, tBexioArchiveable;
 }
 
 class BexioContactRelation extends BexioAPI {
@@ -456,6 +479,21 @@ class BexioSalutation extends BexioAPI {
 
 class BexioTitle extends BexioAPI {
 	protected $type = 'title';
+	protected $class = 'BizCuit\BXObject\ROObject';
+	protected $query = 'BizCuit\BXQuery\ROObject';
+
+	use tBexioV2Api, tBexioObject, tBexioCollection;
+}
+
+class BexioProjectType extends BexioAPI {
+	protected $type = 'pr_project_type';
+	protected $class = 'BizCuit\BXObject\ROObject';
+	protected $query = 'BizCuit\BXQuery\ROObject';
+
+	use tBexioV2Api, tBexioObject, tBexioCollection;
+}
+class BexioProjectStatus extends BexioAPI {
+	protected $type = 'pr_project_state';
 	protected $class = 'BizCuit\BXObject\ROObject';
 	protected $query = 'BizCuit\BXQuery\ROObject';
 
