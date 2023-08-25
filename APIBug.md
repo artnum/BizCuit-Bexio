@@ -16,5 +16,5 @@
   * On the Bills endpoint, limit and page are a bit strange as if you use them
   in some case it return '[400] page: unsupported value type' in some case not,
   still trying to figure out.
-  * For File, the documentation says the id <int32> must be used when in fact 
-  you need to use the uuid <string>.
+  * For File, the documentation says the id [int32] must be used when in fact 
+  you need to use the uuid [string].
