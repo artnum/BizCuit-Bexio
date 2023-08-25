@@ -296,7 +296,7 @@ class User extends BXObject {
     ];
 }
 
-class File extends BXObject {
+class PDF extends BXObject {
     const createProperties = [
         'name',
         'size',

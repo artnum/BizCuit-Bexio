@@ -60,6 +60,10 @@ abstract class BXQuery {
 	function toJson() {
 		return json_encode($this->query);
 	}
+
+	function getRawQuery() {
+		return $this->query;
+	}
 }
 
 class ROObject extends BXQuery {
@@ -337,6 +341,36 @@ class User extends BXQuery {
 			'email',
 			'is_superadmin',
 			'is_accountant'
+		]);
+	}
+}
+
+class Bills extends BXQuery {
+	function __construct() {
+		parent::__construct([
+			'firstname_suffix',
+			'lastname_company',
+			'vendor_ref',
+			'currency_code',
+			'document_no',
+			'title',
+			'supplier_id',
+			'document_no',
+			'net_max',
+			'net_min',
+			'gross_max',
+			'gross_min',
+			'vendor',
+			'pending_amount_max',
+			'pending_amount_min',
+			'currency_code',
+			'title',
+			'vendor_ref',
+			'due_date_end',
+			'due_date_start',
+			'bill_date_end',
+			'bill_date_start',
+			'status'
 		]);
 	}
 }

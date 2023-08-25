@@ -5,6 +5,7 @@ namespace BizCuit;
 require(__DIR__ . '/bxquery.php');
 require(__DIR__ . '/bxobject.php');
 
+use BizCuit\BXObject\ROObject;
 use BizCuit\BXObject\BXObject;
 use BizCuit\BXQuery\BXQuery;
 use Exception;
@@ -216,6 +217,58 @@ trait tBexioV3Api {
 
 trait tBexioV4Api {
 	protected $api_version = '4.0';
+
+	function search (BXQuery $query, Int $offset = 0, Int $limit = 100) {
+		/* 
+			## API or Documenation bug, this should work but it doesn't (but sometime it does)
+			$limit = 100;
+			$page_num = ($offset + $limit) / $limit;
+			$search_str_array = ['search_term' => null, 'page' => $page_num, 'limit' => $limit]; 
+		*/
+		$search_str_array = ['search_term' => null ];
+		$fields = [];
+
+		foreach($query->getRawQuery() as $query) {
+			$field = urlencode($query->field);
+			$term = urlencode($query->value);
+			if (in_array($query->field, $this->search_fields)) {
+				if (in_array($field, $fields)) { continue; }
+				$fields[] = $field;
+				if (!$search_str_array['search_term']) {
+					$search_str_array['search_term'] = $term;
+				}
+				$search_str_array['fields[' . (count($fields) - 1) . ']'] = $field;
+				continue;
+			}
+
+			if (!isset($search_str_array[$field])) { $search_str_array[$field] = $term; }
+		}
+		if (!$search_str_array['search_term']) {
+			unset($search_str_array['search_term']);
+		}
+
+		$a = [];
+		foreach($search_str_array as $k => $v) { $a[] = $k . '=' . $v; }
+		$qs = '?' . join(',', $a);
+
+		$this->ctx->url = $this->api_version . '/' . $this->type . $qs;
+		$this->ctx->method = 'get';
+		$result = $this->ctx->fetch();
+		return array_map(fn($e) => new $this->class($e), $result->data);
+	}
+
+	function list (Int $offset, Int $limit) {
+		return $this->search($this->newQuery(), $offset, $limit);
+	}
+
+	function getIdName ():string {
+		$c = $this->class;
+		return $c::ID;
+	}
+
+	function newQuery ():BXquery {
+		return new $this->query();
+	}
 }
 
 trait tBexioCollection {
@@ -352,7 +405,7 @@ trait tBexioPDFObject {
 			$id = $id->getId();
 		}
 		$this->ctx->url = $this->api_version . '/' . $this->type . '/' . strval($id) . '/pdf';
-		return new \BizCuit\BXObject\File($this->ctx->fetch());
+		return new \BizCuit\BXObject\PDF($this->ctx->fetch());
 	}
 }
 
@@ -498,4 +551,41 @@ class BexioProjectStatus extends BexioAPI {
 	protected $query = 'BizCuit\BXQuery\ROObject';
 
 	use tBexioV2Api, tBexioObject, tBexioCollection;
+}
+
+class BexioBills extends BexioAPI {
+	protected $type = 'purchase/bills';
+	protected $class = 'BizCuit\BXObject\ROObject';
+	protected $query = 'BizCuit\BXQuery\Bills';
+	protected $search_fields = [
+		'firstname_suffix',
+		'lastname_company',
+		'vendor_ref',
+		'currency_code',
+		'document_no',
+		'title'
+	];
+
+	use tBexioObject, tBexioV4Api;
+}
+
+class BexioFile extends BexioAPI {
+	protected $type = 'files';
+	protected $class = 'BizCuit\BXObject\ROObject';
+	protected $query = 'BizCuit\BXQuery\File';
+	protected $uuid;
+
+	function download ($uuid) {
+		if ($uuid instanceof BexioFile) {
+			$uuid = $uuid->uuid;
+		}
+		$this->ctx->url = $this->api_version .'/' . $this->type . '/' .  strval($uuid);
+		$result = $this->ctx->fetch();
+		$file = new ROObject($result);
+		$this->ctx->url = $this->api_version .'/' . $this->type . '/' .  strval($uuid) . '/download';
+		$file->content = base64_encode($this->ctx->fetch());
+		return $file;
+	}
+
+	use tBexioV3Api, tBexioObject, tBexioCollection;
 }
