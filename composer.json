@@ -1,0 +1,20 @@
+{
+    "name": "artnum/bizcuit-bexio",
+    "description": "PHP API to access Bexio.com with token auth, using cURL",
+    "license": "MIT",
+    "keywords": ["curl ","cache","cache-storage","curl-library","curlphp","php8","bexio","bexioapi","winbiz"],
+    "authors": [{
+        "name": "Etienne Bagnoud",
+        "email": "etienne@artnum.ch",
+        "homepage": "https://artnum.ch",
+        "role": "Developper"
+    }],
+    "autoload": {
+        "psr-4": {
+            "BizCuit\\": "./"
+        }
+    },
+    "require": {
+        "php": ">=8.2"
+    }
+}
