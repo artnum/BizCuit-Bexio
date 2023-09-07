@@ -281,14 +281,14 @@ trait tBexioCollection {
 		return new $this->query();
 	}
 
-	function search (BXQuery $query, Int $offset = 0, Int $limit = 500) {
+	function search (BXQuery $query, Int $offset = 0, Int $limit = 500):array {
 		$this->ctx->url = $this->api_version . '/' . $this->type .'/search' . sprintf('?limit=%d&offset=%d', $limit, $offset);
 		$this->ctx->body = $query->toJson();
 		$this->ctx->method = 'post';
 		return array_map(fn($e) => new $this->class($e), $this->ctx->fetch());
 	}
 
-	function list (Int $offset = 0, Int $limit = 500) {
+	function list (Int $offset = 0, Int $limit = 500):array {
 		$this->ctx->url =$this->api_version . '/' . $this->type . sprintf('?limit=%d&offset=%d', $limit, $offset);
 		return array_map(fn($e) => new $this->class($e), $this->ctx->fetch());
 	}
@@ -310,7 +310,7 @@ trait tBexioObject {
 		
 	}
 
-	function get (Int|String|BXObject $id, array $options = []) {
+	function get (Int|String|BXObject $id, array $options = []):BXObject {
 		if ($id instanceof BXObject) {
 			$id = $id->getId();
 		}
@@ -325,7 +325,7 @@ trait tBexioObject {
 		return new $this->class($this->ctx->fetch());
 	}
 
-	function set (BXObject $content) {
+	function set (BXObject $content):BXObject|false {
 		if ($content::readonly) { return false; }
 
 		/* try to fix user_id and owner_id if possible */
@@ -352,7 +352,7 @@ trait tBexioObject {
 		return new $this->class($this->ctx->fetch());
 	}
 
-	function update (BXObject $content) {
+	function update (BXObject $content):BXObject|false {
 		if ($content::readonly) { return false; }
 
 		if (!$content->getId()) { return $this->set($content); }
@@ -369,7 +369,7 @@ trait tBexioObject {
 }
 
 trait tBexioArchiveable {
-	function archive (BXObject $content) {
+	function archive (BXObject $content):bool {
 		if ($content::readonly) { return false; }
 		if (!$content->getId()) { return false; }
 		$this->ctx->url = $this->api_version .'/' . $this->type . '/' .  $content->getId() . '/archive';
@@ -377,7 +377,7 @@ trait tBexioArchiveable {
 		return $this->ctx->fetch()->success;
 	}
 
-	function unarchive (BXObject $content) {
+	function unarchive (BXObject $content):bool {
 		if ($content::readonly) { return false; }
 		if (!$content->getId()) { return false; }
 		$this->ctx->url = $this->api_version .'/' . $this->type . '/' .  $content->getId() . '/reactivate';
@@ -387,7 +387,7 @@ trait tBexioArchiveable {
 }
 
 trait tBexioNumberObject {
-	function getByNumber (Int|String $id) {
+	function getByNumber (Int|String $id):BXObject {
 		$this->ctx->url = $this->api_version . '/' . $this->type . '/search';
 		$this->ctx->method = 'post';
 		$this->ctx->body = json_encode([[
