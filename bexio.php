@@ -14,9 +14,9 @@ use stdClass;
 class BexioCTX {
 	const endpoint = 'https://api.bexio.com/';
 	protected $c = '';
-	protected $headers = [];
-	protected $values;
-	protected $token;
+	protected array $headers = [];
+	protected object $values;
+	protected string $token;
 
 	function __construct(String $token) {
 		$this->c = curl_init();
@@ -48,8 +48,8 @@ class BexioCTX {
 		}
 	}
 
-	private function set_body (String $body = '') {
-		if (strlen($body) <= 0) { return; }
+	private function set_body (string $body = '') {
+		if (strlen($body) < 0) { return; }
 		curl_setopt($this->c, CURLOPT_POSTFIELDS, $body);
 	}
 
@@ -60,7 +60,7 @@ class BexioCTX {
 		curl_reset($this->c);
 	}
 
-	function __set(String $name, String $value) {
+	function __set(string $name, string $value) {
 		switch ($name) {
 			case 'url':
 			case 'method':
@@ -72,7 +72,7 @@ class BexioCTX {
 		}
 	}
 
-	function __get(String $name) {
+	function __get(string $name) {
 		switch ($name) {
 			default: return null;
 			case 'url':
@@ -86,7 +86,7 @@ class BexioCTX {
 		}
 	}
 
-	function __isset($name)	{
+	function __isset(string $name)	{
 		switch ($name) {
 			default: return false;
 			case 'url':
@@ -98,7 +98,7 @@ class BexioCTX {
 		}
 	}
 
-	function __unset($name) {
+	function __unset(string $name) {
 		switch($name) {
 			default: return;
 			case 'url':
@@ -299,7 +299,7 @@ trait tBexioObject {
 		return new $this->class();
 	}
 
-	function delete(Int|BXObject $id): Bool {
+	function delete(Int|String|BXObject $id): Bool {
 		if ($id instanceof BXObject) {
 			$id = $id->getId();
 		}
@@ -310,7 +310,7 @@ trait tBexioObject {
 		
 	}
 
-	function get (Int|BXObject $id, array $options = []) {
+	function get (Int|String|BXObject $id, array $options = []) {
 		if ($id instanceof BXObject) {
 			$id = $id->getId();
 		}
@@ -516,7 +516,7 @@ class BexioUser extends BexioAPI {
 
 class BexioBusinessActivity extends BexioAPI {
 	protected $type = 'client_service';
-	protected $class = 'BizCuit\BXObject\ROObject';
+	protected $class = 'BizCuit\BXObject\ClientService';
 	protected $query = 'BizCuit\BXQuery\ROObject';
 
 	use tBexioV2Api, tBexioObject, tBexioCollection;
@@ -524,7 +524,7 @@ class BexioBusinessActivity extends BexioAPI {
 
 class BexioSalutation extends BexioAPI {
 	protected $type = 'salutation';
-	protected $class = 'BizCuit\BXObject\ROObject';
+	protected $class = 'BizCuit\BXObject\Salutation';
 	protected $query = 'BizCuit\BXQuery\ROObject';
 
 	use tBexioV2Api, tBexioObject, tBexioCollection;
@@ -532,7 +532,7 @@ class BexioSalutation extends BexioAPI {
 
 class BexioTitle extends BexioAPI {
 	protected $type = 'title';
-	protected $class = 'BizCuit\BXObject\ROObject';
+	protected $class = 'BizCuit\BXObject\Title';
 	protected $query = 'BizCuit\BXQuery\ROObject';
 
 	use tBexioV2Api, tBexioObject, tBexioCollection;
@@ -540,7 +540,7 @@ class BexioTitle extends BexioAPI {
 
 class BexioProjectType extends BexioAPI {
 	protected $type = 'pr_project_type';
-	protected $class = 'BizCuit\BXObject\ROObject';
+	protected $class = 'BizCuit\BXObject\ProjectType';
 	protected $query = 'BizCuit\BXQuery\ROObject';
 
 	use tBexioV2Api, tBexioObject, tBexioCollection;
@@ -555,7 +555,7 @@ class BexioProjectStatus extends BexioAPI {
 
 class BexioBills extends BexioAPI {
 	protected $type = 'purchase/bills';
-	protected $class = 'BizCuit\BXObject\ROObject';
+	protected $class = 'BizCuit\BXObject\Bills';
 	protected $query = 'BizCuit\BXQuery\Bills';
 	protected $search_fields = [
 		'firstname_suffix',
@@ -566,22 +566,41 @@ class BexioBills extends BexioAPI {
 		'title'
 	];
 
+
+	function setStatus (Int|String|BXObject $uuid, string $status) {
+		if ($uuid instanceof BexioFile) {
+			$uuid = $uuid->getId();
+		}
+		$this->ctx->url = $this->api_version .'/' . $this->type . '/' .  strval($uuid) . '/bookings/' . $status;
+		$this->ctx->method = 'PUT';
+		$this->ctx->body = '';
+		error_log($this->ctx->url);
+		$result = $this->ctx->fetch();
+		return $this->new($result);
+	}
+
 	use tBexioObject, tBexioV4Api;
 }
 
 class BexioFile extends BexioAPI {
 	protected $type = 'files';
-	protected $class = 'BizCuit\BXObject\ROObject';
+	protected $class = 'BizCuit\BXObject\File';
 	protected $query = 'BizCuit\BXQuery\File';
 	protected $uuid;
 
-	function download ($uuid) {
+	function getId() {
+		return $this->uuid;
+	}
+
+	function get (Int|String|BXObject $uuid, array $options = []) {
+		error_log('get file');
 		if ($uuid instanceof BexioFile) {
-			$uuid = $uuid->uuid;
+			$uuid = $uuid->getId();
 		}
+		
 		$this->ctx->url = $this->api_version .'/' . $this->type . '/' .  strval($uuid);
 		$result = $this->ctx->fetch();
-		$file = new ROObject($result);
+		$file = $this->new($result);
 		$this->ctx->url = $this->api_version .'/' . $this->type . '/' .  strval($uuid) . '/download';
 		$file->content = base64_encode($this->ctx->fetch());
 		return $file;

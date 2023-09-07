@@ -3,7 +3,6 @@
 
 namespace BizCuit\BXObject;
 
-use BizCuit\BXQuery\BXQuery;
 use stdClass;
 
 abstract class BXObject {
@@ -90,6 +89,14 @@ class ROObject extends BXObject {
         return json_encode(new stdClass());
     }
 }
+
+
+class File extends ROObject {}
+class Bills extends ROObject {}
+class ProjectType extends ROObject {}
+class Title extends ROObject {}
+class Salutation extends ROObject {}
+class ClientService extends ROObject {}
 
 class Country extends BXObject {
     const NR = null;
