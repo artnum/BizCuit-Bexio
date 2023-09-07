@@ -1,14 +1,11 @@
-# BizCuit-Bexio, bexio API en PHP
+# BizCuit-Bexio, bexio API in PHP
 
-Cette librairie permet d'accéder à [l'API Bexio](https://docs.bexio.com/) en 
-utilisant l'authentifcation par "token". Construire autour de cURL, elle propose
-déjà pas mal de fonctionnalités.
+This library allow to access [Bexio API](https://docs.bexio.com/). Constructed
+arround cURL, it uses token authentication and provide a great deal of features.
 
-Elle créé une abstraction autour des différentes versions de l'API (4 en 4 ans 
-c'est beaucoup), de manière à ce que le comportement ait l'air toujours
-identique selon les terminaions (endpoint).
-
-La composition est utilisée massivement pour se faire, par exemple :
+It abastracts between the differents API version (like 4 in 4 years is quite
+a lot) to make every endpoint look the same. It relies on class composition to
+achieve that, example :
 
 ```php
 class BexioContact extends BexioAPI {
@@ -21,11 +18,11 @@ class BexioContact extends BexioAPI {
 }
 ```
 
-Encore en développement, elle fournit aussi l'outillage pour éventuellement
-construire un système de cache court terme (pour gérer les limitations [Rate Limiting](https://docs.bexio.com/#section/API-basics/Rate-Limiting))
-et un cache long terme, en lecture seul, en cache de panne du service.
+Still in active developpement, it also provide tooling to build a data cache
+short term (to mitigate [Rate Limiting](https://docs.bexio.com/#section/API-basics/Rate-Limiting))
+and long term to keep working (read-only) if the upstream service goes down.
 
-## Un court exemple
+## Example of usage
 
 ```php
 
