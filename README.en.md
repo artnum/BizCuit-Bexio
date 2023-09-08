@@ -31,6 +31,10 @@ me, the application is soooooo slow (to get ONE item through the API, you wait
 500ms, even from the official frontend you spend more time waiting than 
 working) and it is quite expensive.
 
+## Documentation
+
+Documentation available at [https://bizcuit.ch](https://bizcuit.ch/bexio/documentation/)
+
 ## Example of usage
 
 ```php

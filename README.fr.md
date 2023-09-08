@@ -34,6 +34,10 @@ développeurs comme moi, l'application est tellement lente (pour obtenir
 UN élément via l'API, c'est 500 ms, même depuis l'interface officielle on passe
 plus de temps à attendre qu'agir) et le produit est couteux.
 
+## Documentation
+
+Documentation disponible sur [https://bizcuit.ch](https://bizcuit.ch/bexio/documentation/)
+
 ## Un court exemple
 
 ```php
