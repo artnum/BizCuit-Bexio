@@ -1,11 +1,15 @@
 <?php
-/* (c) 2023 Etienne Bagnoud */
+/**
+ * @author Etienne Bagnoud <etienne@artnum.ch>
+ * @license MIT
+ * @copyright 2023 Etienne Bagnoud
+ * 
+ */
 namespace BizCuit;
 
 require(__DIR__ . '/bxquery.php');
 require(__DIR__ . '/bxobject.php');
 
-use BizCuit\BXObject\ROObject;
 use BizCuit\BXObject\BXObject;
 use BizCuit\BXQuery\BXQuery;
 use Exception;
@@ -49,18 +53,21 @@ class BexioCTX {
 		}
 	}
 
-	private function set_body (string $body = '') {
+	/**
+	 * Set the request body if any.
+	 */
+	private function set_body (string $body = ''):void {
 		if (strlen($body) < 0) { return; }
 		curl_setopt($this->c, CURLOPT_POSTFIELDS, $body);
 	}
 
-	private function reset() {
+	private function reset():void {
 		unset($this->url);
 		unset($this->body);
 		curl_reset($this->c);
 	}
 
-	function __set(string $name, string $value) {
+	function __set(string $name, mixed $value):void {
 		switch ($name) {
 			case 'url':
 			case 'method':
@@ -72,7 +79,7 @@ class BexioCTX {
 		}
 	}
 
-	function __get(string $name) {
+	function __get(string $name):mixed {
 		switch ($name) {
 			default: return null;
 			case 'url':
@@ -86,7 +93,7 @@ class BexioCTX {
 		}
 	}
 
-	function __isset(string $name)	{
+	function __isset(string $name):bool	{
 		switch ($name) {
 			default: return false;
 			case 'url':
@@ -98,7 +105,7 @@ class BexioCTX {
 		}
 	}
 
-	function __unset(string $name) {
+	function __unset(string $name):void {
 		switch($name) {
 			default: return;
 			case 'url':
@@ -110,15 +117,15 @@ class BexioCTX {
 		}
 	}
 
-	function __clone() {
-		$newCtx = new BexioCTX($this->token);
-		if (isset($this->user_id)) { $newCtx->user_id = $this->user_id; }
-		if (isset($this->owner_id)) { $newCtx->owner_id = $this->owner_id; }
-		return $newCtx;
-	}
-
-	function fetch () {
+	/**
+	 * Execute the request.
+	 * @return stdClass|string The JSON response decoded or the raw value
+	 * @throws Exception A generic exception with code matching the HTTP error
+	 * code from the upstream API if any.
+	 */
+	function fetch ():stdClass|string {
 		try {
+			error_log('DO FETCH !!!!!!');
 			$ratelimits = [
 				'remaining' => 0,
 				'limit' => 0,
@@ -151,14 +158,15 @@ class BexioCTX {
 
 			$headers = $this->headers;
 			if ($this->method !== 'get' && $this->method !== 'head') { $this->set_body($this->body); }
-			else { 
-				/* A bug can be triggered if you send a GET without Content-Length 
-				 * set to 0
-				 */
-				$headers = array_merge($this->headers, ['Content-Length: 0']); 
+		
+			/* An API bug can be triggered if you send a GET without 
+			 * Content-Length set to 0
+			 */
+			if (strlen($this->body) <= 0) {
+				$headers = array_merge($this->headers, ['Content-Length: 0']);  
 			}
+		
 			curl_setopt($this->c, CURLOPT_HTTPHEADER, $headers);
-
 			$data = curl_exec($this->c);
 			$code = curl_getinfo($this->c,  CURLINFO_HTTP_CODE);
 			$type = curl_getinfo($this->c, CURLINFO_CONTENT_TYPE);
@@ -203,13 +211,42 @@ class BexioAPI {
 		$this->ctx = $ctx;
 	}
 
-    /* set current user for request that need a user id if not passed */
-	function setCurrentUser (Int $userid) {
+    /**
+	 * Set current user id.
+	 * 
+	 * Some items, at creation, need a user id and/or an owner id. Setting this
+	 * here allows to automatically add this to the item. If only user is set,
+	 * when owner is needed it would be set to user.
+	 * 
+	 * @param Int $userid The id of the user for all creation from now on.
+	 * @return void
+	 * 
+	 */
+	function setCurrentUser (Int $userid):void {
 		$this->userid = $userid;
 	}
+
+    /**
+	 * Set current owner id.
+	 * 
+	 * Some items, at creation, need a user id and/or an owner id. This set the
+	 * owner.
+	 * 
+	 * @param Int $ownerid The id of the owner for all creation from now on.
+	 * @return void
+	 * 
+	 */
     function setCurrentOwner (Int $ownerid) {
         $this->ownerid = $ownerid;
     }
+
+	/**
+	 * Get the current type.
+	 * 
+	 * The current type correspond to an endpoint in the upstream API.
+	 * 
+	 * @return string The type name
+	 */
 	function getType():string {
 		$parts = explode('\\', $this->class);
 		return array_pop($parts);
@@ -227,6 +264,11 @@ trait tBexioV3Api {
 trait tBexioV4Api {
 	protected $api_version = '4.0';
 
+	/**
+	 * Search request for version 4 of the API.
+	 * 
+	 * @see tBexioCollection::search()
+	 */
 	function search (BXQuery $query, Int $offset = 0, Int $limit = 100) {
 		/* 
 			## API or Documenation bug, this should work but it doesn't (but sometime it does)
@@ -266,30 +308,66 @@ trait tBexioV4Api {
 		return array_map(fn($e) => new $this->class($e), $result->data);
 	}
 
+	/**
+	 * List request for version 4 of the API.
+	 * 
+	 * @see tBexioCollection::list()
+	 */
 	function list (Int $offset, Int $limit) {
 		return $this->search($this->newQuery(), $offset, $limit);
 	}
 
+	/**
+	 * Get ID name for version 4 of the API.
+	 * 
+	 * @see tBexioCollection::getIdName()
+	 */
 	function getIdName ():string {
 		$c = $this->class;
 		return $c::ID;
 	}
 
+	/**
+	 * Create new query for version 4 of the API.
+	 * 
+	 * @see tBexioCollection::newQuery()
+	 */
 	function newQuery ():BXquery {
 		return new $this->query();
 	}
 }
 
 trait tBexioCollection {
+	/**
+	 * Return the property name used as unique id for this collection.
+	 * @return string ID name.
+	 * 
+	 * @api
+	 */
 	function getIdName ():string {
 		$c = $this->class;
 		return $c::ID;
 	}
 
+	/**
+	 * Create a new BXQuery object for this collection.
+	 * @return BXquery The BXQuery valid for this collection.
+	 * 
+	 * @api
+	 */
 	function newQuery ():BXquery {
 		return new $this->query();
 	}
 
+	/**
+	 * Search the collection.
+	 * @param BXQuery $query The query object.
+	 * @param Int $offset Offset in the search result,
+	 * @param Int $limit Max number of search resutl.
+	 * @return BXObject[] Matching items in the collection.
+	 * 
+	 * @api
+	 */
 	function search (BXQuery $query, Int $offset = 0, Int $limit = 500):array {
 		$this->ctx->url = $this->api_version . '/' . $this->type .'/search' . sprintf('?limit=%d&offset=%d', $limit, $offset);
 		$this->ctx->body = $query->toJson();
@@ -297,6 +375,14 @@ trait tBexioCollection {
 		return array_map(fn($e) => new $this->class($e), $this->ctx->fetch());
 	}
 
+	/**
+	 * List the collection.
+	 * @param Int $offset Offset in the search result,
+	 * @param Int $limit Max number of search result.
+	 * @return BXObject[] Items in the collection.
+	 * 
+	 * @api
+	 */
 	function list (Int $offset = 0, Int $limit = 500):array {
 		$this->ctx->url =$this->api_version . '/' . $this->type . sprintf('?limit=%d&offset=%d', $limit, $offset);
 		return array_map(fn($e) => new $this->class($e), $this->ctx->fetch());
@@ -304,10 +390,23 @@ trait tBexioCollection {
 }
 
 trait tBexioObject {
+	/**
+	 * Create a new BXObject.
+	 * @return BXObject New empty BXObject.
+	 * 
+	 * @api
+	 */
 	function new ():BXObject {
 		return new $this->class();
 	}
 
+	/**
+	 * Delete an item in the collection.
+	 * @param Int|String|BXObject $id The id or the object to delete.
+	 * @return Bool True on success, false otherwise.
+	 * 
+	 * @api
+	 */
 	function delete(Int|String|BXObject $id): Bool {
 		if ($id instanceof BXObject) {
 			$id = $id->getId();
@@ -319,6 +418,14 @@ trait tBexioObject {
 		
 	}
 
+	/**
+	 * Get an item from the collection
+	 * @param Int|String|BXObject $id The id or the object to get.
+	 * @param Array $options Options that can be passed as query string.
+	 * @return BXObject The item as a BXObject.
+	 * 
+	 * @api
+	 */
 	function get (Int|String|BXObject $id, array $options = []):BXObject {
 		if ($id instanceof BXObject) {
 			$id = $id->getId();
@@ -334,6 +441,18 @@ trait tBexioObject {
 		return new $this->class($this->ctx->fetch());
 	}
 
+	/**
+	 * Set an item in the collection
+	 * 
+	 * Setting an item would create the item if it don't have an ID or overwrite
+	 * the item if it has an ID.
+	 * 
+	 * @param BXObject $content The object to be set.
+	 * @return BXObject|false The item is returned as stored in collection or
+	 * false in case of error
+	 * 
+	 * @api
+	 */
 	function set (BXObject $content):BXObject|false {
 		if ($content::readonly) { return false; }
 
@@ -360,7 +479,18 @@ trait tBexioObject {
 		$this->ctx->body = $content->toJson();
 		return new $this->class($this->ctx->fetch());
 	}
-
+	/**
+	 * [!!!] Update an item in the collection
+	 * 
+	 * This should update property of an item. But the upstream API is buggy
+	 * here, so no way to know what UPDATE does.
+	 * 
+	 * @param BXObject $content The object to be set.
+	 * @return BXObject|false The item is returned as stored in collection or
+	 * false in case of error
+	 * 
+	 * @api
+	 */
 	function update (BXObject $content):BXObject|false {
 		if ($content::readonly) { return false; }
 
@@ -601,17 +731,28 @@ class BexioFile extends BexioAPI {
 		return $this->uuid;
 	}
 
-	function get (Int|String|BXObject $uuid, array $options = []) {
+	/**
+	 * Get a file from file endpoint.
+	 * 
+	 * Files use UUID most of the time, and the documentation says that they use
+	 * ID but id don't work that way. The content is associated with the file
+	 * which require two requests.
+	 * 
+	 * @param Int|String|BXObject The object to get.
+	 * @param Array $options Options it not used here.
+	 * @return BXObject The file as an object with content property added.
+	 * 
+	 */
+	function get (Int|String|BXObject $uuid, array $options = []):BXObject {
 		if ($uuid instanceof BexioFile) {
 			$uuid = $uuid->getId();
 		}
 
 		$this->ctx->url = $this->api_version .'/' . $this->type . '/' . strval($uuid);
-		$result = $this->ctx->fetch();
-		$file = $this->new($result);
+		$file = new $this->class($this->ctx->fetch());
 		$this->ctx->url = $this->api_version .'/' . $this->type . '/' .  strval($uuid) . '/download';
-		
 		$file->content = base64_encode($this->ctx->fetch());
+
 		return $file;
 	}
 

@@ -1,5 +1,10 @@
 <?php
-/* (c) 2023 Etienne Bagnoud */
+/**
+ * @author Etienne Bagnoud <etienne@artnum.ch>
+ * @license MIT
+ * @copyright 2023 Etienne Bagnoud
+ * 
+ */
 namespace BizCuit\BXQuery;
 
 use stdClass;

@@ -1,9 +1,12 @@
 <?php
 
 /**
- * (c) Etienne Bagnoud 2023
+ * @author Etienne Bagnoud <etienne@artnum.ch>
+ * @license MIT
+ * @copyright 2023 Etienne Bagnoud
+ * @todo Still in heavy developpment, not ready for usage as is.
  * 
- * Manage caching of external bexio data into two caches :
+ *  Manage caching of external bexio data into two caches :
  *  - Short time cache to avoid hiting ratelimit (put,get,delete)
  *  - Long time cache in case bexio is down (store,load,remove)
  */
