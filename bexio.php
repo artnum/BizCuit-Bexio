@@ -13,6 +13,7 @@ require(__DIR__ . '/bxobject.php');
 
 use BizCuit\BXObject\BXObject;
 use BizCuit\BXQuery\BXQuery;
+use CurlHandle;
 use Exception;
 use stdClass;
 
@@ -21,7 +22,7 @@ use stdClass;
  */
 class BexioCTX {
 	public const endpoint = 'https://api.bexio.com/';
-	protected $c = '';
+	protected CurlHandle $c;
 	protected array $headers = [];
 	protected object $values;
 	protected string $token;
@@ -135,9 +136,8 @@ class BexioCTX {
 	 * @throws Exception A generic exception with code matching the HTTP error
 	 * code from the upstream API if any.
 	 */
-	function fetch ():stdClass|string {
+	function fetch ():stdClass|string|Array {
 		try {
-			error_log('DO FETCH !!!!!!');
 			$ratelimits = [
 				'remaining' => 0,
 				'limit' => 0,
@@ -213,14 +213,10 @@ class BexioCTX {
  * Base class for enpdoints.
  */
 class BexioAPI {
-	protected $endpoint;
-	protected $c;
-	protected $userid = null;
-    protected $ownerid = null;
-	protected $headers;
-	protected $class;
-	protected $ctx;
-	protected $type;
+	protected string $endpoint;
+	protected Int|null $userid = null;
+    protected Int|null $ownerid = null;
+	protected BexioCTX $ctx;
 
 	/**
 	 * Create withing the given context.
@@ -230,7 +226,7 @@ class BexioAPI {
 	 */
 	function __construct(BexioCTX $ctx) {
 		$this->ctx = $ctx;
-		$this->endpoint = $ctx->endpoint;
+		$this->endpoint = $ctx::endpoint;
 	}
 
     /**
@@ -270,28 +266,28 @@ class BexioAPI {
 	 * @return string The type name
 	 */
 	function getType():string {
-		$parts = explode('\\', $this->class);
+		$parts = explode('\\', $this->className);
 		return array_pop($parts);
 	}
 }
 
 trait tBexioV2Api {
-	protected $api_version = '2.0';
+	const api_version = '2.0';
 }
 
 trait tBexioV3Api {
-	protected $api_version = '3.0';
+	const api_version = '3.0';
 }
 
 trait tBexioV4Api {
-	protected $api_version = '4.0';
+	const api_version = '4.0';
 
 	/**
 	 * Search request for version 4 of the API.
 	 * 
 	 * @see tBexioCollection::search()
 	 */
-	function search (BXQuery $query, Int $offset = 0, Int $limit = 100) {
+	function search (BXQuery $query, Int $offset = 0, Int $limit = 100):array {
 		/* 
 			## API or Documenation bug, this should work but it doesn't (but sometime it does)
 			$limit = 100;
@@ -324,10 +320,10 @@ trait tBexioV4Api {
 		foreach($search_str_array as $k => $v) { $a[] = $k . '=' . $v; }
 		$qs = '?' . join(',', $a);
 
-		$this->ctx->url = $this->api_version . '/' . $this->type . $qs;
+		$this->ctx->url = $this::api_version . '/' . $this::type . $qs;
 		$this->ctx->method = 'get';
 		$result = $this->ctx->fetch();
-		return array_map(fn($e) => new $this->class($e), $result->data);
+		return array_map(fn($e) => new $this->className($e), $result->data);
 	}
 
 	/**
@@ -335,7 +331,7 @@ trait tBexioV4Api {
 	 * 
 	 * @see tBexioCollection::list()
 	 */
-	function list (Int $offset, Int $limit) {
+	function list (Int $offset, Int $limit):array {
 		return $this->search($this->newQuery(), $offset, $limit);
 	}
 
@@ -345,7 +341,7 @@ trait tBexioV4Api {
 	 * @see tBexioCollection::getIdName()
 	 */
 	function getIdName ():string {
-		$c = $this->class;
+		$c = $this::className;
 		return $c::ID;
 	}
 
@@ -367,7 +363,7 @@ trait tBexioCollection {
 	 * @api
 	 */
 	function getIdName ():string {
-		$c = $this->class;
+		$c = $this->className;
 		return $c::ID;
 	}
 
@@ -391,10 +387,10 @@ trait tBexioCollection {
 	 * @api
 	 */
 	function search (BXQuery $query, Int $offset = 0, Int $limit = 500):array {
-		$this->ctx->url = $this->api_version . '/' . $this->type .'/search' . sprintf('?limit=%d&offset=%d', $limit, $offset);
+		$this->ctx->url = $this::api_version . '/' . $this::type .'/search' . sprintf('?limit=%d&offset=%d', $limit, $offset);
 		$this->ctx->body = $query->toJson();
 		$this->ctx->method = 'post';
-		return array_map(fn($e) => new $this->class($e), $this->ctx->fetch());
+		return array_map(fn($e) => new $this->className($e), $this->ctx->fetch());
 	}
 
 	/**
@@ -406,8 +402,8 @@ trait tBexioCollection {
 	 * @api
 	 */
 	function list (Int $offset = 0, Int $limit = 500):array {
-		$this->ctx->url =$this->api_version . '/' . $this->type . sprintf('?limit=%d&offset=%d', $limit, $offset);
-		return array_map(fn($e) => new $this->class($e), $this->ctx->fetch());
+		$this->ctx->url = $this::api_version . '/' . $this::type . sprintf('?limit=%d&offset=%d', $limit, $offset);
+		return array_map(fn($e) => new $this->className($e), $this->ctx->fetch());
 	}
 }
 
@@ -419,7 +415,7 @@ trait tBexioObject {
 	 * @api
 	 */
 	function new ():BXObject {
-		return new $this->class();
+		return new $this->className();
 	}
 
 	/**
@@ -433,7 +429,7 @@ trait tBexioObject {
 		if ($id instanceof BXObject) {
 			$id = $id->getId();
 		}
-		$this->ctx->url = $this->api_version . '/' . $this->type . '/' . strval($id);
+		$this->ctx->url = $this::api_version . '/' . $this::type . '/' . strval($id);
 		$this->ctx->method = 'delete';
 
 		return $this->ctx->fetch()->success;
@@ -452,7 +448,7 @@ trait tBexioObject {
 		if ($id instanceof BXObject) {
 			$id = $id->getId();
 		}
-		$this->ctx->url = $this->api_version .'/' . $this->type . '/' .  strval($id);
+		$this->ctx->url = $this::api_version .'/' . $this::type . '/' .  strval($id);
 		$query = [];
 		foreach ($options as $name => $value) {
 			$query[] = urlencode(strval($name)) . '=' . urlencode(strval($value));
@@ -460,7 +456,7 @@ trait tBexioObject {
 		if (!empty($query)) {
 			$this->ctx->url .= '?' . join('&', $query);
 		}
-		return new $this->class($this->ctx->fetch());
+		return new $this->className($this->ctx->fetch());
 	}
 
 	/**
@@ -491,15 +487,15 @@ trait tBexioObject {
 		}
 
 		if (!$content->getId()) {
-			$this->ctx->url = $this->api_version .'/' . $this->type;
+			$this->ctx->url = $this::api_version .'/' . $this::type;
 			$this->ctx->method = 'post';
 		} else {
-			$this->ctx->url = $this->api_version .'/' . $this->type . '/' .  $content->getId();
+			$this->ctx->url = $this::api_version .'/' . $this::type . '/' .  $content->getId();
 			$this->ctx->method = 'put';
 		}
 
 		$this->ctx->body = $content->toJson();
-		return new $this->class($this->ctx->fetch());
+		return new $this->className($this->ctx->fetch());
 	}
 	/**
 	 * [!!!] Update an item in the collection
@@ -517,14 +513,14 @@ trait tBexioObject {
 		if ($content::readonly) { return false; }
 
 		if (!$content->getId()) { return $this->set($content); }
-		$this->ctx->url = $this->api_version .'/' . $this->type . '/' .  $content->getId();
+		$this->ctx->url = $this::api_version .'/' . $this::type . '/' .  $content->getId();
 		/* API BUG according to documentation it should be "patch" but when 
 		 * using "patch", I get error 404 as when use "post" with partial data 
 		 * it update
 		 */
 		$this->ctx->method = 'post'; 
 		$this->ctx->body = $content->changesToJson();
-		return new $this->class($this->ctx->fetch());
+		return new $this->className($this->ctx->fetch());
 	}
 
 }
@@ -533,7 +529,7 @@ trait tBexioArchiveable {
 	function archive (BXObject $content):bool {
 		if ($content::readonly) { return false; }
 		if (!$content->getId()) { return false; }
-		$this->ctx->url = $this->api_version .'/' . $this->type . '/' .  $content->getId() . '/archive';
+		$this->ctx->url = $this::api_version .'/' . $this::type . '/' .  $content->getId() . '/archive';
 		$this->ctx->method = 'post';
 		return $this->ctx->fetch()->success;
 	}
@@ -541,7 +537,7 @@ trait tBexioArchiveable {
 	function unarchive (BXObject $content):bool {
 		if ($content::readonly) { return false; }
 		if (!$content->getId()) { return false; }
-		$this->ctx->url = $this->api_version .'/' . $this->type . '/' .  $content->getId() . '/reactivate';
+		$this->ctx->url = $this::api_version .'/' . $this::type . '/' .  $content->getId() . '/reactivate';
 		$this->ctx->method = 'post';
 		return $this->ctx->fetch()->success;
 	}
@@ -549,14 +545,14 @@ trait tBexioArchiveable {
 
 trait tBexioNumberObject {
 	function getByNumber (Int|String $id):BXObject {
-		$this->ctx->url = $this->api_version . '/' . $this->type . '/search';
+		$this->ctx->url = $this::api_version . '/' . $this::type . '/search';
 		$this->ctx->method = 'post';
 		$this->ctx->body = json_encode([[
-			'field' => $this->class::NR,
+			'field' => $this::className::NR,
 			'value' => strval($id),
 			'criteria' => '='
 		]]);
-		return new $this->class($this->ctx->fetch()[0]);
+		return new $this->className($this->ctx->fetch()[0]);
 	}
 }
 
@@ -565,7 +561,7 @@ trait tBexioPDFObject {
 		if ($id instanceof BXObject) {
 			$id = $id->getId();
 		}
-		$this->ctx->url = $this->api_version . '/' . $this->type . '/' . strval($id) . '/pdf';
+		$this->ctx->url = $this::api_version . '/' . $this::type . '/' . strval($id) . '/pdf';
 		return new \BizCuit\BXObject\PDF($this->ctx->fetch());
 	}
 }
@@ -584,7 +580,7 @@ trait tBexioProjectObject {
 			$results = array_merge(
 				$results,
 				array_map(
-					fn($e) => new $this->class($e),
+					fn($e) => new $this->className($e),
 					array_filter($list, fn($e) => intval($e->project_id) === intval($projectId))
 				)
 			);
@@ -601,9 +597,9 @@ trait tBexioProjectObject {
  * @api
  */
 class BexioCountry extends BexioAPI {
-	protected $type = 'country';
-	protected $class = 'BizCuit\BXObject\Country';
-	protected $query = 'BizCuit\BXQuery\Coutry';
+	const type = 'country';
+	protected string $className = 'BizCuit\BXObject\Country';
+	protected string $query = 'BizCuit\BXQuery\Coutry';
 
 	use tBexioV2Api, tBexioObject, tBexioCollection;
 }
@@ -615,9 +611,9 @@ class BexioCountry extends BexioAPI {
  * @api
  */
 class BexioQuote extends BexioAPI {
-	protected $type = 'kb_offer';
-	protected $class = 'BizCuit\BXObject\Quote';
-	protected $query = 'BizCuit\BXQuery\Quote';
+	const type = 'kb_offer';
+	protected string $className = 'BizCuit\BXObject\Quote';
+	protected string $query = 'BizCuit\BXQuery\Quote';
 
 	use tBexioV2Api, tBexioObject, tBexioPDFObject, tBexioProjectObject, tBexioCollection, tBexioNumberObject;
 }
@@ -629,9 +625,9 @@ class BexioQuote extends BexioAPI {
  * @api
  */
 class BexioInvoice extends BexioAPI {
-	protected $type = 'kb_invoice';
-	protected $class = 'BizCuit\BXObject\Invoice';
-	protected $query = 'BizCuit\BXQuery\Invoice';
+	const type = 'kb_invoice';
+	protected string $className = 'BizCuit\BXObject\Invoice';
+	protected string $query = 'BizCuit\BXQuery\Invoice';
 
 	use tBexioV2Api, tBexioObject, tBexioPDFObject, tBexioProjectObject, tBexioCollection, tBexioNumberObject;
 }
@@ -643,9 +639,9 @@ class BexioInvoice extends BexioAPI {
  * @api
  */
 class BexioOrder extends BexioAPI {
-	protected $type = 'kb_order';
-	protected $class = 'BizCuit\BXObject\Order';
-	protected $query = 'BizCuit\BXQuery\Order';
+	const type = 'kb_order';
+	protected string $className = 'BizCuit\BXObject\Order';
+	protected string $query = 'BizCuit\BXQuery\Order';
 
 	use tBexioV2Api, tBexioObject, tBexioPDFObject, tBexioProjectObject, tBexioCollection, tBexioNumberObject;
 }
@@ -657,9 +653,9 @@ class BexioOrder extends BexioAPI {
  * @api
  */
 class BexioContact extends BexioAPI {
-	protected $type = 'contact';
-	protected $class = 'BizCuit\BXObject\Contact';
-	protected $query = 'BizCuit\BXQuery\Contact';
+	const type = 'contact';
+	protected string $className = 'BizCuit\BXObject\Contact';
+	protected string $query = 'BizCuit\BXQuery\Contact';
 
 
 	use tBexioV2Api, tBexioObject, tBexioCollection;
@@ -672,9 +668,9 @@ class BexioContact extends BexioAPI {
  * @api
  */
 class BexioProject extends BexioAPI {
-	protected $type = 'pr_project';
-	protected $class = 'BizCuit\BXObject\Project';
-	protected $query = 'BizCuit\BXQuery\Project';
+	const type = 'pr_project';
+	protected string $className = 'BizCuit\BXObject\Project';
+	protected string $query = 'BizCuit\BXQuery\Project';
 
 	use tBexioV2Api, tBexioObject, tBexioCollection, tBexioNumberObject, tBexioArchiveable;
 }
@@ -686,9 +682,9 @@ class BexioProject extends BexioAPI {
  * @api
  */
 class BexioContactRelation extends BexioAPI {
-	protected $type = 'contact_relation';
-	protected $class = 'BizCuit\BXObject\ContactRelation';
-	protected $query = 'BizCuit\BXQuery\ContactRelation';
+	const type = 'contact_relation';
+	protected string $className = 'BizCuit\BXObject\ContactRelation';
+	protected string $query = 'BizCuit\BXQuery\ContactRelation';
 
 	use tBexioV2Api, tBexioObject, tBexioCollection;
 }
@@ -700,9 +696,9 @@ class BexioContactRelation extends BexioAPI {
  * @api
  */
 class BexioAdditionalAddress extends BexioAPI {
-	protected $type = 'additional_address';
-	protected $class = 'BizCuit\BXObject\AdditionalAddress';
-	protected $query = 'BizCuit\BXQuery\AdditionalAddress';
+	const type = 'additional_address';
+	protected string $className = 'BizCuit\BXObject\AdditionalAddress';
+	protected string $query = 'BizCuit\BXQuery\AdditionalAddress';
 
 	use tBexioV2Api, tBexioObject, tBexioCollection;
 }
@@ -714,9 +710,9 @@ class BexioAdditionalAddress extends BexioAPI {
  * @api
  */
 class BexioNote extends BexioAPI {
-	protected $type = 'note';
-	protected $class = 'BizCuit\BXObject\Note';
-	protected $query = 'BizCuit\BXQuery\Note';
+	const type = 'note';
+	protected string $className = 'BizCuit\BXObject\Note';
+	protected string $query = 'BizCuit\BXQuery\Note';
 
 	use tBexioV2Api, tBexioObject, tBexioCollection;
 }
@@ -729,9 +725,9 @@ class BexioNote extends BexioAPI {
  * @api
  */
 class BexioUser extends BexioAPI {
-	protected $type = 'users';
-	protected $class = 'BizCuit\BXObject\User';
-	protected $query = 'BizCuit\BXQuery\User';
+	const type = 'users';
+	protected string $className = 'BizCuit\BXObject\User';
+	protected string $query = 'BizCuit\BXQuery\User';
 
 	use tBexioV3Api, tBexioObject, tBexioCollection;
 }
@@ -743,9 +739,9 @@ class BexioUser extends BexioAPI {
  * @api
  */
 class BexioBusinessActivity extends BexioAPI {
-	protected $type = 'client_service';
-	protected $class = 'BizCuit\BXObject\ClientService';
-	protected $query = 'BizCuit\BXQuery\ROObject';
+	const type = 'client_service';
+	protected string $className = 'BizCuit\BXObject\ClientService';
+	protected string $query = 'BizCuit\BXQuery\ROObject';
 
 	use tBexioV2Api, tBexioObject, tBexioCollection;
 }
@@ -757,9 +753,9 @@ class BexioBusinessActivity extends BexioAPI {
  * @api
  */
 class BexioSalutation extends BexioAPI {
-	protected $type = 'salutation';
-	protected $class = 'BizCuit\BXObject\Salutation';
-	protected $query = 'BizCuit\BXQuery\ROObject';
+	const type = 'salutation';
+	protected string $className = 'BizCuit\BXObject\Salutation';
+	protected string $query = 'BizCuit\BXQuery\ROObject';
 
 	use tBexioV2Api, tBexioObject, tBexioCollection;
 }
@@ -771,9 +767,9 @@ class BexioSalutation extends BexioAPI {
  * @api
  */
 class BexioTitle extends BexioAPI {
-	protected $type = 'title';
-	protected $class = 'BizCuit\BXObject\Title';
-	protected $query = 'BizCuit\BXQuery\ROObject';
+	const type = 'title';
+	protected string $className = 'BizCuit\BXObject\Title';
+	protected string $query = 'BizCuit\BXQuery\ROObject';
 
 	use tBexioV2Api, tBexioObject, tBexioCollection;
 }
@@ -785,9 +781,9 @@ class BexioTitle extends BexioAPI {
  * @api
  */
 class BexioProjectType extends BexioAPI {
-	protected $type = 'pr_project_type';
-	protected $class = 'BizCuit\BXObject\ProjectType';
-	protected $query = 'BizCuit\BXQuery\ROObject';
+	const type = 'pr_project_type';
+	protected string $className = 'BizCuit\BXObject\ProjectType';
+	protected string $query = 'BizCuit\BXQuery\ROObject';
 
 	use tBexioV2Api, tBexioObject, tBexioCollection;
 }
@@ -799,9 +795,9 @@ class BexioProjectType extends BexioAPI {
  * @api
  */
 class BexioProjectStatus extends BexioAPI {
-	protected $type = 'pr_project_state';
-	protected $class = 'BizCuit\BXObject\ROObject';
-	protected $query = 'BizCuit\BXQuery\ROObject';
+	const type = 'pr_project_state';
+	protected string $className = 'BizCuit\BXObject\ROObject';
+	protected string $query = 'BizCuit\BXQuery\ROObject';
 
 	use tBexioV2Api, tBexioObject, tBexioCollection;
 }
@@ -813,9 +809,9 @@ class BexioProjectStatus extends BexioAPI {
  * @api
  */
 class BexioBills extends BexioAPI {
-	protected $type = 'purchase/bills';
-	protected $class = 'BizCuit\BXObject\Bills';
-	protected $query = 'BizCuit\BXQuery\Bills';
+	const type = 'purchase/bills';
+	protected string $className = 'BizCuit\BXObject\Bills';
+	protected string $query = 'BizCuit\BXQuery\Bills';
 	protected $search_fields = [
 		'firstname_suffix',
 		'lastname_company',
@@ -826,14 +822,13 @@ class BexioBills extends BexioAPI {
 	];
 
 
-	function setStatus (Int|String|BXObject $uuid, string $status) {
-		if ($uuid instanceof BexioFile) {
+	function setStatus (Int|String|BXObject $uuid, string $status):BXObject {
+		if ($uuid instanceof BXObject) {
 			$uuid = $uuid->getId();
 		}
-		$this->ctx->url = $this->api_version .'/' . $this->type . '/' .  strval($uuid) . '/bookings/' . $status;
+		$this->ctx->url = $this::api_version .'/' . $this::type . '/' .  strval($uuid) . '/bookings/' . $status;
 		$this->ctx->method = 'PUT';
 		$this->ctx->body = '';
-		error_log($this->ctx->url);
 		$result = $this->ctx->fetch();
 		return $this->new($result);
 	}
@@ -848,9 +843,9 @@ class BexioBills extends BexioAPI {
  * @api
  */
 class BexioFile extends BexioAPI {
-	protected $type = 'files';
-	protected $class = 'BizCuit\BXObject\File';
-	protected $query = 'BizCuit\BXQuery\File';
+	const type = 'files';
+	protected string $className = 'BizCuit\BXObject\File';
+	protected string $query = 'BizCuit\BXQuery\File';
 	protected $uuid;
 
 	function getId() {
@@ -870,13 +865,13 @@ class BexioFile extends BexioAPI {
 	 * 
 	 */
 	function get (Int|String|BXObject $uuid, array $options = []):BXObject {
-		if ($uuid instanceof BexioFile) {
+		if ($uuid instanceof BXObject) {
 			$uuid = $uuid->getId();
 		}
 
-		$this->ctx->url = $this->api_version .'/' . $this->type . '/' . strval($uuid);
-		$file = new $this->class($this->ctx->fetch());
-		$this->ctx->url = $this->api_version .'/' . $this->type . '/' .  strval($uuid) . '/download';
+		$this->ctx->url = $this::api_version .'/' . $this::type . '/' . strval($uuid);
+		$file = new $this->className($this->ctx->fetch());
+		$this->ctx->url = $this::api_version .'/' . $this::type . '/' .  strval($uuid) . '/download';
 		$file->content = base64_encode($this->ctx->fetch());
 
 		return $file;
