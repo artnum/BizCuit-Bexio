@@ -26,6 +26,7 @@ class BexioCTX {
 			'Authorization: Bearer ' . $token
 		];
 		$this->values = new stdClass();
+		$this->method = 'get';
 	}
 
 	private function set_url (String $url) {
@@ -39,7 +40,7 @@ class BexioCTX {
 	private function set_method(String $method = 'get') {
 		switch(strtolower($method)) {
 			default:
-			case 'get': break;
+			case 'get': curl_setopt($this->c, CURLOPT_HTTPGET, true); break;
 			case 'post': curl_setopt($this->c, CURLOPT_POST, true); break;
 			case 'delete': curl_setopt($this->c, CURLOPT_CUSTOMREQUEST, 'DELETE'); break;
 			case 'put': curl_setopt($this->c, CURLOPT_CUSTOMREQUEST, 'PUT'); break;
@@ -55,7 +56,6 @@ class BexioCTX {
 
 	private function reset() {
 		unset($this->url);
-		unset($this->method);
 		unset($this->body);
 		curl_reset($this->c);
 	}
@@ -124,7 +124,6 @@ class BexioCTX {
 				'limit' => 0,
 				'reset' => 0
 			];
-			curl_setopt($this->c, CURLOPT_HTTPHEADER, $this->headers);
 			curl_setopt($this->c, CURLOPT_RETURNTRANSFER, true);
 			curl_setopt($this->c, CURLOPT_HEADERFUNCTION, 
 				function ($curl, $header) use (&$ratelimits) {
@@ -149,7 +148,17 @@ class BexioCTX {
 			);
 			$this->set_method($this->method);
 			$this->set_url($this->url);
+
+			$headers = $this->headers;
 			if ($this->method !== 'get' && $this->method !== 'head') { $this->set_body($this->body); }
+			else { 
+				/* A bug can be triggered if you send a GET without Content-Length 
+				 * set to 0
+				 */
+				$headers = array_merge($this->headers, ['Content-Length: 0']); 
+			}
+			curl_setopt($this->c, CURLOPT_HTTPHEADER, $headers);
+
 			$data = curl_exec($this->c);
 			$code = curl_getinfo($this->c,  CURLINFO_HTTP_CODE);
 			$type = curl_getinfo($this->c, CURLINFO_CONTENT_TYPE);
@@ -593,15 +602,15 @@ class BexioFile extends BexioAPI {
 	}
 
 	function get (Int|String|BXObject $uuid, array $options = []) {
-		error_log('get file');
 		if ($uuid instanceof BexioFile) {
 			$uuid = $uuid->getId();
 		}
-		
-		$this->ctx->url = $this->api_version .'/' . $this->type . '/' .  strval($uuid);
+
+		$this->ctx->url = $this->api_version .'/' . $this->type . '/' . strval($uuid);
 		$result = $this->ctx->fetch();
 		$file = $this->new($result);
 		$this->ctx->url = $this->api_version .'/' . $this->type . '/' .  strval($uuid) . '/download';
+		
 		$file->content = base64_encode($this->ctx->fetch());
 		return $file;
 	}
