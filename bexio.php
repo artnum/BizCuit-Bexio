@@ -5,6 +5,7 @@
  * @copyright 2023 Etienne Bagnoud
  * 
  */
+
 namespace BizCuit;
 
 require(__DIR__ . '/bxquery.php');
@@ -15,13 +16,24 @@ use BizCuit\BXQuery\BXQuery;
 use Exception;
 use stdClass;
 
+/**
+ * Base class containing cURL operations.
+ */
 class BexioCTX {
-	const endpoint = 'https://api.bexio.com/';
+	public const endpoint = 'https://api.bexio.com/';
 	protected $c = '';
 	protected array $headers = [];
 	protected object $values;
 	protected string $token;
 
+	/**
+	 * Create the context with API token needed to access endpoints
+	 *
+	 * Of all authentications available, only the API token is avaible.
+	 * 
+	 * @link https://docs.bexio.com/#section/Authentication/API-Tokens 
+	 * @param String $token The token.
+	 */
 	function __construct(String $token) {
 		$this->c = curl_init();
 		$this->token = $token;
@@ -197,8 +209,11 @@ class BexioCTX {
 	}
 }
 
+/**
+ * Base class for enpdoints.
+ */
 class BexioAPI {
-	protected $endpoint = 'https://api.bexio.com/';
+	protected $endpoint;
 	protected $c;
 	protected $userid = null;
     protected $ownerid = null;
@@ -207,8 +222,15 @@ class BexioAPI {
 	protected $ctx;
 	protected $type;
 
+	/**
+	 * Create withing the given context.
+	 * 
+	 * @param BexioCTX $ctx The context in which the API will work.
+	 * 
+	 */
 	function __construct(BexioCTX $ctx) {
 		$this->ctx = $ctx;
+		$this->endpoint = $ctx->endpoint;
 	}
 
     /**
@@ -572,6 +594,12 @@ trait tBexioProjectObject {
 	}
 }
 
+/**
+ * Represent the enpoint Countries 
+ * 
+ * @link https://docs.bexio.com/#tag/Countries
+ * @api
+ */
 class BexioCountry extends BexioAPI {
 	protected $type = 'country';
 	protected $class = 'BizCuit\BXObject\Country';
@@ -580,6 +608,12 @@ class BexioCountry extends BexioAPI {
 	use tBexioV2Api, tBexioObject, tBexioCollection;
 }
 
+/**
+ * Represent the enpoint Quotes
+ * 
+ * @link https://docs.bexio.com/#tag/Quotes
+ * @api
+ */
 class BexioQuote extends BexioAPI {
 	protected $type = 'kb_offer';
 	protected $class = 'BizCuit\BXObject\Quote';
@@ -588,6 +622,12 @@ class BexioQuote extends BexioAPI {
 	use tBexioV2Api, tBexioObject, tBexioPDFObject, tBexioProjectObject, tBexioCollection, tBexioNumberObject;
 }
 
+/**
+ * Represent the enpoint Invoices
+ * 
+ * @link https://docs.bexio.com/#tag/Invoices
+ * @api
+ */
 class BexioInvoice extends BexioAPI {
 	protected $type = 'kb_invoice';
 	protected $class = 'BizCuit\BXObject\Invoice';
@@ -596,6 +636,12 @@ class BexioInvoice extends BexioAPI {
 	use tBexioV2Api, tBexioObject, tBexioPDFObject, tBexioProjectObject, tBexioCollection, tBexioNumberObject;
 }
 
+/**
+ * Represent the enpoint Orders
+ * 
+ * @link https://docs.bexio.com/#tag/Orders
+ * @api
+ */
 class BexioOrder extends BexioAPI {
 	protected $type = 'kb_order';
 	protected $class = 'BizCuit\BXObject\Order';
@@ -604,6 +650,12 @@ class BexioOrder extends BexioAPI {
 	use tBexioV2Api, tBexioObject, tBexioPDFObject, tBexioProjectObject, tBexioCollection, tBexioNumberObject;
 }
 
+/**
+ * Represent the enpoint Contacts
+ * 
+ * @link https://docs.bexio.com/#tag/Contacts
+ * @api
+ */
 class BexioContact extends BexioAPI {
 	protected $type = 'contact';
 	protected $class = 'BizCuit\BXObject\Contact';
@@ -613,6 +665,12 @@ class BexioContact extends BexioAPI {
 	use tBexioV2Api, tBexioObject, tBexioCollection;
 }
 
+/**
+ * Represent the enpoint Projects
+ * 
+ * @link https://docs.bexio.com/#tag/Projects
+ * @api
+ */
 class BexioProject extends BexioAPI {
 	protected $type = 'pr_project';
 	protected $class = 'BizCuit\BXObject\Project';
@@ -621,6 +679,12 @@ class BexioProject extends BexioAPI {
 	use tBexioV2Api, tBexioObject, tBexioCollection, tBexioNumberObject, tBexioArchiveable;
 }
 
+/**
+ * Represent the enpoint Contact Relations
+ * 
+ * @link https://docs.bexio.com/#tag/Contact-Relations
+ * @api
+ */
 class BexioContactRelation extends BexioAPI {
 	protected $type = 'contact_relation';
 	protected $class = 'BizCuit\BXObject\ContactRelation';
@@ -629,6 +693,12 @@ class BexioContactRelation extends BexioAPI {
 	use tBexioV2Api, tBexioObject, tBexioCollection;
 }
 
+/**
+ * Represent the enpoint Additional Addresses
+ * 
+ * @link https://docs.bexio.com/#tag/Additional-Addresses
+ * @api
+ */
 class BexioAdditionalAddress extends BexioAPI {
 	protected $type = 'additional_address';
 	protected $class = 'BizCuit\BXObject\AdditionalAddress';
@@ -637,6 +707,12 @@ class BexioAdditionalAddress extends BexioAPI {
 	use tBexioV2Api, tBexioObject, tBexioCollection;
 }
 
+/**
+ * Represent the enpoint Notes
+ * 
+ * @link https://docs.bexio.com/#tag/Notes
+ * @api
+ */
 class BexioNote extends BexioAPI {
 	protected $type = 'note';
 	protected $class = 'BizCuit\BXObject\Note';
@@ -645,6 +721,13 @@ class BexioNote extends BexioAPI {
 	use tBexioV2Api, tBexioObject, tBexioCollection;
 }
 
+/**
+ * Represent the enpoint User Management
+ * 
+ * @todo Add fictionnal user management
+ * @link https://docs.bexio.com/#tag/User-Management
+ * @api
+ */
 class BexioUser extends BexioAPI {
 	protected $type = 'users';
 	protected $class = 'BizCuit\BXObject\User';
@@ -653,6 +736,12 @@ class BexioUser extends BexioAPI {
 	use tBexioV3Api, tBexioObject, tBexioCollection;
 }
 
+/**
+ * Represent the enpoint Business Activities
+ * 
+ * @link https://docs.bexio.com/#tag/Business-Activities
+ * @api
+ */
 class BexioBusinessActivity extends BexioAPI {
 	protected $type = 'client_service';
 	protected $class = 'BizCuit\BXObject\ClientService';
@@ -661,6 +750,12 @@ class BexioBusinessActivity extends BexioAPI {
 	use tBexioV2Api, tBexioObject, tBexioCollection;
 }
 
+/**
+ * Represent the enpoint Salutations
+ * 
+ * @link https://docs.bexio.com/#tag/Salutations
+ * @api
+ */
 class BexioSalutation extends BexioAPI {
 	protected $type = 'salutation';
 	protected $class = 'BizCuit\BXObject\Salutation';
@@ -669,6 +764,12 @@ class BexioSalutation extends BexioAPI {
 	use tBexioV2Api, tBexioObject, tBexioCollection;
 }
 
+/**
+ * Represent the enpoint Titles
+ * 
+ * @link https://docs.bexio.com/#tag/Titles
+ * @api
+ */
 class BexioTitle extends BexioAPI {
 	protected $type = 'title';
 	protected $class = 'BizCuit\BXObject\Title';
@@ -677,6 +778,12 @@ class BexioTitle extends BexioAPI {
 	use tBexioV2Api, tBexioObject, tBexioCollection;
 }
 
+/**
+ * Represent the enpoint Project Types
+ * 
+ * @link https://docs.bexio.com/#tag/Projects/operation/v2ListProjectType
+ * @api
+ */
 class BexioProjectType extends BexioAPI {
 	protected $type = 'pr_project_type';
 	protected $class = 'BizCuit\BXObject\ProjectType';
@@ -684,6 +791,13 @@ class BexioProjectType extends BexioAPI {
 
 	use tBexioV2Api, tBexioObject, tBexioCollection;
 }
+
+/**
+ * Represent the enpoint Project Status
+ * 
+ * @link https://docs.bexio.com/#tag/Projects/operation/v2ListProjectStatus
+ * @api
+ */
 class BexioProjectStatus extends BexioAPI {
 	protected $type = 'pr_project_state';
 	protected $class = 'BizCuit\BXObject\ROObject';
@@ -692,6 +806,12 @@ class BexioProjectStatus extends BexioAPI {
 	use tBexioV2Api, tBexioObject, tBexioCollection;
 }
 
+/**
+ * Represent the enpoint Bills
+ * 
+ * @link https://docs.bexio.com/#tag/Bills
+ * @api
+ */
 class BexioBills extends BexioAPI {
 	protected $type = 'purchase/bills';
 	protected $class = 'BizCuit\BXObject\Bills';
@@ -721,6 +841,12 @@ class BexioBills extends BexioAPI {
 	use tBexioObject, tBexioV4Api;
 }
 
+/**
+ * Represent the enpoint Files
+ * 
+ * @link https://docs.bexio.com/#tag/Files
+ * @api
+ */
 class BexioFile extends BexioAPI {
 	protected $type = 'files';
 	protected $class = 'BizCuit\BXObject\File';
