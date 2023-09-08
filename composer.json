@@ -10,9 +10,7 @@
         "role": "Developper"
     }],
     "autoload": {
-        "psr-4": {
-            "BizCuit\\": "./"
-        }
+        "files": ["./bexio.php" ]
     },
     "require": {
         "php": ">=8.2"
