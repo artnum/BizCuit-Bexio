@@ -22,6 +22,15 @@ Still in active developpement, it also provide tooling to build a data cache
 short term (to mitigate [Rate Limiting](https://docs.bexio.com/#section/API-basics/Rate-Limiting))
 and long term to keep working (read-only) if the upstream service goes down.
 
+## Disclaimer
+
+The fact that I am developping this doesn't mean that I support the Bexio product. 
+I do it because I need it, but if I were to have the choice, I wouldn't use bexio.
+The support is quite arrogant and try as hard as possible to drive away dev like
+me, the application is soooooo slow (to get ONE item through the API, you wait
+500ms, even from the official frontend you spend more time waiting than 
+working) and it is quite expensive.
+
 ## Example of usage
 
 ```php

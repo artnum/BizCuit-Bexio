@@ -25,6 +25,15 @@ Encore en développement, elle fournit aussi l'outillage pour éventuellement
 construire un système de cache court terme (pour gérer les limitations [Rate Limiting](https://docs.bexio.com/#section/API-basics/Rate-Limiting))
 et un cache long terme, en lecture seul, en cache de panne du service.
 
+## Clause de non-responsabilité
+
+Le fait que je développe ce projet ne signifie pas que je soutiens le produit 
+Bexio. Je le fais parce que le je le dois, mais, si j'avais le choix,
+je n'utiliserais pas bexio. Le support est arrogant et essaie de chasser les 
+développeurs comme moi, l'application est tellement lente (pour obtenir 
+UN élément via l'API, c'est 500 ms, même depuis l'interface officielle on passe
+plus de temps à attendre qu'agir) et le produit est couteux.
+
 ## Un court exemple
 
 ```php
