@@ -18,3 +18,5 @@
   still trying to figure out.
   * For File, the documentation says the id [int32] must be used when in fact 
   you need to use the uuid [string].
+  * A GET request without body and without Content-Length: 0 as header can have
+  the API returning an error.
