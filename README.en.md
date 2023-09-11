@@ -33,7 +33,7 @@ working) and it is expensive.
 
 ## Install
 
-Via composer `composer require "artnum/bizcuit-bexio @dev`
+Via composer `composer require "artnum/bizcuit-bexio @dev"`
 
 ## Documentation
 

@@ -36,7 +36,7 @@ plus de temps à attendre qu'agir) et le produit est couteux.
 
 ## Installation
 
-Via composer `composer require "artnum/bizcuit-bexio @dev`
+Via composer `composer require "artnum/bizcuit-bexio @dev"`
 
 ## Documentation
 
