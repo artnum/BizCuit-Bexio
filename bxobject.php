@@ -99,9 +99,20 @@ class ROObject extends BXObject {
 class File extends ROObject {}
 class Bills extends ROObject {}
 class ProjectType extends ROObject {}
+class ProjectStatus extends ROObject {}
 class Title extends ROObject {}
 class Salutation extends ROObject {}
 class ClientService extends ROObject {}
+class Currency extends ROObject {}
+class Expense extends ROObject {}
+class ContactGroup extends ROObject { }
+class ContactSector extends ROObject { }
+class Payment extends ROObject { }
+class Unit extends ROObject { }
+class StockLocation extends ROObject { }
+class BusinessActivity extends ROObject { }
+class CommunicationType extends ROObject { }
+
 
 class Country extends BXObject {
     const NR = null;

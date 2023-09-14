@@ -111,11 +111,6 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/BizCuit-BexioAPI.html#property_endpoint"
         },                {
-            "fqsen": "\\BizCuit\\BexioAPI\u003A\u003A\u0024c",
-            "name": "c",
-            "summary": "",
-            "url": "classes/BizCuit-BexioAPI.html#property_c"
-        },                {
             "fqsen": "\\BizCuit\\BexioAPI\u003A\u003A\u0024userid",
             "name": "userid",
             "summary": "",
@@ -126,40 +121,25 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/BizCuit-BexioAPI.html#property_ownerid"
         },                {
-            "fqsen": "\\BizCuit\\BexioAPI\u003A\u003A\u0024headers",
-            "name": "headers",
-            "summary": "",
-            "url": "classes/BizCuit-BexioAPI.html#property_headers"
-        },                {
-            "fqsen": "\\BizCuit\\BexioAPI\u003A\u003A\u0024class",
-            "name": "class",
-            "summary": "",
-            "url": "classes/BizCuit-BexioAPI.html#property_class"
-        },                {
             "fqsen": "\\BizCuit\\BexioAPI\u003A\u003A\u0024ctx",
             "name": "ctx",
             "summary": "",
             "url": "classes/BizCuit-BexioAPI.html#property_ctx"
-        },                {
-            "fqsen": "\\BizCuit\\BexioAPI\u003A\u003A\u0024type",
-            "name": "type",
-            "summary": "",
-            "url": "classes/BizCuit-BexioAPI.html#property_type"
         },                {
             "fqsen": "\\BizCuit\\BexioCountry",
             "name": "BexioCountry",
             "summary": "Represent\u0020the\u0020enpoint\u0020Countries",
             "url": "classes/BizCuit-BexioCountry.html"
         },                {
-            "fqsen": "\\BizCuit\\BexioCountry\u003A\u003A\u0024type",
+            "fqsen": "\\BizCuit\\BexioCountry\u003A\u003Atype",
             "name": "type",
             "summary": "",
-            "url": "classes/BizCuit-BexioCountry.html#property_type"
+            "url": "classes/BizCuit-BexioCountry.html#constant_type"
         },                {
-            "fqsen": "\\BizCuit\\BexioCountry\u003A\u003A\u0024class",
-            "name": "class",
+            "fqsen": "\\BizCuit\\BexioCountry\u003A\u003A\u0024className",
+            "name": "className",
             "summary": "",
-            "url": "classes/BizCuit-BexioCountry.html#property_class"
+            "url": "classes/BizCuit-BexioCountry.html#property_className"
         },                {
             "fqsen": "\\BizCuit\\BexioCountry\u003A\u003A\u0024query",
             "name": "query",
@@ -171,15 +151,15 @@ Search.appendIndex(
             "summary": "Represent\u0020the\u0020enpoint\u0020Quotes",
             "url": "classes/BizCuit-BexioQuote.html"
         },                {
-            "fqsen": "\\BizCuit\\BexioQuote\u003A\u003A\u0024type",
+            "fqsen": "\\BizCuit\\BexioQuote\u003A\u003Atype",
             "name": "type",
             "summary": "",
-            "url": "classes/BizCuit-BexioQuote.html#property_type"
+            "url": "classes/BizCuit-BexioQuote.html#constant_type"
         },                {
-            "fqsen": "\\BizCuit\\BexioQuote\u003A\u003A\u0024class",
-            "name": "class",
+            "fqsen": "\\BizCuit\\BexioQuote\u003A\u003A\u0024className",
+            "name": "className",
             "summary": "",
-            "url": "classes/BizCuit-BexioQuote.html#property_class"
+            "url": "classes/BizCuit-BexioQuote.html#property_className"
         },                {
             "fqsen": "\\BizCuit\\BexioQuote\u003A\u003A\u0024query",
             "name": "query",
@@ -191,15 +171,15 @@ Search.appendIndex(
             "summary": "Represent\u0020the\u0020enpoint\u0020Invoices",
             "url": "classes/BizCuit-BexioInvoice.html"
         },                {
-            "fqsen": "\\BizCuit\\BexioInvoice\u003A\u003A\u0024type",
+            "fqsen": "\\BizCuit\\BexioInvoice\u003A\u003Atype",
             "name": "type",
             "summary": "",
-            "url": "classes/BizCuit-BexioInvoice.html#property_type"
+            "url": "classes/BizCuit-BexioInvoice.html#constant_type"
         },                {
-            "fqsen": "\\BizCuit\\BexioInvoice\u003A\u003A\u0024class",
-            "name": "class",
+            "fqsen": "\\BizCuit\\BexioInvoice\u003A\u003A\u0024className",
+            "name": "className",
             "summary": "",
-            "url": "classes/BizCuit-BexioInvoice.html#property_class"
+            "url": "classes/BizCuit-BexioInvoice.html#property_className"
         },                {
             "fqsen": "\\BizCuit\\BexioInvoice\u003A\u003A\u0024query",
             "name": "query",
@@ -211,15 +191,15 @@ Search.appendIndex(
             "summary": "Represent\u0020the\u0020enpoint\u0020Orders",
             "url": "classes/BizCuit-BexioOrder.html"
         },                {
-            "fqsen": "\\BizCuit\\BexioOrder\u003A\u003A\u0024type",
+            "fqsen": "\\BizCuit\\BexioOrder\u003A\u003Atype",
             "name": "type",
             "summary": "",
-            "url": "classes/BizCuit-BexioOrder.html#property_type"
+            "url": "classes/BizCuit-BexioOrder.html#constant_type"
         },                {
-            "fqsen": "\\BizCuit\\BexioOrder\u003A\u003A\u0024class",
-            "name": "class",
+            "fqsen": "\\BizCuit\\BexioOrder\u003A\u003A\u0024className",
+            "name": "className",
             "summary": "",
-            "url": "classes/BizCuit-BexioOrder.html#property_class"
+            "url": "classes/BizCuit-BexioOrder.html#property_className"
         },                {
             "fqsen": "\\BizCuit\\BexioOrder\u003A\u003A\u0024query",
             "name": "query",
@@ -231,15 +211,15 @@ Search.appendIndex(
             "summary": "Represent\u0020the\u0020enpoint\u0020Contacts",
             "url": "classes/BizCuit-BexioContact.html"
         },                {
-            "fqsen": "\\BizCuit\\BexioContact\u003A\u003A\u0024type",
+            "fqsen": "\\BizCuit\\BexioContact\u003A\u003Atype",
             "name": "type",
             "summary": "",
-            "url": "classes/BizCuit-BexioContact.html#property_type"
+            "url": "classes/BizCuit-BexioContact.html#constant_type"
         },                {
-            "fqsen": "\\BizCuit\\BexioContact\u003A\u003A\u0024class",
-            "name": "class",
+            "fqsen": "\\BizCuit\\BexioContact\u003A\u003A\u0024className",
+            "name": "className",
             "summary": "",
-            "url": "classes/BizCuit-BexioContact.html#property_class"
+            "url": "classes/BizCuit-BexioContact.html#property_className"
         },                {
             "fqsen": "\\BizCuit\\BexioContact\u003A\u003A\u0024query",
             "name": "query",
@@ -251,15 +231,15 @@ Search.appendIndex(
             "summary": "Represent\u0020the\u0020enpoint\u0020Projects",
             "url": "classes/BizCuit-BexioProject.html"
         },                {
-            "fqsen": "\\BizCuit\\BexioProject\u003A\u003A\u0024type",
+            "fqsen": "\\BizCuit\\BexioProject\u003A\u003Atype",
             "name": "type",
             "summary": "",
-            "url": "classes/BizCuit-BexioProject.html#property_type"
+            "url": "classes/BizCuit-BexioProject.html#constant_type"
         },                {
-            "fqsen": "\\BizCuit\\BexioProject\u003A\u003A\u0024class",
-            "name": "class",
+            "fqsen": "\\BizCuit\\BexioProject\u003A\u003A\u0024className",
+            "name": "className",
             "summary": "",
-            "url": "classes/BizCuit-BexioProject.html#property_class"
+            "url": "classes/BizCuit-BexioProject.html#property_className"
         },                {
             "fqsen": "\\BizCuit\\BexioProject\u003A\u003A\u0024query",
             "name": "query",
@@ -271,15 +251,15 @@ Search.appendIndex(
             "summary": "Represent\u0020the\u0020enpoint\u0020Contact\u0020Relations",
             "url": "classes/BizCuit-BexioContactRelation.html"
         },                {
-            "fqsen": "\\BizCuit\\BexioContactRelation\u003A\u003A\u0024type",
+            "fqsen": "\\BizCuit\\BexioContactRelation\u003A\u003Atype",
             "name": "type",
             "summary": "",
-            "url": "classes/BizCuit-BexioContactRelation.html#property_type"
+            "url": "classes/BizCuit-BexioContactRelation.html#constant_type"
         },                {
-            "fqsen": "\\BizCuit\\BexioContactRelation\u003A\u003A\u0024class",
-            "name": "class",
+            "fqsen": "\\BizCuit\\BexioContactRelation\u003A\u003A\u0024className",
+            "name": "className",
             "summary": "",
-            "url": "classes/BizCuit-BexioContactRelation.html#property_class"
+            "url": "classes/BizCuit-BexioContactRelation.html#property_className"
         },                {
             "fqsen": "\\BizCuit\\BexioContactRelation\u003A\u003A\u0024query",
             "name": "query",
@@ -291,15 +271,15 @@ Search.appendIndex(
             "summary": "Represent\u0020the\u0020enpoint\u0020Additional\u0020Addresses",
             "url": "classes/BizCuit-BexioAdditionalAddress.html"
         },                {
-            "fqsen": "\\BizCuit\\BexioAdditionalAddress\u003A\u003A\u0024type",
+            "fqsen": "\\BizCuit\\BexioAdditionalAddress\u003A\u003Atype",
             "name": "type",
             "summary": "",
-            "url": "classes/BizCuit-BexioAdditionalAddress.html#property_type"
+            "url": "classes/BizCuit-BexioAdditionalAddress.html#constant_type"
         },                {
-            "fqsen": "\\BizCuit\\BexioAdditionalAddress\u003A\u003A\u0024class",
-            "name": "class",
+            "fqsen": "\\BizCuit\\BexioAdditionalAddress\u003A\u003A\u0024className",
+            "name": "className",
             "summary": "",
-            "url": "classes/BizCuit-BexioAdditionalAddress.html#property_class"
+            "url": "classes/BizCuit-BexioAdditionalAddress.html#property_className"
         },                {
             "fqsen": "\\BizCuit\\BexioAdditionalAddress\u003A\u003A\u0024query",
             "name": "query",
@@ -311,15 +291,15 @@ Search.appendIndex(
             "summary": "Represent\u0020the\u0020enpoint\u0020Notes",
             "url": "classes/BizCuit-BexioNote.html"
         },                {
-            "fqsen": "\\BizCuit\\BexioNote\u003A\u003A\u0024type",
+            "fqsen": "\\BizCuit\\BexioNote\u003A\u003Atype",
             "name": "type",
             "summary": "",
-            "url": "classes/BizCuit-BexioNote.html#property_type"
+            "url": "classes/BizCuit-BexioNote.html#constant_type"
         },                {
-            "fqsen": "\\BizCuit\\BexioNote\u003A\u003A\u0024class",
-            "name": "class",
+            "fqsen": "\\BizCuit\\BexioNote\u003A\u003A\u0024className",
+            "name": "className",
             "summary": "",
-            "url": "classes/BizCuit-BexioNote.html#property_class"
+            "url": "classes/BizCuit-BexioNote.html#property_className"
         },                {
             "fqsen": "\\BizCuit\\BexioNote\u003A\u003A\u0024query",
             "name": "query",
@@ -331,15 +311,15 @@ Search.appendIndex(
             "summary": "Represent\u0020the\u0020enpoint\u0020User\u0020Management",
             "url": "classes/BizCuit-BexioUser.html"
         },                {
-            "fqsen": "\\BizCuit\\BexioUser\u003A\u003A\u0024type",
+            "fqsen": "\\BizCuit\\BexioUser\u003A\u003Atype",
             "name": "type",
             "summary": "",
-            "url": "classes/BizCuit-BexioUser.html#property_type"
+            "url": "classes/BizCuit-BexioUser.html#constant_type"
         },                {
-            "fqsen": "\\BizCuit\\BexioUser\u003A\u003A\u0024class",
-            "name": "class",
+            "fqsen": "\\BizCuit\\BexioUser\u003A\u003A\u0024className",
+            "name": "className",
             "summary": "",
-            "url": "classes/BizCuit-BexioUser.html#property_class"
+            "url": "classes/BizCuit-BexioUser.html#property_className"
         },                {
             "fqsen": "\\BizCuit\\BexioUser\u003A\u003A\u0024query",
             "name": "query",
@@ -348,18 +328,18 @@ Search.appendIndex(
         },                {
             "fqsen": "\\BizCuit\\BexioBusinessActivity",
             "name": "BexioBusinessActivity",
-            "summary": "Represent\u0020the\u0020enpoint\u0020Business\u0020Activities",
+            "summary": "Represent\u0020the\u0020enpoint\u0020Business\u0020Activities\u0020\u005Bread\u0020only\u005D",
             "url": "classes/BizCuit-BexioBusinessActivity.html"
         },                {
-            "fqsen": "\\BizCuit\\BexioBusinessActivity\u003A\u003A\u0024type",
+            "fqsen": "\\BizCuit\\BexioBusinessActivity\u003A\u003Atype",
             "name": "type",
             "summary": "",
-            "url": "classes/BizCuit-BexioBusinessActivity.html#property_type"
+            "url": "classes/BizCuit-BexioBusinessActivity.html#constant_type"
         },                {
-            "fqsen": "\\BizCuit\\BexioBusinessActivity\u003A\u003A\u0024class",
-            "name": "class",
+            "fqsen": "\\BizCuit\\BexioBusinessActivity\u003A\u003A\u0024className",
+            "name": "className",
             "summary": "",
-            "url": "classes/BizCuit-BexioBusinessActivity.html#property_class"
+            "url": "classes/BizCuit-BexioBusinessActivity.html#property_className"
         },                {
             "fqsen": "\\BizCuit\\BexioBusinessActivity\u003A\u003A\u0024query",
             "name": "query",
@@ -368,18 +348,18 @@ Search.appendIndex(
         },                {
             "fqsen": "\\BizCuit\\BexioSalutation",
             "name": "BexioSalutation",
-            "summary": "Represent\u0020the\u0020enpoint\u0020Salutations",
+            "summary": "Represent\u0020the\u0020enpoint\u0020Salutations\u0020\u005Bread\u0020only\u005D",
             "url": "classes/BizCuit-BexioSalutation.html"
         },                {
-            "fqsen": "\\BizCuit\\BexioSalutation\u003A\u003A\u0024type",
+            "fqsen": "\\BizCuit\\BexioSalutation\u003A\u003Atype",
             "name": "type",
             "summary": "",
-            "url": "classes/BizCuit-BexioSalutation.html#property_type"
+            "url": "classes/BizCuit-BexioSalutation.html#constant_type"
         },                {
-            "fqsen": "\\BizCuit\\BexioSalutation\u003A\u003A\u0024class",
-            "name": "class",
+            "fqsen": "\\BizCuit\\BexioSalutation\u003A\u003A\u0024className",
+            "name": "className",
             "summary": "",
-            "url": "classes/BizCuit-BexioSalutation.html#property_class"
+            "url": "classes/BizCuit-BexioSalutation.html#property_className"
         },                {
             "fqsen": "\\BizCuit\\BexioSalutation\u003A\u003A\u0024query",
             "name": "query",
@@ -388,18 +368,18 @@ Search.appendIndex(
         },                {
             "fqsen": "\\BizCuit\\BexioTitle",
             "name": "BexioTitle",
-            "summary": "Represent\u0020the\u0020enpoint\u0020Titles",
+            "summary": "Represent\u0020the\u0020enpoint\u0020Titles\u0020\u005Bread\u0020only\u005D",
             "url": "classes/BizCuit-BexioTitle.html"
         },                {
-            "fqsen": "\\BizCuit\\BexioTitle\u003A\u003A\u0024type",
+            "fqsen": "\\BizCuit\\BexioTitle\u003A\u003Atype",
             "name": "type",
             "summary": "",
-            "url": "classes/BizCuit-BexioTitle.html#property_type"
+            "url": "classes/BizCuit-BexioTitle.html#constant_type"
         },                {
-            "fqsen": "\\BizCuit\\BexioTitle\u003A\u003A\u0024class",
-            "name": "class",
+            "fqsen": "\\BizCuit\\BexioTitle\u003A\u003A\u0024className",
+            "name": "className",
             "summary": "",
-            "url": "classes/BizCuit-BexioTitle.html#property_class"
+            "url": "classes/BizCuit-BexioTitle.html#property_className"
         },                {
             "fqsen": "\\BizCuit\\BexioTitle\u003A\u003A\u0024query",
             "name": "query",
@@ -408,18 +388,18 @@ Search.appendIndex(
         },                {
             "fqsen": "\\BizCuit\\BexioProjectType",
             "name": "BexioProjectType",
-            "summary": "Represent\u0020the\u0020enpoint\u0020Project\u0020Types",
+            "summary": "Represent\u0020the\u0020enpoint\u0020Project\u0020Types\u0020\u005Bread\u0020only\u005D",
             "url": "classes/BizCuit-BexioProjectType.html"
         },                {
-            "fqsen": "\\BizCuit\\BexioProjectType\u003A\u003A\u0024type",
+            "fqsen": "\\BizCuit\\BexioProjectType\u003A\u003Atype",
             "name": "type",
             "summary": "",
-            "url": "classes/BizCuit-BexioProjectType.html#property_type"
+            "url": "classes/BizCuit-BexioProjectType.html#constant_type"
         },                {
-            "fqsen": "\\BizCuit\\BexioProjectType\u003A\u003A\u0024class",
-            "name": "class",
+            "fqsen": "\\BizCuit\\BexioProjectType\u003A\u003A\u0024className",
+            "name": "className",
             "summary": "",
-            "url": "classes/BizCuit-BexioProjectType.html#property_class"
+            "url": "classes/BizCuit-BexioProjectType.html#property_className"
         },                {
             "fqsen": "\\BizCuit\\BexioProjectType\u003A\u003A\u0024query",
             "name": "query",
@@ -428,23 +408,68 @@ Search.appendIndex(
         },                {
             "fqsen": "\\BizCuit\\BexioProjectStatus",
             "name": "BexioProjectStatus",
-            "summary": "Represent\u0020the\u0020enpoint\u0020Project\u0020Status",
+            "summary": "Represent\u0020the\u0020enpoint\u0020Project\u0020Status\u0020\u005Bread\u0020only\u005D",
             "url": "classes/BizCuit-BexioProjectStatus.html"
         },                {
-            "fqsen": "\\BizCuit\\BexioProjectStatus\u003A\u003A\u0024type",
+            "fqsen": "\\BizCuit\\BexioProjectStatus\u003A\u003Atype",
             "name": "type",
             "summary": "",
-            "url": "classes/BizCuit-BexioProjectStatus.html#property_type"
+            "url": "classes/BizCuit-BexioProjectStatus.html#constant_type"
         },                {
-            "fqsen": "\\BizCuit\\BexioProjectStatus\u003A\u003A\u0024class",
-            "name": "class",
+            "fqsen": "\\BizCuit\\BexioProjectStatus\u003A\u003A\u0024className",
+            "name": "className",
             "summary": "",
-            "url": "classes/BizCuit-BexioProjectStatus.html#property_class"
+            "url": "classes/BizCuit-BexioProjectStatus.html#property_className"
         },                {
             "fqsen": "\\BizCuit\\BexioProjectStatus\u003A\u003A\u0024query",
             "name": "query",
             "summary": "",
             "url": "classes/BizCuit-BexioProjectStatus.html#property_query"
+        },                {
+            "fqsen": "\\BizCuit\\BexioCurrency",
+            "name": "BexioCurrency",
+            "summary": "Represent\u0020the\u0020enpoint\u0020Currencies\u0020\u005Bread\u0020only\u005D",
+            "url": "classes/BizCuit-BexioCurrency.html"
+        },                {
+            "fqsen": "\\BizCuit\\BexioCurrency\u003A\u003Atype",
+            "name": "type",
+            "summary": "",
+            "url": "classes/BizCuit-BexioCurrency.html#constant_type"
+        },                {
+            "fqsen": "\\BizCuit\\BexioCurrency\u003A\u003A\u0024className",
+            "name": "className",
+            "summary": "",
+            "url": "classes/BizCuit-BexioCurrency.html#property_className"
+        },                {
+            "fqsen": "\\BizCuit\\BexioCurrency\u003A\u003A\u0024query",
+            "name": "query",
+            "summary": "",
+            "url": "classes/BizCuit-BexioCurrency.html#property_query"
+        },                {
+            "fqsen": "\\BizCuit\\BexioExpense",
+            "name": "BexioExpense",
+            "summary": "Represent\u0020the\u0020enpoint\u0020Expenses\u0020\u005Bread\u0020only\u005D",
+            "url": "classes/BizCuit-BexioExpense.html"
+        },                {
+            "fqsen": "\\BizCuit\\BexioExpense\u003A\u003Atype",
+            "name": "type",
+            "summary": "",
+            "url": "classes/BizCuit-BexioExpense.html#constant_type"
+        },                {
+            "fqsen": "\\BizCuit\\BexioExpense\u003A\u003A\u0024className",
+            "name": "className",
+            "summary": "",
+            "url": "classes/BizCuit-BexioExpense.html#property_className"
+        },                {
+            "fqsen": "\\BizCuit\\BexioExpense\u003A\u003A\u0024query",
+            "name": "query",
+            "summary": "",
+            "url": "classes/BizCuit-BexioExpense.html#property_query"
+        },                {
+            "fqsen": "\\BizCuit\\BexioExpense\u003A\u003A\u0024search_fields",
+            "name": "search_fields",
+            "summary": "",
+            "url": "classes/BizCuit-BexioExpense.html#property_search_fields"
         },                {
             "fqsen": "\\BizCuit\\BexioBills",
             "name": "BexioBills",
@@ -456,15 +481,15 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/BizCuit-BexioBills.html#method_setStatus"
         },                {
-            "fqsen": "\\BizCuit\\BexioBills\u003A\u003A\u0024type",
+            "fqsen": "\\BizCuit\\BexioBills\u003A\u003Atype",
             "name": "type",
             "summary": "",
-            "url": "classes/BizCuit-BexioBills.html#property_type"
+            "url": "classes/BizCuit-BexioBills.html#constant_type"
         },                {
-            "fqsen": "\\BizCuit\\BexioBills\u003A\u003A\u0024class",
-            "name": "class",
+            "fqsen": "\\BizCuit\\BexioBills\u003A\u003A\u0024className",
+            "name": "className",
             "summary": "",
-            "url": "classes/BizCuit-BexioBills.html#property_class"
+            "url": "classes/BizCuit-BexioBills.html#property_className"
         },                {
             "fqsen": "\\BizCuit\\BexioBills\u003A\u003A\u0024query",
             "name": "query",
@@ -491,15 +516,15 @@ Search.appendIndex(
             "summary": "Get\u0020a\u0020file\u0020from\u0020file\u0020endpoint.",
             "url": "classes/BizCuit-BexioFile.html#method_get"
         },                {
-            "fqsen": "\\BizCuit\\BexioFile\u003A\u003A\u0024type",
+            "fqsen": "\\BizCuit\\BexioFile\u003A\u003Atype",
             "name": "type",
             "summary": "",
-            "url": "classes/BizCuit-BexioFile.html#property_type"
+            "url": "classes/BizCuit-BexioFile.html#constant_type"
         },                {
-            "fqsen": "\\BizCuit\\BexioFile\u003A\u003A\u0024class",
-            "name": "class",
+            "fqsen": "\\BizCuit\\BexioFile\u003A\u003A\u0024className",
+            "name": "className",
             "summary": "",
-            "url": "classes/BizCuit-BexioFile.html#property_class"
+            "url": "classes/BizCuit-BexioFile.html#property_className"
         },                {
             "fqsen": "\\BizCuit\\BexioFile\u003A\u003A\u0024query",
             "name": "query",
@@ -516,20 +541,10 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/BizCuit-tBexioV2Api.html"
         },                {
-            "fqsen": "\\BizCuit\\tBexioV2Api\u003A\u003A\u0024api_version",
-            "name": "api_version",
-            "summary": "",
-            "url": "classes/BizCuit-tBexioV2Api.html#property_api_version"
-        },                {
             "fqsen": "\\BizCuit\\tBexioV3Api",
             "name": "tBexioV3Api",
             "summary": "",
             "url": "classes/BizCuit-tBexioV3Api.html"
-        },                {
-            "fqsen": "\\BizCuit\\tBexioV3Api\u003A\u003A\u0024api_version",
-            "name": "api_version",
-            "summary": "",
-            "url": "classes/BizCuit-tBexioV3Api.html#property_api_version"
         },                {
             "fqsen": "\\BizCuit\\tBexioV4Api",
             "name": "tBexioV4Api",
@@ -555,11 +570,6 @@ Search.appendIndex(
             "name": "newQuery",
             "summary": "Create\u0020new\u0020query\u0020for\u0020version\u00204\u0020of\u0020the\u0020API.",
             "url": "classes/BizCuit-tBexioV4Api.html#method_newQuery"
-        },                {
-            "fqsen": "\\BizCuit\\tBexioV4Api\u003A\u003A\u0024api_version",
-            "name": "api_version",
-            "summary": "",
-            "url": "classes/BizCuit-tBexioV4Api.html#property_api_version"
         },                {
             "fqsen": "\\BizCuit\\tBexioCollection",
             "name": "tBexioCollection",
@@ -660,6 +670,131 @@ Search.appendIndex(
             "name": "listByProject",
             "summary": "",
             "url": "classes/BizCuit-tBexioProjectObject.html#method_listByProject"
+        },                {
+            "fqsen": "\\BexioCache",
+            "name": "BexioCache",
+            "summary": "",
+            "url": "classes/BexioCache.html"
+        },                {
+            "fqsen": "\\BexioCache\u003A\u003A__construct\u0028\u0029",
+            "name": "__construct",
+            "summary": "",
+            "url": "classes/BexioCache.html#method___construct"
+        },                {
+            "fqsen": "\\BexioCache\u003A\u003Acontent_hash\u0028\u0029",
+            "name": "content_hash",
+            "summary": "",
+            "url": "classes/BexioCache.html#method_content_hash"
+        },                {
+            "fqsen": "\\BexioCache\u003A\u003Aref_hash\u0028\u0029",
+            "name": "ref_hash",
+            "summary": "",
+            "url": "classes/BexioCache.html#method_ref_hash"
+        },                {
+            "fqsen": "\\BexioCache\u003A\u003Aref_to_path\u0028\u0029",
+            "name": "ref_to_path",
+            "summary": "",
+            "url": "classes/BexioCache.html#method_ref_to_path"
+        },                {
+            "fqsen": "\\BexioCache\u003A\u003Acmp_content\u0028\u0029",
+            "name": "cmp_content",
+            "summary": "",
+            "url": "classes/BexioCache.html#method_cmp_content"
+        },                {
+            "fqsen": "\\BexioCache\u003A\u003Aset_to_collection\u0028\u0029",
+            "name": "set_to_collection",
+            "summary": "When\u0020set\u0020into\u0020collection,\u0020this\u0020will\u0020be\u0020for\u0020iterating\u0020only\u0020so\u0020performance\npenalty\u0020is\u0020not\u0020a\u0020concern\u0020when\u0020reading\u0020back.\u0020This\u0020is\u0020to\u0020be\u0020used\u0020in\u0020some\nspecific\u0020emergency\u0020case\u0020where\u0020slowness\u0020is\u0020not\u0020a\u0020problem.",
+            "url": "classes/BexioCache.html#method_set_to_collection"
+        },                {
+            "fqsen": "\\BexioCache\u003A\u003Aget_age\u0028\u0029",
+            "name": "get_age",
+            "summary": "",
+            "url": "classes/BexioCache.html#method_get_age"
+        },                {
+            "fqsen": "\\BexioCache\u003A\u003Aiterate_collection\u0028\u0029",
+            "name": "iterate_collection",
+            "summary": "",
+            "url": "classes/BexioCache.html#method_iterate_collection"
+        },                {
+            "fqsen": "\\BexioCache\u003A\u003Astore\u0028\u0029",
+            "name": "store",
+            "summary": "",
+            "url": "classes/BexioCache.html#method_store"
+        },                {
+            "fqsen": "\\BexioCache\u003A\u003Aload\u0028\u0029",
+            "name": "load",
+            "summary": "",
+            "url": "classes/BexioCache.html#method_load"
+        },                {
+            "fqsen": "\\BexioCache\u003A\u003Aremove\u0028\u0029",
+            "name": "remove",
+            "summary": "",
+            "url": "classes/BexioCache.html#method_remove"
+        },                {
+            "fqsen": "\\BexioCache\u003A\u003Aput\u0028\u0029",
+            "name": "put",
+            "summary": "",
+            "url": "classes/BexioCache.html#method_put"
+        },                {
+            "fqsen": "\\BexioCache\u003A\u003Aget\u0028\u0029",
+            "name": "get",
+            "summary": "",
+            "url": "classes/BexioCache.html#method_get"
+        },                {
+            "fqsen": "\\BexioCache\u003A\u003Adelete\u0028\u0029",
+            "name": "delete",
+            "summary": "",
+            "url": "classes/BexioCache.html#method_delete"
+        },                {
+            "fqsen": "\\BexioCache\u003A\u003A\u0024cache",
+            "name": "cache",
+            "summary": "",
+            "url": "classes/BexioCache.html#property_cache"
+        },                {
+            "fqsen": "\\BexioCache\u003A\u003A\u0024path",
+            "name": "path",
+            "summary": "",
+            "url": "classes/BexioCache.html#property_path"
+        },                {
+            "fqsen": "\\BexioCache\u003A\u003A\u0024duration",
+            "name": "duration",
+            "summary": "",
+            "url": "classes/BexioCache.html#property_duration"
+        },                {
+            "fqsen": "\\BexioJSONCache",
+            "name": "BexioJSONCache",
+            "summary": "",
+            "url": "classes/BexioJSONCache.html"
+        },                {
+            "fqsen": "\\BexioJSONCache\u003A\u003Aread_cache\u0028\u0029",
+            "name": "read_cache",
+            "summary": "",
+            "url": "classes/BexioJSONCache.html#method_read_cache"
+        },                {
+            "fqsen": "\\BexioJSONCache\u003A\u003Asearch_cache\u0028\u0029",
+            "name": "search_cache",
+            "summary": "",
+            "url": "classes/BexioJSONCache.html#method_search_cache"
+        },                {
+            "fqsen": "\\BexioJSONCache\u003A\u003A_cmp_value\u0028\u0029",
+            "name": "_cmp_value",
+            "summary": "",
+            "url": "classes/BexioJSONCache.html#method__cmp_value"
+        },                {
+            "fqsen": "\\BexioJSONCache\u003A\u003Aquery_cache\u0028\u0029",
+            "name": "query_cache",
+            "summary": "Search\u0020cache\u0020a\u0020bit\u0020like\u0020it\u0020would\u0020be\u0020done\u0020on\u0020real\u0020server",
+            "url": "classes/BexioJSONCache.html#method_query_cache"
+        },                {
+            "fqsen": "\\BexioJSONCache\u003A\u003Astore_cache\u0028\u0029",
+            "name": "store_cache",
+            "summary": "",
+            "url": "classes/BexioJSONCache.html#method_store_cache"
+        },                {
+            "fqsen": "\\BexioJSONCache\u003A\u003A\u0024bxcache",
+            "name": "bxcache",
+            "summary": "",
+            "url": "classes/BexioJSONCache.html#property_bxcache"
         },                {
             "fqsen": "\\BizCuit\\BXObject\\BXObject",
             "name": "BXObject",
@@ -786,6 +921,11 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/BizCuit-BXObject-ProjectType.html"
         },                {
+            "fqsen": "\\BizCuit\\BXObject\\ProjectStatus",
+            "name": "ProjectStatus",
+            "summary": "",
+            "url": "classes/BizCuit-BXObject-ProjectStatus.html"
+        },                {
             "fqsen": "\\BizCuit\\BXObject\\Title",
             "name": "Title",
             "summary": "",
@@ -800,6 +940,51 @@ Search.appendIndex(
             "name": "ClientService",
             "summary": "",
             "url": "classes/BizCuit-BXObject-ClientService.html"
+        },                {
+            "fqsen": "\\BizCuit\\BXObject\\Currency",
+            "name": "Currency",
+            "summary": "",
+            "url": "classes/BizCuit-BXObject-Currency.html"
+        },                {
+            "fqsen": "\\BizCuit\\BXObject\\Expense",
+            "name": "Expense",
+            "summary": "",
+            "url": "classes/BizCuit-BXObject-Expense.html"
+        },                {
+            "fqsen": "\\BizCuit\\BXObject\\ContactGroup",
+            "name": "ContactGroup",
+            "summary": "",
+            "url": "classes/BizCuit-BXObject-ContactGroup.html"
+        },                {
+            "fqsen": "\\BizCuit\\BXObject\\ContactSector",
+            "name": "ContactSector",
+            "summary": "",
+            "url": "classes/BizCuit-BXObject-ContactSector.html"
+        },                {
+            "fqsen": "\\BizCuit\\BXObject\\Payment",
+            "name": "Payment",
+            "summary": "",
+            "url": "classes/BizCuit-BXObject-Payment.html"
+        },                {
+            "fqsen": "\\BizCuit\\BXObject\\Unit",
+            "name": "Unit",
+            "summary": "",
+            "url": "classes/BizCuit-BXObject-Unit.html"
+        },                {
+            "fqsen": "\\BizCuit\\BXObject\\StockLocation",
+            "name": "StockLocation",
+            "summary": "",
+            "url": "classes/BizCuit-BXObject-StockLocation.html"
+        },                {
+            "fqsen": "\\BizCuit\\BXObject\\BusinessActivity",
+            "name": "BusinessActivity",
+            "summary": "",
+            "url": "classes/BizCuit-BXObject-BusinessActivity.html"
+        },                {
+            "fqsen": "\\BizCuit\\BXObject\\CommunicationType",
+            "name": "CommunicationType",
+            "summary": "",
+            "url": "classes/BizCuit-BXObject-CommunicationType.html"
         },                {
             "fqsen": "\\BizCuit\\BXObject\\Country",
             "name": "Country",
@@ -1056,16 +1241,6 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/BizCuit-BXQuery-ContactSector.html"
         },                {
-            "fqsen": "\\BizCuit\\BXQuery\\Salutation",
-            "name": "Salutation",
-            "summary": "",
-            "url": "classes/BizCuit-BXQuery-Salutation.html"
-        },                {
-            "fqsen": "\\BizCuit\\BXQuery\\Title",
-            "name": "Title",
-            "summary": "",
-            "url": "classes/BizCuit-BXQuery-Title.html"
-        },                {
             "fqsen": "\\BizCuit\\BXQuery\\Payment",
             "name": "Payment",
             "summary": "",
@@ -1090,6 +1265,41 @@ Search.appendIndex(
             "name": "CommunicationType",
             "summary": "",
             "url": "classes/BizCuit-BXQuery-CommunicationType.html"
+        },                {
+            "fqsen": "\\BizCuit\\BXQuery\\Currency",
+            "name": "Currency",
+            "summary": "",
+            "url": "classes/BizCuit-BXQuery-Currency.html"
+        },                {
+            "fqsen": "\\BizCuit\\BXQuery\\ProjectStatus",
+            "name": "ProjectStatus",
+            "summary": "",
+            "url": "classes/BizCuit-BXQuery-ProjectStatus.html"
+        },                {
+            "fqsen": "\\BizCuit\\BXQuery\\ProjectType",
+            "name": "ProjectType",
+            "summary": "",
+            "url": "classes/BizCuit-BXQuery-ProjectType.html"
+        },                {
+            "fqsen": "\\BizCuit\\BXQuery\\Title",
+            "name": "Title",
+            "summary": "",
+            "url": "classes/BizCuit-BXQuery-Title.html"
+        },                {
+            "fqsen": "\\BizCuit\\BXQuery\\Salutation",
+            "name": "Salutation",
+            "summary": "",
+            "url": "classes/BizCuit-BXQuery-Salutation.html"
+        },                {
+            "fqsen": "\\BizCuit\\BXQuery\\ClientService",
+            "name": "ClientService",
+            "summary": "",
+            "url": "classes/BizCuit-BXQuery-ClientService.html"
+        },                {
+            "fqsen": "\\BizCuit\\BXQuery\\Expense",
+            "name": "Expense",
+            "summary": "",
+            "url": "classes/BizCuit-BXQuery-Expense.html"
         },                {
             "fqsen": "\\BizCuit\\BXQuery\\Project",
             "name": "Project",

@@ -90,13 +90,18 @@ class ROObject extends BXQuery {
 
 class ContactGroup extends BXQuery { }
 class ContactSector extends BXQuery { }
-class Salutation extends BXQuery { }
-class Title extends BXQuery { }
 class Payment extends BXQuery { }
 class Unit extends BXQuery { }
 class StockLocation extends BXQuery { }
 class BusinessActivity extends BXQuery { }
 class CommunicationType extends BXQuery { }
+class Currency extends ROObject { }
+class ProjectStatus extends ROObject { }
+class ProjectType extends ROObject { }
+class Title extends ROObject { }
+class Salutation extends ROObject { }
+class ClientService extends ROObject { }
+class Expense extends ROObject {}
 
 class Project extends BXQuery {
 	function __construct() {

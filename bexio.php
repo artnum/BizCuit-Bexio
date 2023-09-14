@@ -733,7 +733,7 @@ class BexioUser extends BexioAPI {
 }
 
 /**
- * Represent the enpoint Business Activities
+ * Represent the enpoint Business Activities [read only]
  * 
  * @link https://docs.bexio.com/#tag/Business-Activities
  * @api
@@ -741,13 +741,13 @@ class BexioUser extends BexioAPI {
 class BexioBusinessActivity extends BexioAPI {
 	const type = 'client_service';
 	protected string $className = 'BizCuit\BXObject\ClientService';
-	protected string $query = 'BizCuit\BXQuery\ROObject';
+	protected string $query = 'BizCuit\BXQuery\ClientService';
 
 	use tBexioV2Api, tBexioObject, tBexioCollection;
 }
 
 /**
- * Represent the enpoint Salutations
+ * Represent the enpoint Salutations [read only]
  * 
  * @link https://docs.bexio.com/#tag/Salutations
  * @api
@@ -755,13 +755,13 @@ class BexioBusinessActivity extends BexioAPI {
 class BexioSalutation extends BexioAPI {
 	const type = 'salutation';
 	protected string $className = 'BizCuit\BXObject\Salutation';
-	protected string $query = 'BizCuit\BXQuery\ROObject';
+	protected string $query = 'BizCuit\BXQuery\Salutation';
 
 	use tBexioV2Api, tBexioObject, tBexioCollection;
 }
 
 /**
- * Represent the enpoint Titles
+ * Represent the enpoint Titles [read only]
  * 
  * @link https://docs.bexio.com/#tag/Titles
  * @api
@@ -769,13 +769,13 @@ class BexioSalutation extends BexioAPI {
 class BexioTitle extends BexioAPI {
 	const type = 'title';
 	protected string $className = 'BizCuit\BXObject\Title';
-	protected string $query = 'BizCuit\BXQuery\ROObject';
+	protected string $query = 'BizCuit\BXQuery\Title';
 
 	use tBexioV2Api, tBexioObject, tBexioCollection;
 }
 
 /**
- * Represent the enpoint Project Types
+ * Represent the enpoint Project Types [read only]
  * 
  * @link https://docs.bexio.com/#tag/Projects/operation/v2ListProjectType
  * @api
@@ -783,23 +783,67 @@ class BexioTitle extends BexioAPI {
 class BexioProjectType extends BexioAPI {
 	const type = 'pr_project_type';
 	protected string $className = 'BizCuit\BXObject\ProjectType';
-	protected string $query = 'BizCuit\BXQuery\ROObject';
+	protected string $query = 'BizCuit\BXQuery\ProjectType';
 
 	use tBexioV2Api, tBexioObject, tBexioCollection;
 }
 
 /**
- * Represent the enpoint Project Status
+ * Represent the enpoint Project Status [read only]
  * 
  * @link https://docs.bexio.com/#tag/Projects/operation/v2ListProjectStatus
  * @api
  */
 class BexioProjectStatus extends BexioAPI {
 	const type = 'pr_project_state';
-	protected string $className = 'BizCuit\BXObject\ROObject';
-	protected string $query = 'BizCuit\BXQuery\ROObject';
+	protected string $className = 'BizCuit\BXObject\ProjectStatus';
+	protected string $query = 'BizCuit\BXQuery\ProjectStatus';
 
 	use tBexioV2Api, tBexioObject, tBexioCollection;
+}
+
+/**
+ * Represent the enpoint Currencies [read only]
+ * 
+ * @link https://docs.bexio.com/#tag/Currencies
+ * @api
+ */
+class BexioCurrency extends BexioAPI {
+	const type = 'currencies';
+	protected string $className = 'BizCuit\BXObject\Currency';
+	protected string $query = 'BizCuit\BXQuery\Currency';
+
+	use tBexioV3Api, tBexioObject, tBexioCollection;
+}
+
+/**
+ * Represent the enpoint Expenses [read only]
+ * 
+ * @link https://docs.bexio.com/#tag/Expenses
+ * @api
+ */
+class BexioExpense extends BexioAPI {
+	const type = 'currencies';
+	protected string $className = 'BizCuit\BXObject\Expense';
+	protected string $query = 'BizCuit\BXQuery\Expense';
+	protected $search_fields = [
+		'vendor',
+		'gross_min',
+		'gross_max',
+		'net_min',
+		'net_max',
+		'paid_on_start',
+		'paid_on_end',
+		'created_at_start',
+		'created_at_end',
+		'title',
+		'currency_code',
+		'document_no',
+		'supplier_id',
+		'project_id'
+	];
+
+	use tBexioV4Api, tBexioObject;
 }
 
 /**

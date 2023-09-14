@@ -127,7 +127,7 @@
         <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="bexio.php"><a href="files/bexio.html">bexio.php</a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">815</span>
+    <span class="phpdocumentor-element-found-in__line">855</span>
 
     </aside>
 
@@ -164,6 +164,19 @@
 
 
 
+<h4 id="toc-constants">
+    Constants
+    <a href="classes/BizCuit-BexioBills.html#toc-constants" class="headerlink"><i class="fas fa-link"></i></a>
+
+</h4>
+<dl class="phpdocumentor-table-of-contents">
+            <dt class="phpdocumentor-table-of-contents__entry -constant -public">
+    <a href="classes/BizCuit-BexioBills.html#constant_type">type</a>
+    <span>
+        &nbsp;= &#039;purchase/bills&#039;                            </span>
+</dt>
+
+    </dl>
 
 
 <h4 id="toc-properties">
@@ -173,51 +186,33 @@
 </h4>
 <dl class="phpdocumentor-table-of-contents">
             <dt class="phpdocumentor-table-of-contents__entry -property -protected">
-    <a href="classes/BizCuit-tBexioV4Api.html#property_api_version">$api_version</a>
+    <a href="classes/BizCuit-BexioBills.html#property_className">$className</a>
     <span>
-                        &nbsp;: mixed            </span>
-</dt>
-
-            <dt class="phpdocumentor-table-of-contents__entry -property -protected">
-    <a href="classes/BizCuit-BexioAPI.html#property_c">$c</a>
-    <span>
-                        &nbsp;: mixed            </span>
-</dt>
-
-            <dt class="phpdocumentor-table-of-contents__entry -property -protected">
-    <a href="classes/BizCuit-BexioBills.html#property_class">$class</a>
-    <span>
-                        &nbsp;: mixed            </span>
+                        &nbsp;: string            </span>
 </dt>
 
             <dt class="phpdocumentor-table-of-contents__entry -property -protected">
     <a href="classes/BizCuit-BexioAPI.html#property_ctx">$ctx</a>
     <span>
-                        &nbsp;: mixed            </span>
+                        &nbsp;: <a href="classes/BizCuit-BexioCTX.html"><abbr title="\BizCuit\BexioCTX">BexioCTX</abbr></a>            </span>
 </dt>
 
             <dt class="phpdocumentor-table-of-contents__entry -property -protected">
     <a href="classes/BizCuit-BexioAPI.html#property_endpoint">$endpoint</a>
     <span>
-                        &nbsp;: mixed            </span>
-</dt>
-
-            <dt class="phpdocumentor-table-of-contents__entry -property -protected">
-    <a href="classes/BizCuit-BexioAPI.html#property_headers">$headers</a>
-    <span>
-                        &nbsp;: mixed            </span>
+                        &nbsp;: string            </span>
 </dt>
 
             <dt class="phpdocumentor-table-of-contents__entry -property -protected">
     <a href="classes/BizCuit-BexioAPI.html#property_ownerid">$ownerid</a>
     <span>
-                        &nbsp;: mixed            </span>
+                        &nbsp;: int|null            </span>
 </dt>
 
             <dt class="phpdocumentor-table-of-contents__entry -property -protected">
     <a href="classes/BizCuit-BexioBills.html#property_query">$query</a>
     <span>
-                        &nbsp;: mixed            </span>
+                        &nbsp;: string            </span>
 </dt>
 
             <dt class="phpdocumentor-table-of-contents__entry -property -protected">
@@ -227,15 +222,9 @@
 </dt>
 
             <dt class="phpdocumentor-table-of-contents__entry -property -protected">
-    <a href="classes/BizCuit-BexioBills.html#property_type">$type</a>
-    <span>
-                        &nbsp;: mixed            </span>
-</dt>
-
-            <dt class="phpdocumentor-table-of-contents__entry -property -protected">
     <a href="classes/BizCuit-BexioAPI.html#property_userid">$userid</a>
     <span>
-                        &nbsp;: mixed            </span>
+                        &nbsp;: int|null            </span>
 </dt>
 
     </dl>
@@ -284,7 +273,7 @@
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/BizCuit-tBexioV4Api.html#method_list">list()</a>
     <span>
-                                &nbsp;: mixed    </span>
+                                &nbsp;: array&lt;string|int, mixed&gt;    </span>
 </dt>
 <dd>List request for version 4 of the API.</dd>
 
@@ -305,7 +294,7 @@
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/BizCuit-tBexioV4Api.html#method_search">search()</a>
     <span>
-                                &nbsp;: mixed    </span>
+                                &nbsp;: array&lt;string|int, mixed&gt;    </span>
 </dt>
 <dd>Search request for version 4 of the API.</dd>
 
@@ -333,7 +322,7 @@
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/BizCuit-BexioBills.html#method_setStatus">setStatus()</a>
     <span>
-                                &nbsp;: mixed    </span>
+                                &nbsp;: <a href="classes/BizCuit-BXObject-BXObject.html"><abbr title="\BizCuit\BXObject\BXObject">BXObject</abbr></a>    </span>
 </dt>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
@@ -349,6 +338,41 @@
 
 
         
+    <section class="phpdocumentor-constants">
+        <h3 class="phpdocumentor-elements__header" id="constants">
+            Constants
+            <a href="classes/BizCuit-BexioBills.html#constants" class="headerlink"><i class="fas fa-link"></i></a>
+
+        </h3>
+                    <article class="phpdocumentor-element -constant -public ">
+    <h4 class="phpdocumentor-element__name" id="constant_type">
+        type
+        <a href="classes/BizCuit-BexioBills.html#constant_type" class="headerlink"><i class="fas fa-link"></i></a>
+
+    </h4>
+
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="bexio.php"><a href="files/bexio.html">bexio.php</a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">856</span>
+
+    </aside>
+
+    
+    <code class="phpdocumentor-signature phpdocumentor-code ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+        <span class="phpdocumentor-signature__type">mixed</span>
+    <span class="phpdocumentor-signature__name">type</span>
+    = <span class="phpdocumentor-signature__default-value">&#039;purchase/bills&#039;</span>
+</code>
+
+
+    
+    
+    
+
+</article>
+            </section>
 
         
     <section class="phpdocumentor-properties">
@@ -364,9 +388,9 @@
             -protected
                                                         "
 >
-    <h4 class="phpdocumentor-element__name" id="property_api_version">
-        $api_version
-        <a href="classes/BizCuit-tBexioV4Api.html#property_api_version" class="headerlink"><i class="fas fa-link"></i></a>
+    <h4 class="phpdocumentor-element__name" id="property_className">
+        $className
+        <a href="classes/BizCuit-BexioBills.html#property_className" class="headerlink"><i class="fas fa-link"></i></a>
 
         <span class="phpdocumentor-element__modifiers">
                                 </span>
@@ -374,81 +398,15 @@
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="bexio.php"><a href="files/bexio.html">bexio.php</a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">287</span>
+    <span class="phpdocumentor-element-found-in__line">857</span>
 
     </aside>
 
     
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">protected</span>
-        <span class="phpdocumentor-signature__type">mixed</span>
-    <span class="phpdocumentor-signature__name">$api_version</span>
-     = <span class="phpdocumentor-signature__default-value">&#039;4.0&#039;</span></code>
-
-    
-    
-    
-
-</article>
-                    <article
-        class="
-            phpdocumentor-element
-            -property
-            -protected
-                                                        "
->
-    <h4 class="phpdocumentor-element__name" id="property_c">
-        $c
-        <a href="classes/BizCuit-BexioAPI.html#property_c" class="headerlink"><i class="fas fa-link"></i></a>
-
-        <span class="phpdocumentor-element__modifiers">
-                                </span>
-    </h4>
-    <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="bexio.php"><a href="files/bexio.html">bexio.php</a></abbr>
-    :
-    <span class="phpdocumentor-element-found-in__line">217</span>
-
-    </aside>
-
-    
-    <code class="phpdocumentor-code phpdocumentor-signature ">
-    <span class="phpdocumentor-signature__visibility">protected</span>
-        <span class="phpdocumentor-signature__type">mixed</span>
-    <span class="phpdocumentor-signature__name">$c</span>
-    </code>
-
-    
-    
-    
-
-</article>
-                    <article
-        class="
-            phpdocumentor-element
-            -property
-            -protected
-                                                        "
->
-    <h4 class="phpdocumentor-element__name" id="property_class">
-        $class
-        <a href="classes/BizCuit-BexioBills.html#property_class" class="headerlink"><i class="fas fa-link"></i></a>
-
-        <span class="phpdocumentor-element__modifiers">
-                                </span>
-    </h4>
-    <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="bexio.php"><a href="files/bexio.html">bexio.php</a></abbr>
-    :
-    <span class="phpdocumentor-element-found-in__line">817</span>
-
-    </aside>
-
-    
-    <code class="phpdocumentor-code phpdocumentor-signature ">
-    <span class="phpdocumentor-signature__visibility">protected</span>
-        <span class="phpdocumentor-signature__type">mixed</span>
-    <span class="phpdocumentor-signature__name">$class</span>
+        <span class="phpdocumentor-signature__type">string</span>
+    <span class="phpdocumentor-signature__name">$className</span>
      = <span class="phpdocumentor-signature__default-value">&#039;BizCuit\\BXObject\\Bills&#039;</span></code>
 
     
@@ -473,14 +431,14 @@
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="bexio.php"><a href="files/bexio.html">bexio.php</a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">222</span>
+    <span class="phpdocumentor-element-found-in__line">219</span>
 
     </aside>
 
     
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">protected</span>
-        <span class="phpdocumentor-signature__type">mixed</span>
+        <span class="phpdocumentor-signature__type"><a href="classes/BizCuit-BexioCTX.html"><abbr title="\BizCuit\BexioCTX">BexioCTX</abbr></a></span>
     <span class="phpdocumentor-signature__name">$ctx</span>
     </code>
 
@@ -513,41 +471,8 @@
     
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">protected</span>
-        <span class="phpdocumentor-signature__type">mixed</span>
+        <span class="phpdocumentor-signature__type">string</span>
     <span class="phpdocumentor-signature__name">$endpoint</span>
-    </code>
-
-    
-    
-    
-
-</article>
-                    <article
-        class="
-            phpdocumentor-element
-            -property
-            -protected
-                                                        "
->
-    <h4 class="phpdocumentor-element__name" id="property_headers">
-        $headers
-        <a href="classes/BizCuit-BexioAPI.html#property_headers" class="headerlink"><i class="fas fa-link"></i></a>
-
-        <span class="phpdocumentor-element__modifiers">
-                                </span>
-    </h4>
-    <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="bexio.php"><a href="files/bexio.html">bexio.php</a></abbr>
-    :
-    <span class="phpdocumentor-element-found-in__line">220</span>
-
-    </aside>
-
-    
-    <code class="phpdocumentor-code phpdocumentor-signature ">
-    <span class="phpdocumentor-signature__visibility">protected</span>
-        <span class="phpdocumentor-signature__type">mixed</span>
-    <span class="phpdocumentor-signature__name">$headers</span>
     </code>
 
     
@@ -572,14 +497,14 @@
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="bexio.php"><a href="files/bexio.html">bexio.php</a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">219</span>
+    <span class="phpdocumentor-element-found-in__line">218</span>
 
     </aside>
 
     
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">protected</span>
-        <span class="phpdocumentor-signature__type">mixed</span>
+        <span class="phpdocumentor-signature__type">int|null</span>
     <span class="phpdocumentor-signature__name">$ownerid</span>
      = <span class="phpdocumentor-signature__default-value">null</span></code>
 
@@ -605,14 +530,14 @@
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="bexio.php"><a href="files/bexio.html">bexio.php</a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">818</span>
+    <span class="phpdocumentor-element-found-in__line">858</span>
 
     </aside>
 
     
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">protected</span>
-        <span class="phpdocumentor-signature__type">mixed</span>
+        <span class="phpdocumentor-signature__type">string</span>
     <span class="phpdocumentor-signature__name">$query</span>
      = <span class="phpdocumentor-signature__default-value">&#039;BizCuit\\BXQuery\\Bills&#039;</span></code>
 
@@ -638,7 +563,7 @@
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="bexio.php"><a href="files/bexio.html">bexio.php</a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">819</span>
+    <span class="phpdocumentor-element-found-in__line">859</span>
 
     </aside>
 
@@ -648,39 +573,6 @@
         <span class="phpdocumentor-signature__type">mixed</span>
     <span class="phpdocumentor-signature__name">$search_fields</span>
      = <span class="phpdocumentor-signature__default-value">[&#039;firstname_suffix&#039;, &#039;lastname_company&#039;, &#039;vendor_ref&#039;, &#039;currency_code&#039;, &#039;document_no&#039;, &#039;title&#039;]</span></code>
-
-    
-    
-    
-
-</article>
-                    <article
-        class="
-            phpdocumentor-element
-            -property
-            -protected
-                                                        "
->
-    <h4 class="phpdocumentor-element__name" id="property_type">
-        $type
-        <a href="classes/BizCuit-BexioBills.html#property_type" class="headerlink"><i class="fas fa-link"></i></a>
-
-        <span class="phpdocumentor-element__modifiers">
-                                </span>
-    </h4>
-    <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="bexio.php"><a href="files/bexio.html">bexio.php</a></abbr>
-    :
-    <span class="phpdocumentor-element-found-in__line">816</span>
-
-    </aside>
-
-    
-    <code class="phpdocumentor-code phpdocumentor-signature ">
-    <span class="phpdocumentor-signature__visibility">protected</span>
-        <span class="phpdocumentor-signature__type">mixed</span>
-    <span class="phpdocumentor-signature__name">$type</span>
-     = <span class="phpdocumentor-signature__default-value">&#039;purchase/bills&#039;</span></code>
 
     
     
@@ -704,14 +596,14 @@
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="bexio.php"><a href="files/bexio.html">bexio.php</a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">218</span>
+    <span class="phpdocumentor-element-found-in__line">217</span>
 
     </aside>
 
     
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">protected</span>
-        <span class="phpdocumentor-signature__type">mixed</span>
+        <span class="phpdocumentor-signature__type">int|null</span>
     <span class="phpdocumentor-signature__name">$userid</span>
      = <span class="phpdocumentor-signature__default-value">null</span></code>
 
@@ -742,7 +634,7 @@
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="bexio.php"><a href="files/bexio.html">bexio.php</a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">231</span>
+    <span class="phpdocumentor-element-found-in__line">227</span>
 
     </aside>
 
@@ -786,7 +678,7 @@
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="bexio.php"><a href="files/bexio.html">bexio.php</a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">432</span>
+    <span class="phpdocumentor-element-found-in__line">428</span>
 
     </aside>
 
@@ -840,7 +732,7 @@
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="bexio.php"><a href="files/bexio.html">bexio.php</a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">451</span>
+    <span class="phpdocumentor-element-found-in__line">447</span>
 
     </aside>
 
@@ -903,7 +795,7 @@
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="bexio.php"><a href="files/bexio.html">bexio.php</a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">347</span>
+    <span class="phpdocumentor-element-found-in__line">343</span>
 
     </aside>
 
@@ -954,7 +846,7 @@
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="bexio.php"><a href="files/bexio.html">bexio.php</a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">272</span>
+    <span class="phpdocumentor-element-found-in__line">268</span>
 
     </aside>
 
@@ -996,7 +888,7 @@
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="bexio.php"><a href="files/bexio.html">bexio.php</a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">338</span>
+    <span class="phpdocumentor-element-found-in__line">334</span>
 
     </aside>
 
@@ -1004,7 +896,7 @@
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-                    <span class="phpdocumentor-signature__name">list</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">int&nbsp;</span><span class="phpdocumentor-signature__argument__name">$offset</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">int&nbsp;</span><span class="phpdocumentor-signature__argument__name">$limit</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
+                    <span class="phpdocumentor-signature__name">list</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">int&nbsp;</span><span class="phpdocumentor-signature__argument__name">$offset</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">int&nbsp;</span><span class="phpdocumentor-signature__argument__name">$limit</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span></code>
 
     <div class="phpdocumentor-label-line">
         </div>
@@ -1044,7 +936,11 @@
                                     </dd>
                                             </dl>
 
-    
+            <section>
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+        <span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span>
+            </section>
+
 </article>
                     <article
         class="phpdocumentor-element
@@ -1060,7 +956,7 @@
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="bexio.php"><a href="files/bexio.html">bexio.php</a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">421</span>
+    <span class="phpdocumentor-element-found-in__line">417</span>
 
     </aside>
 
@@ -1102,7 +998,7 @@
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="bexio.php"><a href="files/bexio.html">bexio.php</a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">357</span>
+    <span class="phpdocumentor-element-found-in__line">353</span>
 
     </aside>
 
@@ -1153,7 +1049,7 @@
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="bexio.php"><a href="files/bexio.html">bexio.php</a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">294</span>
+    <span class="phpdocumentor-element-found-in__line">290</span>
 
     </aside>
 
@@ -1161,7 +1057,7 @@
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-                    <span class="phpdocumentor-signature__name">search</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type"><a href="classes/BizCuit-BXQuery-BXQuery.html"><abbr title="\BizCuit\BXQuery\BXQuery">BXQuery</abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$query</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type">int&nbsp;</span><span class="phpdocumentor-signature__argument__name">$offset</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">0</span><span> ]</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type">int&nbsp;</span><span class="phpdocumentor-signature__argument__name">$limit</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">100</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
+                    <span class="phpdocumentor-signature__name">search</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type"><a href="classes/BizCuit-BXQuery-BXQuery.html"><abbr title="\BizCuit\BXQuery\BXQuery">BXQuery</abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$query</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type">int&nbsp;</span><span class="phpdocumentor-signature__argument__name">$offset</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">0</span><span> ]</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type">int&nbsp;</span><span class="phpdocumentor-signature__argument__name">$limit</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">100</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span></code>
 
     <div class="phpdocumentor-label-line">
         </div>
@@ -1208,7 +1104,11 @@
                                     </dd>
                                             </dl>
 
-    
+            <section>
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+        <span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span>
+            </section>
+
 </article>
                     <article
         class="phpdocumentor-element
@@ -1224,7 +1124,7 @@
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="bexio.php"><a href="files/bexio.html">bexio.php</a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">478</span>
+    <span class="phpdocumentor-element-found-in__line">474</span>
 
     </aside>
 
@@ -1282,7 +1182,7 @@ false in case of error</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="bexio.php"><a href="files/bexio.html">bexio.php</a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">261</span>
+    <span class="phpdocumentor-element-found-in__line">257</span>
 
     </aside>
 
@@ -1329,7 +1229,7 @@ owner.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="bexio.php"><a href="files/bexio.html">bexio.php</a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">247</span>
+    <span class="phpdocumentor-element-found-in__line">243</span>
 
     </aside>
 
@@ -1377,14 +1277,14 @@ when owner is needed it would be set to user.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="bexio.php"><a href="files/bexio.html">bexio.php</a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">829</span>
+    <span class="phpdocumentor-element-found-in__line">869</span>
 
     </aside>
 
     
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-                    <span class="phpdocumentor-signature__name">setStatus</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">int|string|<a href="classes/BizCuit-BXObject-BXObject.html"><abbr title="\BizCuit\BXObject\BXObject">BXObject</abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$uuid</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$status</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
+                    <span class="phpdocumentor-signature__name">setStatus</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">int|string|<a href="classes/BizCuit-BXObject-BXObject.html"><abbr title="\BizCuit\BXObject\BXObject">BXObject</abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$uuid</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$status</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type"><a href="classes/BizCuit-BXObject-BXObject.html"><abbr title="\BizCuit\BXObject\BXObject">BXObject</abbr></a></span></code>
 
     <div class="phpdocumentor-label-line">
         </div>
@@ -1409,7 +1309,11 @@ when owner is needed it would be set to user.</p>
 
     
 
-    
+            <section>
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+        <span class="phpdocumentor-signature__response_type"><a href="classes/BizCuit-BXObject-BXObject.html"><abbr title="\BizCuit\BXObject\BXObject">BXObject</abbr></a></span>
+            </section>
+
 </article>
                     <article
         class="phpdocumentor-element
@@ -1425,7 +1329,7 @@ when owner is needed it would be set to user.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="bexio.php"><a href="files/bexio.html">bexio.php</a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">516</span>
+    <span class="phpdocumentor-element-found-in__line">512</span>
 
     </aside>
 
@@ -1574,24 +1478,27 @@ false in case of error</p>
             <li class="phpdocumentor-on-this-page-section__title">Table Of Contents</li>
             <li>
                 <ul class="phpdocumentor-list -clean">
+                                        <li><a href="classes/BizCuit-BexioBills.html#toc-constants">Constants</a></li>
                                                             <li><a href="classes/BizCuit-BexioBills.html#toc-properties">Properties</a></li>
                                                             <li><a href="classes/BizCuit-BexioBills.html#toc-methods">Methods</a></li>
                                     </ul>
             </li>
+                            <li class="phpdocumentor-on-this-page-section__title">Constants</li>
+                <li>
+                    <ul class="phpdocumentor-list -clean">
+                                                    <li><a href="classes/BizCuit-BexioBills.html#constant_type">type</a></li>
+                                            </ul>
+                </li>
             
                             <li class="phpdocumentor-on-this-page-section__title">Properties</li>
                 <li>
                     <ul class="phpdocumentor-list -clean">
-                                                    <li><a href="classes/BizCuit-tBexioV4Api.html#property_api_version">$api_version<a href="classes/BizCuit-BexioBills.html"></li>
-                                                    <li><a href="classes/BizCuit-BexioAPI.html#property_c">$c<a href="classes/BizCuit-BexioBills.html"></li>
-                                                    <li><a href="classes/BizCuit-BexioBills.html#property_class">$class<a href="classes/BizCuit-BexioBills.html"></li>
+                                                    <li><a href="classes/BizCuit-BexioBills.html#property_className">$className<a href="classes/BizCuit-BexioBills.html"></li>
                                                     <li><a href="classes/BizCuit-BexioAPI.html#property_ctx">$ctx<a href="classes/BizCuit-BexioBills.html"></li>
                                                     <li><a href="classes/BizCuit-BexioAPI.html#property_endpoint">$endpoint<a href="classes/BizCuit-BexioBills.html"></li>
-                                                    <li><a href="classes/BizCuit-BexioAPI.html#property_headers">$headers<a href="classes/BizCuit-BexioBills.html"></li>
                                                     <li><a href="classes/BizCuit-BexioAPI.html#property_ownerid">$ownerid<a href="classes/BizCuit-BexioBills.html"></li>
                                                     <li><a href="classes/BizCuit-BexioBills.html#property_query">$query<a href="classes/BizCuit-BexioBills.html"></li>
                                                     <li><a href="classes/BizCuit-BexioBills.html#property_search_fields">$search_fields<a href="classes/BizCuit-BexioBills.html"></li>
-                                                    <li><a href="classes/BizCuit-BexioBills.html#property_type">$type<a href="classes/BizCuit-BexioBills.html"></li>
                                                     <li><a href="classes/BizCuit-BexioAPI.html#property_userid">$userid<a href="classes/BizCuit-BexioBills.html"></li>
                                             </ul>
                 </li>
