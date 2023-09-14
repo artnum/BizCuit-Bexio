@@ -341,7 +341,7 @@ trait tBexioV4Api {
 	 * @see tBexioCollection::getIdName()
 	 */
 	function getIdName ():string {
-		$c = $this::className;
+		$c = $this->className;
 		return $c::ID;
 	}
 
@@ -548,7 +548,7 @@ trait tBexioNumberObject {
 		$this->ctx->url = $this::api_version . '/' . $this::type . '/search';
 		$this->ctx->method = 'post';
 		$this->ctx->body = json_encode([[
-			'field' => $this::className::NR,
+			'field' => $this::NR,
 			'value' => strval($id),
 			'criteria' => '='
 		]]);
