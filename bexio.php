@@ -943,6 +943,9 @@ class BexioOutgoingPayment extends BexioAPI {
 	protected string $className = 'BizCuit\BXObject\OutgoingPayment';
 	protected string $query = 'BizCuit\BXQuery\OutgoingPayment';
 	protected $uuid;
+	protected $search_fields = [
+		'bill_id'
+	];
 
 	function getId() {
 		return $this->uuid;
