@@ -938,7 +938,7 @@ class BexioFile extends BexioAPI {
 	use tBexioV3Api, tBexioObject, tBexioCollection;
 }
 
-class BexioOutgoinPayment extends BexioAPI {
+class BexioOutgoingPayment extends BexioAPI {
 	const type = 'purchase/outgoing-payments';
 	protected string $className = 'BizCuit\BXObject\OutgoingPayment';
 	protected string $query = 'BizCuit\BXQuery\OutgoingPayment';
