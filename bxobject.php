@@ -112,7 +112,8 @@ class Unit extends ROObject { }
 class StockLocation extends ROObject { }
 class BusinessActivity extends ROObject { }
 class CommunicationType extends ROObject { }
-
+class BankAccount extends ROObject { }
+class OutgoingPayment extends ROObject { }
 
 class Country extends BXObject {
     const NR = null;

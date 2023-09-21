@@ -847,6 +847,20 @@ class BexioExpense extends BexioAPI {
 }
 
 /**
+ * Represent the enpoint Bank Accounts [read only]
+ * 
+ * @link https://docs.bexio.com/#tag/Bank-Accounts
+ * @api
+ */
+class BexioBankAccount extends BexioAPI {
+	const type = 'banking/accounts';
+	protected string $className = 'BizCuit\BXObject\BankAccount';
+	protected string $query = 'BizCuit\BXQuery\BankAccount';
+
+	use tBexioV3Api, tBexioObject, tBexioCollection;
+}
+
+/**
  * Represent the enpoint Bills
  * 
  * @link https://docs.bexio.com/#tag/Bills
@@ -922,4 +936,17 @@ class BexioFile extends BexioAPI {
 	}
 
 	use tBexioV3Api, tBexioObject, tBexioCollection;
+}
+
+class BexioOutgoinPayment extends BexioAPI {
+	const type = 'purchase/outgoing-payments';
+	protected string $className = 'BizCuit\BXObject\OutgoingPayment';
+	protected string $query = 'BizCuit\BXQuery\OutgoingPayment';
+	protected $uuid;
+
+	function getId() {
+		return $this->uuid;
+	}
+
+	use tBexioV4Api, tBexioObject;
 }

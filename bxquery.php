@@ -102,6 +102,8 @@ class Title extends ROObject { }
 class Salutation extends ROObject { }
 class ClientService extends ROObject { }
 class Expense extends ROObject {}
+class BankAccount extends ROObject { }
+class OutgoingPayment extends ROObject { }
 
 class Project extends BXQuery {
 	function __construct() {
