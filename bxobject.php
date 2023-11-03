@@ -97,7 +97,6 @@ class ROObject extends BXObject {
 
 
 class File extends ROObject {}
-class Bills extends ROObject {}
 class ProjectType extends ROObject {}
 class ProjectStatus extends ROObject {}
 class Title extends ROObject {}
@@ -319,6 +318,33 @@ class User extends BXObject {
         'is_accountant'
     ];
 }
+
+class Bills extends BXObject {
+    const NR = null;
+    const createProperties = [
+        'supplier_id',
+        'vendor_ref',
+        'title',
+        'contact_partner_id',
+        'bill_date',
+        'due_date',
+        'amount_man',
+        'amount_calc',
+        'manual_amount',
+        'currency_code',
+        'exchange_rate',
+        'base_currency_amount',
+        'item_net',
+        'purchase_order_id',
+        'qr_bill_information',
+        'attachment_ids',
+        'address',
+        'line_items',
+        'discounts',
+        'payment'
+    ];
+}
+
 
 class PDF extends BXObject {
     const createProperties = [

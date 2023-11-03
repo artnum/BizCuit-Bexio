@@ -40,6 +40,7 @@ class BexioCTX {
 		$this->c = curl_init();
 		$this->token = $token;
 		$this->headers = [
+			'Content-Type: application/json',
 			'Accept: application/json',
 			'Authorization: Bearer ' . $token
 		];
@@ -205,7 +206,6 @@ class BexioCTX {
 			if (strlen($this->body) <= 0) {
 				$headers = array_merge($this->headers, ['Content-Length: 0']);  
 			}
-		
 			curl_setopt($this->c, CURLOPT_HTTPHEADER, $headers);
 			$data = curl_exec($this->c);
 			$code = curl_getinfo($this->c,  CURLINFO_HTTP_CODE);
