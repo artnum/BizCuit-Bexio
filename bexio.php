@@ -13,6 +13,7 @@ require(__DIR__ . '/bxobject.php');
 
 use BizCuit\BXObject\BXObject;
 use BizCuit\BXQuery\BXQuery;
+use CURLFile;
 use CurlHandle;
 use Exception;
 use stdClass;
@@ -80,6 +81,10 @@ class BexioCTX {
 		curl_reset($this->c);
 	}
 
+	function get_token ():string {
+		return $this->token;
+	}
+
 	function __set(string $name, mixed $value):void {
 		switch ($name) {
 			case 'url':
@@ -127,6 +132,29 @@ class BexioCTX {
 			case 'user_id':
 			case 'owner_id':
 				unset($this->values->{$name});
+		}
+	}
+
+	function handle_result ($data, $code, $type):stdClass|string|Array {
+		switch($code) {
+			case 200:
+			case 201:
+				if (strcasecmp($type, 'application/json') === 0) {
+					return json_decode($data);
+				}
+				return $data;
+			case 304: throw new Exception('The resource has not been changed', $code, new Exception($data));
+            case 400: throw new Exception('The request parameters are invalid', $code, new Exception($data));
+            case 401: throw new Exception('The bearer token or the provided api key is invalid', $code, new Exception($data));
+            case 403: throw new Exception('You do not possess the required rights to access this resource',$code, new Exception($data));
+            case 404: throw new Exception('The resource could not be found', $code, new Exception($data));
+            case 411: throw new Exception('Length Required', $code, new Exception($data));
+            case 415: throw new Exception('The data could not be processed or the accept header is invalid', $code, new Exception($data));
+            case 422: throw new Exception('Could not save the entity', $code, new Exception($data));
+            case 429: throw new Exception('Too many requests', $code, new Exception($data));
+            case 500: throw new Exception('An unexpected condition was encountered', $code, new Exception($data));
+            case 503: throw new Exception('The server is not available (maintenance work)', $code, new Exception($data));
+			default: throw new Exception('Error with code ' . $code, $code, new Exception($data));
 		}
 	}
 
@@ -186,26 +214,7 @@ class BexioCTX {
 		} catch (Exception $e) {
 			throw new Exception('Program error', 0, $e);
 		}
-		switch($code) {
-			case 200:
-			case 201:
-				if (strcasecmp($type, 'application/json') === 0) {
-					return json_decode($data);
-				}
-				return $data;
-			case 304: throw new Exception('The resource has not been changed', $code, new Exception($data));
-            case 400: throw new Exception('The request parameters are invalid', $code, new Exception($data));
-            case 401: throw new Exception('The bearer token or the provided api key is invalid', $code, new Exception($data));
-            case 403: throw new Exception('You do not possess the required rights to access this resource',$code, new Exception($data));
-            case 404: throw new Exception('The resource could not be found', $code, new Exception($data));
-            case 411: throw new Exception('Length Required', $code, new Exception($data));
-            case 415: throw new Exception('The data could not be processed or the accept header is invalid', $code, new Exception($data));
-            case 422: throw new Exception('Could not save the entity', $code, new Exception($data));
-            case 429: throw new Exception('Too many requests', $code, new Exception($data));
-            case 500: throw new Exception('An unexpected condition was encountered', $code, new Exception($data));
-            case 503: throw new Exception('The server is not available (maintenance work)', $code, new Exception($data));
-			default: throw new Exception('Error with code ' . $code, $code, new Exception($data));
-		}
+		return $this->handle_result($data, $code, $type);
 	}
 }
 
@@ -302,16 +311,17 @@ trait tBexioV4Api {
 			$term = urlencode($query->value);
 			if (in_array($query->field, $this->search_fields)) {
 				if (in_array($field, $fields)) { continue; }
-				$fields[] = $field;
+				/*$fields[] = $field;
 				if (!$search_str_array['search_term']) {
 					$search_str_array['search_term'] = $term;
-				}
-				$search_str_array['fields[' . (count($fields) - 1) . ']'] = $field;
+				}*/
+				$search_str_array[$field] = $term;
 				continue;
 			}
 
 			if (!isset($search_str_array[$field])) { $search_str_array[$field] = $term; }
 		}
+
 		if (!$search_str_array['search_term']) {
 			unset($search_str_array['search_term']);
 		}
@@ -352,6 +362,34 @@ trait tBexioV4Api {
 	 */
 	function newQuery ():BXquery {
 		return new $this->query();
+	}
+}
+
+trait tBexioUpload {
+	function upload (string $filepath):stdClass|string|Array {
+		$headers = [
+			'Accept: application/json',
+			'Authorization: Bearer ' . $this->ctx->get_token()
+		];
+		try {
+			$c = curl_init();
+			$curlfile = new CURLFile($filepath, mime_content_type($filepath), basename($filepath));
+			$url = $this::api_version . '/' . $this::type;
+			while(substr($url, 0, 1) === '/') { $url = substr($url, 1); }
+			$url = str_replace('//', '/', $url);
+			curl_setopt($c, CURLOPT_URL, $this->ctx::endpoint . $url);
+			curl_setopt($c, CURLOPT_RETURNTRANSFER, true);
+			curl_setopt($c, CURLOPT_POST, true);
+			curl_setopt($c, CURLOPT_POSTFIELDS,['file' => $curlfile]);
+			curl_setopt($c, CURLOPT_HTTPHEADER, $headers);
+			$data = curl_exec($c);
+			$code = curl_getinfo($c,  CURLINFO_HTTP_CODE);
+			$type = curl_getinfo($c, CURLINFO_CONTENT_TYPE);
+			curl_close($c);
+		} catch (Exception $e) {
+			throw new Exception('Program error', 0, $e);
+		}
+		return $this->ctx->handle_result($data, $code, $type);
 	}
 }
 
@@ -565,7 +603,6 @@ trait tBexioPDFObject {
 		return new \BizCuit\BXObject\PDF($this->ctx->fetch());
 	}
 }
-
 
 trait tBexioProjectObject {
 	function listByProject (Int|BXObject $projectId): Array {
@@ -935,7 +972,7 @@ class BexioFile extends BexioAPI {
 		return $file;
 	}
 
-	use tBexioV3Api, tBexioObject, tBexioCollection;
+	use tBexioV3Api, tBexioObject, tBexioCollection, tBexioUpload;
 }
 
 class BexioOutgoingPayment extends BexioAPI {
