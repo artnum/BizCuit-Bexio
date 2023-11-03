@@ -20,3 +20,11 @@
   you need to use the uuid [string].
   * A GET request without body and without Content-Length: 0 as header can have
   the API returning an error.
+  * Random field size where it should not : to create a payment, you have fields
+  to fill that comes directly from the Swiss QR Bill. There's a standard that
+  define each field. For example field PstCd is 16 chars long and contains
+  a postcode. In Bexio, that same field is max 10 chars long. So some valid
+  value in the payment standard set by banks will not work with Bexio. Following
+  fields don't match the standard : TwnNm, Ctry, PstCd, BldgNbOrAdrLine2, 
+  StrtNmOrAdrLine1 and IBAN (some are longer than the standard, which is
+  ok, some are smaller than the standard, which is not ok).
