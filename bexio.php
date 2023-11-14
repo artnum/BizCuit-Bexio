@@ -486,6 +486,7 @@ trait tBexioObject {
 		if ($id instanceof BXObject) {
 			$id = $id->getId();
 		}
+		$this->ctx->method = 'get';
 		$this->ctx->url = $this::api_version .'/' . $this::type . '/' .  strval($id);
 		$query = [];
 		foreach ($options as $name => $value) {
