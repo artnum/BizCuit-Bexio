@@ -637,7 +637,7 @@ trait tBexioProjectObject {
 class BexioCountry extends BexioAPI {
 	const type = 'country';
 	protected string $className = 'BizCuit\BXObject\Country';
-	protected string $query = 'BizCuit\BXQuery\Coutry';
+	protected string $query = 'BizCuit\BXQuery\Country';
 
 	use tBexioV2Api, tBexioObject, tBexioCollection;
 }
