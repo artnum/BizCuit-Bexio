@@ -285,7 +285,6 @@ class Quote extends BXObject {
         'contact_id',
         'contact_sub_id',
         'user_id',
-        'project_id',
         'language_id',
         'bank_account_id',
         'currency_id',
