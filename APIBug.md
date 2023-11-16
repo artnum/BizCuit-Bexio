@@ -28,3 +28,20 @@
   fields don't match the standard : TwnNm, Ctry, PstCd, BldgNbOrAdrLine2, 
   StrtNmOrAdrLine1 and IBAN (some are longer than the standard, which is
   ok, some are smaller than the standard, which is not ok).
+  * Filtering for some endpoints is strange, like you can't get all invoices
+  for one project and you have to rely on stuff like
+  ```php
+   $bxQuery = $bxInvoice->newQuery();
+   $bxQuery->add('kb_item_status_id', '7', '>');
+   $bxQuery->add('kb_item_status_id', '10', '<');
+
+   $limit = 100;
+   $offset = 0;
+
+   $invoices = [];
+   while (!empty(($batch = $bxInvoice->search($bxQuery, $offset, $limit)))) {
+      $batch = array_filter($batch, function ($i) use ($prjid) { if (intval($i->project_id) === intval($prjid)) { return $i; } });
+      $invoices = array_merge($invoices, $batch);
+      $offset += $limit;
+   }
+  ```
