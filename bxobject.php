@@ -49,7 +49,6 @@ abstract class BXObject {
 	function toJson() {
 		$outClass = clone $this->content;
         foreach ($outClass as $k => $v) {
-            if (!in_array($k, $this::createProperties) && $k !== $this::ID) { unset($outClass->{$k}); }
             /* when requesting data, it appears that null properties are set to 0 and fail to write back */
             if (in_array($k, $this::nullableProperties) && $outClass->{$k} === 0) { $outClass->{$k} = null; } 
         }
