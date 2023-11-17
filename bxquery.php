@@ -88,7 +88,6 @@ class ROObject extends BXQuery {
 	}
 }
 
-class ContactGroup extends BXQuery { }
 class ContactSector extends BXQuery { }
 class Payment extends BXQuery { }
 class Unit extends BXQuery { }
@@ -383,6 +382,14 @@ class Bills extends BXQuery {
 			'bill_date_end',
 			'bill_date_start',
 			'status'
+		]);
+	}
+}
+
+class ContactGroup extends BXQuery {
+	function __construct() {
+		parent::__construct([
+			'name'
 		]);
 	}
 }

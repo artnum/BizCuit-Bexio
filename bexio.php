@@ -991,3 +991,12 @@ class BexioOutgoingPayment extends BexioAPI {
 
 	use tBexioV4Api, tBexioObject;
 }
+
+class BexioContactGroup extends BexioAPI {
+	const type = 'contact_group';
+	protected string $className = 'BizCuit\BXObject\ContactGroup';
+	protected string $query = 'BizCuit\BXQuery\ContactGroup';
+
+
+	use tBexioV2Api, tBexioObject, tBexioCollection;
+}

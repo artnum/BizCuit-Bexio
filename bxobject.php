@@ -103,7 +103,6 @@ class Salutation extends ROObject {}
 class ClientService extends ROObject {}
 class Currency extends ROObject {}
 class Expense extends ROObject {}
-class ContactGroup extends ROObject { }
 class ContactSector extends ROObject { }
 class Payment extends ROObject { }
 class Unit extends ROObject { }
@@ -395,4 +394,11 @@ class PDF extends BXObject {
         }
         return json_encode($outClass);
     }
+}
+
+class ContactGroup extends BXObject {
+    const NR = null;
+    const createProperties = [
+        'name'
+    ];
 }
