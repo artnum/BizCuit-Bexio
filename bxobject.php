@@ -12,9 +12,9 @@ use stdClass;
 
 abstract class BXObject {
     /** @var string|null */
-    protected const ID = 'id';
+    public const ID = 'id';
     /** @var string|null */
-    protected const NR = 'nr';
+    public const NR = 'nr';
     /** @var  array */
     protected const createProperties = [];
     /** @var array */
