@@ -27,6 +27,8 @@ class BexioCTX {
 	protected array $headers = [];
 	protected object $values;
 	protected string $token;
+	protected array $ratelimits;
+	protected int $sleepPercent;
 
 	/**
 	 * Create the context with API token needed to access endpoints
@@ -46,6 +48,11 @@ class BexioCTX {
 		];
 		$this->values = new stdClass();
 		$this->method = 'get';
+		$this->ratelimits = [
+			'remaining' => 0,
+			'limit' => 0,
+			'reset' => 0
+		];
 	}
 
 	private function set_url (string $url):void {
@@ -136,6 +143,18 @@ class BexioCTX {
 		}
 	}
 
+	/**
+	 * Set the sleep percent for each request. The API give back the time remaining
+	 * and the number of requests still available in that time frame. This give
+	 * us a number of request per second. By setting a value > 0, we will sleep
+	 * for the given percent of the time remaining.
+	 * @param int $percent 
+	 * @return void 
+	 */
+	function setSleep (int $percent) {
+		$this->sleepPercent = $percent;
+	}
+
 	function handle_result (string $data, int $code, string $type):stdClass|string|Array {
 		switch($code) {
 			case 200:
@@ -211,11 +230,20 @@ class BexioCTX {
 			if ($data === false) { throw new Exception(curl_error($this->c), curl_errno($this->c)); }
 			$code = curl_getinfo($this->c,  CURLINFO_HTTP_CODE);
 			$type = curl_getinfo($this->c, CURLINFO_CONTENT_TYPE);
+			$this->ratelimits = $ratelimits;
+			if ($this->sleepPercent > 0 && $ratelimits['remaining'] > 0 && $ratelimits['reset'] > 0) {
+				$sleep = (($ratelimits['reset'] * 1000000) / $ratelimits['remaining']) * $this->sleepPercent / 100;
+				usleep($sleep);
+			}
 			$this->reset();
 		} catch (Exception $e) {
 			throw new Exception('Program error', 0, $e);
 		}
 		return $this->handle_result($data, $code, $type);
+	}
+
+	function getCurrentLimits():array {
+		return $this->ratelimits;
 	}
 }
 
@@ -426,10 +454,80 @@ trait tBexioCollection {
 	 * @api
 	 */
 	function search (BXQuery $query, Int $offset = 0, Int $limit = 500):array {
-		$this->ctx->url = $this::api_version . '/' . $this::type .'/search' . sprintf('?limit=%d&offset=%d', $limit, $offset);
+		if ($query->isWithAnyfields()) { return $this->search_with_anyfields($query); }
+		$this->ctx->url = self::api_version . '/' . self::type .'/search' . sprintf('?limit=%d&offset=%d', $limit, $offset);
 		$this->ctx->body = $query->toJson();
 		$this->ctx->method = 'post';
 		return array_map(fn($e) => new $this->className($e), $this->ctx->fetch());
+	}
+
+	protected function compare (BXQuery $query, BXObject $e):bool {
+		$query = $query->getRawQueryLocal();
+		foreach ($query as $condition) {
+			switch ($condition->criteria) {
+				case '=': case 'equal':
+					if ($e->{$condition->field} != $condition->value) { return false; }
+					break;
+				case '!=': case 'not_equal':
+					if ($e->{$condition->field} == $condition->value) { return false; }
+					break;
+				case '>': case 'greater_than':
+					if ($e->{$condition->field} <= $condition->value) { return false; }
+					break;
+				case '<': case 'less_than':
+					if ($e->{$condition->field} >= $condition->value) { return false; }
+					break;
+				case '>=': case 'greater_equal':
+					if ($e->{$condition->field} < $condition->value) { return false; }
+					break;
+				case '<=': case 'less_equal':
+					if ($e->{$condition->field} > $condition->value) { return false; }
+					break;
+				case 'like':
+					if (strpos(strval($e->{$condition->field}), strval($condition->value)) === false) { return false; }
+					break;
+				case 'not_like':
+					if (strpos(strval($e->{$condition->field}), strval($condition->value)) !== false) { return false; }
+					break;
+				case 'is_null':
+					if (!is_null($e->{$condition->field})) { return false; }
+					break;
+				case 'not_null':
+					if (is_null($e->{$condition->field})) { return false; }
+					break;
+				case 'in':
+					if (!in_array($e->{$condition->field}, $condition->value)) { return false; }
+					break;
+				case 'not_in':
+					if (in_array($e->{$condition->field}, $condition->value)) { return false; }
+					break;
+			}
+		}
+
+		return true;
+	}
+	protected function search_with_anyfields (BXQuery $query):array {
+		$results = [];
+		$offset = 0;
+		$limit = 500;
+		$useList = empty($query->getRawQuery());
+		$query->unsetWithAnyfields();
+		do {
+			$batch = [];
+			if ($useList) {
+				$batch = $this->list($offset, $limit);
+			} else {
+				$batch = $this->search($query, $offset, $limit);
+			}
+			if (empty($batch)) { break; }
+			$results = array_merge(
+				$results,
+				array_filter($batch, fn($e) => $this->compare($query, $e))
+			);
+			$offset += $limit;
+		} while (true);
+
+		return $results;
 	}
 
 	/**
@@ -441,7 +539,7 @@ trait tBexioCollection {
 	 * @api
 	 */
 	function list (Int $offset = 0, Int $limit = 500):array {
-		$this->ctx->url = $this::api_version . '/' . $this::type . sprintf('?limit=%d&offset=%d', $limit, $offset);
+		$this->ctx->url = self::api_version . '/' . self::type . sprintf('?limit=%d&offset=%d', $limit, $offset);
 		return array_map(fn($e) => new $this->className($e), $this->ctx->fetch());
 	}
 }

@@ -30,10 +30,18 @@ abstract class BXQuery {
 		'in',
 		'not_in'
 	];
+	protected bool $anyField = false;
 	protected array $allowedField = ['name'];
 	protected array $query = [];
+	protected array $localFields = [];
 
-	function __construct(Array $allowedField = ['name']) {
+	/**
+	 * Create a search object
+	 * 
+	 * @param array $allowedField Fields allowed in the query as per Bexio documentation
+	 * @return void 
+	 */
+	function __construct(array $allowedField = ['name']) {
 		$this->allowedField = $allowedField;
 	}
 
@@ -41,15 +49,19 @@ abstract class BXQuery {
 		$field = strtolower($field);
 		$criteria = strtolower($criteria);
 
-		if (!in_array($criteria, $this::allowedCriteria)) { return false; }
-		if (!in_array($field, $this->allowedField)) { return false; }
-		
+		if (!in_array($criteria, self::allowedCriteria)) { return false; }
+		if (!$this->anyField && !in_array($field, $this->allowedField)) { return false; }
+
 		$q = new stdClass();
 		$q->field = $field;
 		$q->value = $term;
 		$q->criteria = $criteria;
 
-		$this->query[] = $q;
+		if ($this->anyField && !in_array($field, $this->allowedField)) { 
+			$this->localFields[] = $q;	
+		} else {
+			$this->query[] = $q;
+		}
 		return true;
 	}
 
@@ -70,6 +82,31 @@ abstract class BXQuery {
 	function getRawQuery():array {
 		return $this->query;
 	}
+
+	function getRawQueryLocal():array {
+		return $this->localFields;
+	}
+
+	function isWithAnyfields():bool {
+		return $this->anyField;
+	}
+
+	/**
+	 * The query will run with any fields. Fields that are note searchable on 
+	 * Bexio side will be searched locally.
+	 * @return void 
+	 */
+	function setWithAnyfields():void {
+		$this->anyField = true;
+	}
+	
+	/**
+	 * The query will run with only fields that are searchable on Bexio side.
+	 * @return void 
+	 */
+	function unsetWithAnyfields():void {
+		$this->anyField = false;
+	}
 }
 
 class ROObject extends BXQuery {
@@ -77,7 +114,7 @@ class ROObject extends BXQuery {
 		$field = strtolower($field);
 		$criteria = strtolower($criteria);
 
-		if (!in_array($criteria, $this::allowedCriteria)) { return false; }
+		if (!in_array($criteria, self::allowedCriteria)) { return false; }
 		
 		$q = new stdClass();
 		$q->field = $field;
