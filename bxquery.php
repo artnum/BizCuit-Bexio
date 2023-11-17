@@ -30,14 +30,14 @@ abstract class BXQuery {
 		'in',
 		'not_in'
 	];
-	protected $allowedField = ['name'];
-	protected $query = [];
+	protected array $allowedField = ['name'];
+	protected array $query = [];
 
 	function __construct(Array $allowedField = ['name']) {
 		$this->allowedField = $allowedField;
 	}
 
-	function add(String $field, String $term, String $criteria = '=') {
+	function add(String $field, String $term, String $criteria = '='):bool {
 		$field = strtolower($field);
 		$criteria = strtolower($criteria);
 
@@ -53,26 +53,27 @@ abstract class BXQuery {
 		return true;
 	}
 
-	function remove(String $field) {
+	function remove(String $field):true {
 		$this->query = array_filter($this->query, fn ($e) => $e->field !== $field );
+		return true;
 	}
 
-	function replace(String $field, String $term, String $criteria) {
+	function replace(String $field, String $term, String $criteria):bool {
 		$this->remove($field);
 		return $this->add($field, $term, $criteria);
 	}
 
-	function toJson() {
+	function toJson():string {
 		return json_encode($this->query);
 	}
 
-	function getRawQuery() {
+	function getRawQuery():array {
 		return $this->query;
 	}
 }
 
 class ROObject extends BXQuery {
-	function add(String $field, String $term, string $criteria = '=') {
+	function add(String $field, String $term, string $criteria = '='):bool {
 		$field = strtolower($field);
 		$criteria = strtolower($criteria);
 

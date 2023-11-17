@@ -11,27 +11,33 @@ namespace BizCuit\BXObject;
 use stdClass;
 
 abstract class BXObject {
-    const ID = 'id';
-    const NR = 'nr';
-    const createProperties = [];
-    const nullableProperties = [];
-    const mapProperties = [];
-    const readonly = false;
-    protected $changes = [];
-	protected $content;
+    /** @var string|null */
+    protected const ID = 'id';
+    /** @var string|null */
+    protected const NR = 'nr';
+    /** @var  array */
+    protected const createProperties = [];
+    /** @var array */
+    protected const nullableProperties = [];
+    /** @var array */
+    protected const mapProperties = [];
+    /** @var bool */
+    protected const readonly = false;
+    protected array $changes = [];
+	protected stdClass $content;
 
 	function __construct(stdClass $object = new stdClass()) {
         $this->content = new stdClass();
         foreach($this::createProperties as $prop) {
             $this->{$prop} = null;
         }
-        foreach ($object as $prop => $value) {
+        foreach (get_object_vars($object) as $prop => $value) {
             $this->{$prop} = $value;
         }
         $this->changes = [];
 	}
 
-	function getId() {
+	function getId():mixed {
         if (!isset($this->content->{$this::ID})) { return null; }
 		return $this->content->{$this::ID};
 	}
@@ -41,21 +47,21 @@ abstract class BXObject {
         return array_pop($parts);
     }
 
-	function getNumber() {
+	function getNumber():mixed {
         if ($this::NR === null) { return null; }
 		return $this->content->{$this::NR};
 	}
 
-	function toJson() {
+	function toJson():string {
 		$outClass = clone $this->content;
-        foreach ($outClass as $k => $v) {
+        foreach (get_object_vars($outClass) as $k => $_) {
             /* when requesting data, it appears that null properties are set to 0 and fail to write back */
             if (in_array($k, $this::nullableProperties) && $outClass->{$k} === 0) { $outClass->{$k} = null; } 
         }
 		return json_encode($outClass);
 	}
 
-    function changesToJson() {
+    function changesToJson():string {
         $outClass = new stdClass();
         foreach($this->changes as $key) {
             $outClass->{$key} = $this->{$key};
@@ -63,7 +69,7 @@ abstract class BXObject {
         return json_encode($outClass);
     }
 
-	function __get($name) {
+	function __get(string $name):mixed {
         if (isset($this::mapProperties[$name])) {
             $name = $this::mapProperties[$name];
         }
@@ -71,7 +77,7 @@ abstract class BXObject {
 		return false;
 	}
 
-	function __set($name, $value) {
+	function __set(string $name, mixed $value) {
         if (isset($this::mapProperties[$name])) {
             $name = $this::mapProperties[$name];
         }
@@ -85,11 +91,11 @@ class ROObject extends BXObject {
     const NR = null;
     const readonly = true;
 
-	function toJson() {
+	function toJson():string {
 		return json_encode(clone $this->content);
 	}
 
-    function changesToJson() {
+    function changesToJson():string {
         return json_encode(new stdClass());
     }
 }
@@ -356,7 +362,7 @@ class PDF extends BXObject {
         foreach($this::createProperties as $prop) {
             $this->{$prop} = null;
         }
-        foreach ($object as $prop => $value) {
+        foreach (get_object_vars($object) as $prop => $value) {
             if ($prop === 'content') {
                 $this->{$prop} = base64_decode($value);
                 continue;
@@ -366,16 +372,16 @@ class PDF extends BXObject {
         $this->changes = [];
     }
 
-    function toJson() {
+    function toJson():string {
 		$outClass = new stdClass();
-        foreach ($this->content as $k => $v) {
+        foreach (get_object_vars($this->content) as $k => $v) {
             if ($k === 'content') {
                 $outClass->{$k} = base64_encode($v);
                 continue;
             }
             $outClass->{$k} = $v;
         }
-        foreach ($outClass as $k => $v) {
+        foreach (get_object_vars($outClass) as $k => $_) {
             if (!in_array($k, $this::createProperties)) { unset($outClass->{$k}); }
             /* when requesting data, it appears that null properties are set to 0 and fail to write back */
             if (in_array($k, $this::nullableProperties) && $outClass->{$k} === 0) { $outClass->{$k} = null; } 
@@ -384,7 +390,7 @@ class PDF extends BXObject {
 		return json_encode($outClass);
 	}
 
-    function changesToJson() {
+    function changesToJson():string {
         $outClass = new stdClass();
         foreach($this->changes as $key) {
             if ($key === 'content') {

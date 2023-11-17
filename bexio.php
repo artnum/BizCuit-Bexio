@@ -48,7 +48,7 @@ class BexioCTX {
 		$this->method = 'get';
 	}
 
-	private function set_url (String $url) {
+	private function set_url (string $url):void {
 		// remove leading slash
 		while(substr($url, 0, 1) === '/') { $url = substr($url, 1); }
 		// remove double slashes (bexio api return an error else)
@@ -56,7 +56,7 @@ class BexioCTX {
 		curl_setopt($this->c, CURLOPT_URL, $this::endpoint . $url);
 	}
 
-	private function set_method(String $method = 'get') {
+	private function set_method(string $method = 'get'):void {
 		switch(strtolower($method)) {
 			default:
 			case 'get': curl_setopt($this->c, CURLOPT_HTTPGET, true); break;
@@ -136,7 +136,7 @@ class BexioCTX {
 		}
 	}
 
-	function handle_result ($data, $code, $type):stdClass|string|Array {
+	function handle_result (string $data, int $code, string $type):stdClass|string|Array {
 		switch($code) {
 			case 200:
 			case 201:
@@ -161,7 +161,7 @@ class BexioCTX {
 
 	/**
 	 * Execute the request.
-	 * @return stdClass|string The JSON response decoded or the raw value
+	 * @return stdClass|string|Array The JSON response decoded or the raw value
 	 * @throws Exception A generic exception with code matching the HTTP error
 	 * code from the upstream API if any.
 	 */
@@ -174,7 +174,7 @@ class BexioCTX {
 			];
 			curl_setopt($this->c, CURLOPT_RETURNTRANSFER, true);
 			curl_setopt($this->c, CURLOPT_HEADERFUNCTION, 
-				function ($curl, $header) use (&$ratelimits) {
+				function (CurlHandle $curl, string $header) use (&$ratelimits) {
 					$len = strlen($header);
 					$parts = explode(':', $header);
 					if (count($parts) < 2) { return $len; }					
@@ -208,6 +208,7 @@ class BexioCTX {
 			}
 			curl_setopt($this->c, CURLOPT_HTTPHEADER, $headers);
 			$data = curl_exec($this->c);
+			if ($data === false) { throw new Exception(curl_error($this->c), curl_errno($this->c)); }
 			$code = curl_getinfo($this->c,  CURLINFO_HTTP_CODE);
 			$type = curl_getinfo($this->c, CURLINFO_CONTENT_TYPE);
 			$this->reset();
@@ -333,7 +334,7 @@ trait tBexioV4Api {
 		$this->ctx->url = $this::api_version . '/' . $this::type . $qs;
 		$this->ctx->method = 'get';
 		$result = $this->ctx->fetch();
-		return array_map(fn($e) => new $this->className($e), $result->data);
+		return array_map(fn(array $e) => new $this->className($e), $result->data);
 	}
 
 	/**
