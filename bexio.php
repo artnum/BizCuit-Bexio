@@ -433,14 +433,15 @@ trait tBexioCollection {
 
 	/**
 	 * List the collection.
+	 * @param String $order Order of search result.
 	 * @param Int $offset Offset in the search result,
 	 * @param Int $limit Max number of search result.
 	 * @return BXObject[] Items in the collection.
 	 * 
 	 * @api
 	 */
-	function list (Int $offset = 0, Int $limit = 500):array {
-		$this->ctx->url = $this::api_version . '/' . $this::type . sprintf('?limit=%d&offset=%d', $limit, $offset);
+	function list (String $order = 'id', Int $offset = 0, Int $limit = 500):array {
+		$this->ctx->url = $this::api_version . '/' . $this::type . '?order_by=' . $order . sprintf('&limit=%d&offset=%d', $limit, $offset);
 		return array_map(fn($e) => new $this->className($e), $this->ctx->fetch());
 	}
 }
