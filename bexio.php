@@ -53,6 +53,7 @@ class BexioCTX {
 			'limit' => 0,
 			'reset' => 0
 		];
+		$this->sleepPercent = 0;
 	}
 
 	private function set_url (string $url):void {
