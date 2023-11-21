@@ -445,6 +445,29 @@ trait tBexioCollection {
 		return new $this->query();
 	}
 
+	function query_string (array|int $options, int $limit):string {
+		$qs = [];
+		if (is_array($options)) {
+			$qs = [ 
+				sprintf('offset=%d', $options['offset'] ?? 0),
+				sprintf('limit=%d', $options['limit'] ?? 100) 
+			];
+			if ($options['order']) {
+				if (is_string($options['order'])) {
+					$qs[] = sprintf('order=%s', $options['order']);
+				} else if (is_array($options['order'])) {
+					$qs[] = sprintf('order=%s', join(',', $options['order']));
+				}
+			}
+		} else {
+			$qs = [ 
+				sprintf('offset=%d', $options),
+				sprintf('limit=%d', $limit) 
+			];		
+		}
+		return implode('&', $qs);
+	}
+
 	/**
 	 * Search the collection.
 	 * @param BXQuery $query The query object.
@@ -454,9 +477,9 @@ trait tBexioCollection {
 	 * 
 	 * @api
 	 */
-	function search (BXQuery $query, Int $offset = 0, Int $limit = 500):array {
+	function search (BXQuery $query, array|Int $options = 0, Int $limit = 500):array {
 		if ($query->isWithAnyfields()) { return $this->search_with_anyfields($query); }
-		$this->ctx->url = self::api_version . '/' . self::type .'/search' . sprintf('?limit=%d&offset=%d', $limit, $offset);
+		$this->ctx->url = self::api_version . '/' . self::type .'/search' . '?' . $this->query_string($options, $limit);
 		$this->ctx->body = $query->toJson();
 		$this->ctx->method = 'post';
 		return array_map(fn($e) => new $this->className($e), $this->ctx->fetch());
@@ -539,8 +562,8 @@ trait tBexioCollection {
 	 * 
 	 * @api
 	 */
-	function list (Int $offset = 0, Int $limit = 500):array {
-		$this->ctx->url = self::api_version . '/' . self::type . sprintf('?limit=%d&offset=%d', $limit, $offset);
+	function list (array|Int $options = 0, Int $limit = 500):array {
+		$this->ctx->url = self::api_version . '/' . self::type . '?' . $this->query_string($options, $limit);
 		return array_map(fn($e) => new $this->className($e), $this->ctx->fetch());
 	}
 }
