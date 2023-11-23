@@ -69,6 +69,10 @@ abstract class BXObject {
         return json_encode($outClass);
     }
 
+    function isReadonly():bool {
+        return $this->readonly;
+    }
+
 	function __get(string $name):mixed {
         if (isset($this::mapProperties[$name])) {
             $name = $this::mapProperties[$name];

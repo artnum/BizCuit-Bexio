@@ -611,7 +611,7 @@ trait tBexioObject {
 	 * @api
 	 */
 	function set (BXObject $content):BXObject|false {
-		if ($content::readonly) { return false; }
+		if ($content->isReadonly()) { return false; }
 
 		/* try to fix user_id and owner_id if possible */
 		if (!is_null($this->ctx->user_id)) {
@@ -649,7 +649,7 @@ trait tBexioObject {
 	 * @api
 	 */
 	function update (BXObject $content):BXObject|false {
-		if ($content::readonly) { return false; }
+		if ($content->isReadonly()) { return false; }
 
 		if (!$content->getId()) { return $this->set($content); }
 		$this->ctx->url = $this::api_version .'/' . $this::type . '/' .  $content->getId();
@@ -666,7 +666,7 @@ trait tBexioObject {
 
 trait tBexioArchiveable {
 	function archive (BXObject $content):bool {
-		if ($content::readonly) { return false; }
+		if ($content->isReadonly()) { return false; }
 		if (!$content->getId()) { return false; }
 		$this->ctx->url = $this::api_version .'/' . $this::type . '/' .  $content->getId() . '/archive';
 		$this->ctx->method = 'post';
