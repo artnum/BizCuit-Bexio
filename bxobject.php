@@ -21,6 +21,8 @@ abstract class BXObject {
     protected const nullableProperties = [];
     /** @var array */
     protected const mapProperties = [];
+    /** @var array */
+    protected const removeOnSet = [];
     /** @var bool */
     protected const readonly = false;
     protected array $changes = [];
@@ -73,6 +75,10 @@ abstract class BXObject {
         return $this->readonly;
     }
 
+    function getRemoveOnSet():array {
+        return $this::removeOnSet;
+    }
+
 	function __get(string $name):mixed {
         if (isset($this::mapProperties[$name])) {
             $name = $this::mapProperties[$name];
@@ -89,6 +95,17 @@ abstract class BXObject {
         if (!in_array($name, $this->changes)) { $this->changes[] = $name; }
 		return $this->content->{$name};
 	}
+
+    function __unset($name) {
+        if (isset($this::mapProperties[$name])) {
+            $name = $this::mapProperties[$name];
+        }
+        unset($this->content->{$name});
+        if (in_array($name, $this->changes)) { 
+            $this->changes = array_filter($this->changes, fn ($e) => $e !== $name );
+        }
+    
+    }
 }
 
 class ROObject extends BXObject {
@@ -120,7 +137,6 @@ class StockLocation extends ROObject { }
 class BusinessActivity extends ROObject { }
 class CommunicationType extends ROObject { }
 class BankAccount extends ROObject { }
-class OutgoingPayment extends ROObject { }
 
 class Country extends BXObject {
     const NR = null;
@@ -342,13 +358,27 @@ class Bills extends BXObject {
         'exchange_rate',
         'base_currency_amount',
         'item_net',
-        'purchase_order_id',
-        'qr_bill_information',
         'attachment_ids',
         'address',
         'line_items',
         'discounts',
         'payment'
+    ];
+    /* When updating a bill, the server complains about the purchase_order_id
+     * being in the body. When you get the bill, the server answer with that
+     * value set. So to fix that, we remove the value.
+     */
+    const removeOnSet = [
+        'id',
+        'purchase_order_id',
+        'qr_bill_information',
+        'status',
+        'firstname_suffix',
+        'lastname_company',
+        'created_at',
+        'base_currency_code',
+        'pending_amount',
+        'overdue'
     ];
 }
 
@@ -410,5 +440,19 @@ class ContactGroup extends BXObject {
     const NR = null;
     const createProperties = [
         'name'
+    ];
+}
+
+class OutgoingPayment extends BXObject { 
+    const NR = null;
+    const createProperties = [
+        'bill_id',
+        'payment_type',
+        'execution_date',
+        'amount',
+        'currency_code',
+        'exchange_rate',
+        'sender_bank_account_id',
+        'is_salary_payment'
     ];
 }

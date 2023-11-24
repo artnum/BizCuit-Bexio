@@ -140,7 +140,6 @@ class Salutation extends ROObject { }
 class ClientService extends ROObject { }
 class Expense extends ROObject {}
 class BankAccount extends ROObject { }
-class OutgoingPayment extends ROObject { }
 
 class Project extends BXQuery {
 	function __construct() {
@@ -428,6 +427,14 @@ class ContactGroup extends BXQuery {
 	function __construct() {
 		parent::__construct([
 			'name'
+		]);
+	}
+}
+
+class OutgoingPayment extends BXQuery { 
+	function __construct() {
+		parent::__construct([
+			'bill_id'
 		]);
 	}
 }

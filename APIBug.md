@@ -45,3 +45,5 @@
       $offset += $limit;
    }
   ```
+  * You need to filter out some value on some endpoint before writing the object
+  back into the API.
