@@ -634,7 +634,7 @@ trait tBexioObject {
 	 * @api
 	 */
 	function set (BXObject $content):BXObject|false {
-		if ($content::readonly) { return false; }
+		if ($content->isReadonly()) { return false; }
 
 		/* try to fix user_id and owner_id if possible */
 		if (!is_null($this->ctx->user_id)) {
@@ -648,11 +648,19 @@ trait tBexioObject {
 			}
 		}
 
-		if (!$content->getId()) {
+		$id = $content->getId();
+		$toremove = $content->getRemoveOnSet();
+		if (!empty($toremove)) {
+			foreach($toremove as $name) {
+				unset($content->{$name});
+			}
+		}
+
+		if (!$id) {
 			$this->ctx->url = $this::api_version .'/' . $this::type;
 			$this->ctx->method = 'post';
 		} else {
-			$this->ctx->url = $this::api_version .'/' . $this::type . '/' .  $content->getId();
+			$this->ctx->url = $this::api_version .'/' . $this::type . '/' .  $id;
 			$this->ctx->method = 'put';
 		}
 
@@ -672,10 +680,19 @@ trait tBexioObject {
 	 * @api
 	 */
 	function update (BXObject $content):BXObject|false {
-		if ($content::readonly) { return false; }
+		if ($content->isReadonly()) { return false; }
+
+		$id = $content->getId();
+
+		$toremove = $content->getRemoveOnSet();
+		if (!empty($toremove)) {
+			foreach($toremove as $name) {
+				unset($content->{$name});
+			}
+		}
 
 		if (!$content->getId()) { return $this->set($content); }
-		$this->ctx->url = $this::api_version .'/' . $this::type . '/' .  $content->getId();
+		$this->ctx->url = $this::api_version .'/' . $this::type . '/' .  $id;
 		/* API BUG according to documentation it should be "patch" but when 
 		 * using "patch", I get error 404 as when use "post" with partial data 
 		 * it update
@@ -689,7 +706,7 @@ trait tBexioObject {
 
 trait tBexioArchiveable {
 	function archive (BXObject $content):bool {
-		if ($content::readonly) { return false; }
+		if ($content->isReadonly()) { return false; }
 		if (!$content->getId()) { return false; }
 		$this->ctx->url = $this::api_version .'/' . $this::type . '/' .  $content->getId() . '/archive';
 		$this->ctx->method = 'post';
@@ -1107,10 +1124,6 @@ class BexioOutgoingPayment extends BexioAPI {
 	protected $search_fields = [
 		'bill_id'
 	];
-
-	function getId() {
-		return $this->uuid;
-	}
 
 	use tBexioV4Api, tBexioObject;
 }
