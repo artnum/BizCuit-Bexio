@@ -136,7 +136,6 @@ class Currency extends ROObject { }
 class ProjectStatus extends ROObject { }
 class ProjectType extends ROObject { }
 class Title extends ROObject { }
-class Salutation extends ROObject { }
 class ClientService extends ROObject { }
 class Expense extends ROObject {}
 class BankAccount extends ROObject { }
@@ -435,6 +434,14 @@ class OutgoingPayment extends BXQuery {
 	function __construct() {
 		parent::__construct([
 			'bill_id'
+		]);
+	}
+}
+
+class Salutation extends BXQuery { 
+	function __construct() {
+		parent::__construct([
+			'name'
 		]);
 	}
 }

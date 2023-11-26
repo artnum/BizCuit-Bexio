@@ -126,7 +126,6 @@ class File extends ROObject {}
 class ProjectType extends ROObject {}
 class ProjectStatus extends ROObject {}
 class Title extends ROObject {}
-class Salutation extends ROObject {}
 class ClientService extends ROObject {}
 class Currency extends ROObject {}
 class Expense extends ROObject {}
@@ -454,5 +453,12 @@ class OutgoingPayment extends BXObject {
         'exchange_rate',
         'sender_bank_account_id',
         'is_salary_payment'
+    ];
+}
+
+class Salutation extends BXObject {
+    const NR = null;
+    const createProperties = [
+        'name'
     ];
 }
