@@ -563,6 +563,7 @@ trait tBexioCollection {
 	 * @api
 	 */
 	function list (array|Int $options = 0, Int $limit = 500):array {
+		$this->ctx->method = 'get';
 		$this->ctx->url = self::api_version . '/' . self::type . '?' . $this->query_string($options, $limit);
 		return array_map(fn($e) => new $this->className($e), $this->ctx->fetch());
 	}
