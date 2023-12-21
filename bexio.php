@@ -452,7 +452,7 @@ trait tBexioCollection {
 				sprintf('offset=%d', $options['offset'] ?? 0),
 				sprintf('limit=%d', $options['limit'] ?? 100) 
 			];
-			if ($options['order']) {
+			if (isset($options['order'])) {
 				if (is_string($options['order'])) {
 					$qs[] = sprintf('order_by=%s', $options['order']);
 				} else if (is_array($options['order'])) {
