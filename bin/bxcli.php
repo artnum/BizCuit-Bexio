@@ -42,18 +42,40 @@ function get($ctx, $args) {
     dump($col->get($id));
 }
 
+function search ($ctx, $args) {
+    $resource = 'BizCuit\\Bexio' . ucfirst(array_shift($args));
+    $col = new $resource($ctx);
+    $query = $col->newQuery();
+    $query->setWithAnyFields();
+    foreach ($args as $arg) {
+        $arg = str_replace('"', '', $arg);
+        $parts = explode(' ', $arg);
+        $query->add($parts[0], $parts[2], $parts[1]);
+    }
+    $i = 0;
+    $first = true;
+    foreach ($col->search($query) as $item) {
+        if (!$first) { echo "\n"; }
+        echo "\e[1mITEM(" . $i++ . "\e[0m)\n";
+        dump($item, 1);
+        $first = false;
+    }
+}
+
 $BexioCTX = new BexioCTX($BXConfig['token']);
 
 $quit = false;
 while (!$quit) {
     $line = strtolower(trim(readline('bxcli> ')));
     readline_add_history($line);
-    $args = explode(' ', $line);
+
+    $args = preg_split('/\s+(?=([^"]*"[^"]*")*[^"]*$)/', $line);
     $command = array_shift($args);
     try {
         switch ($command) {
             case 'quit': $quit = true; break;
             case 'get': get($BexioCTX, $args); break;
+            case 'search': search($BexioCTX, $args); break;
         }
     } catch (Exception|Error $e) {
         echo 'ERROR: ' . $e->getMessage() . "\n";
