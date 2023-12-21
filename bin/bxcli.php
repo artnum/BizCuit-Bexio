@@ -35,16 +35,20 @@ function dump ($object) {
     _dump($content);
 }
 
+function getResource ($BexioCTX, $resource) {
+    $resource = implode('', array_map(fn($e) => ucfirst($e), explode('_', $resource)));
+    $resource = 'BizCuit\\Bexio' . $resource;
+    return new $resource($BexioCTX);
+}
+
 function get($ctx, $args) {
-    $resource = 'BizCuit\\Bexio' . ucfirst(array_shift($args));
+    $col = getResource($ctx, array_shift($args));
     $id = array_shift($args);
-    $col = new $resource($ctx);
     dump($col->get($id));
 }
 
 function search ($ctx, $args) {
-    $resource = 'BizCuit\\Bexio' . ucfirst(array_shift($args));
-    $col = new $resource($ctx);
+    $col = getResource($ctx, array_shift($args));
     $query = $col->newQuery();
     $query->setWithAnyFields();
     foreach ($args as $arg) {
@@ -63,8 +67,7 @@ function search ($ctx, $args) {
 }
 
 function dolist ($ctx, $args) {
-    $resource = 'BizCuit\\Bexio' . ucfirst(array_shift($args));
-    $col = new $resource($ctx);
+    $col = getResource($ctx, array_shift($args));
     $first = true;
     $limit = 500;
     $offset = 0;
