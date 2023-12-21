@@ -63,6 +63,10 @@ abstract class BXObject {
 		return json_encode($outClass);
 	}
 
+    function toObject():stdClass {
+        return clone $this->content;
+    }
+
     function changesToJson():string {
         $outClass = new stdClass();
         foreach($this->changes as $key) {
