@@ -454,9 +454,9 @@ trait tBexioCollection {
 			];
 			if ($options['order']) {
 				if (is_string($options['order'])) {
-					$qs[] = sprintf('order=%s', $options['order']);
+					$qs[] = sprintf('order_by=%s', $options['order']);
 				} else if (is_array($options['order'])) {
-					$qs[] = sprintf('order=%s', join(',', $options['order']));
+					$qs[] = sprintf('order_by=%s', join(',', $options['order']));
 				}
 			}
 		} else {
@@ -530,6 +530,7 @@ trait tBexioCollection {
 
 		return true;
 	}
+
 	protected function search_with_anyfields (BXQuery $query):array {
 		$results = [];
 		$offset = 0;
@@ -539,9 +540,15 @@ trait tBexioCollection {
 		do {
 			$batch = [];
 			if ($useList) {
-				$batch = $this->list($offset, $limit);
+				$batch = $this->list([
+					'offset' => $offset,
+					'limit' => $limit, 
+					'order' => 'id']);
 			} else {
-				$batch = $this->search($query, $offset, $limit);
+				$batch = $this->search($query, [
+					'offset' => $offset,
+					'limit' => $limit, 
+					'order' => 'id']);
 			}
 			if (empty($batch)) { break; }
 			$results = array_merge(
