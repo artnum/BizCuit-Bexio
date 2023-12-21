@@ -62,6 +62,26 @@ function search ($ctx, $args) {
     }
 }
 
+function dolist ($ctx, $args) {
+    $resource = 'BizCuit\\Bexio' . ucfirst(array_shift($args));
+    $col = new $resource($ctx);
+    $first = true;
+    $limit = 500;
+    $offset = 0;
+    $i = 0;
+    while (true) {
+        $items = $col->list(['offset' => $offset, 'limit' => $limit]);
+        if (empty($items)) { break; }
+        foreach ($items as $item) {
+            if (!$first) { echo "\n"; }
+            echo "\e[1mITEM(" . $i++ . "\e[0m)\n";
+            dump($item, 1);
+            $first = false;
+        }
+        $offset += $limit;
+    }
+}
+
 $BexioCTX = new BexioCTX($BXConfig['token']);
 
 $quit = false;
@@ -76,6 +96,7 @@ while (!$quit) {
             case 'quit': $quit = true; break;
             case 'get': get($BexioCTX, $args); break;
             case 'search': search($BexioCTX, $args); break;
+            case 'list': dolist($BexioCTX, $args); break;
         }
     } catch (Exception|Error $e) {
         echo 'ERROR: ' . $e->getMessage() . "\n";
