@@ -83,6 +83,20 @@ function search ($ctx, $args) {
     }
 }
 
+function docreate ($ctx, $args) {
+    $col = getResource($ctx, array_shift($args));
+    $object = $col->new();
+    foreach ($object->toObject() as $k => $v) {
+        if ($object::ID === $k) { continue; }
+        $value = trim(readline("    $k: "));
+        if (empty($value)) { continue; }
+        $object->{$k} = $value;
+    }
+    $new = $col->set($object);
+    echo "Created new item with ID: " . $new->getId() . "\n";
+}
+
+
 function dolist ($ctx, $args) {
     $col = getResource($ctx, array_shift($args));
     $first = true;
@@ -117,6 +131,7 @@ while (!$quit) {
             case 'get': get($BexioCTX, $args); break;
             case 'search': search($BexioCTX, $args); break;
             case 'list': dolist($BexioCTX, $args); break;
+            case 'create': docreate($BexioCTX, $args); break;
             default: echo "ERROR: Unknown command: $command\n";
         }
     } catch (Exception|Error $e) {
