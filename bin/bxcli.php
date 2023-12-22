@@ -6,23 +6,41 @@ require('../bexio.php');
 include('conf.php');
 global $BXConfig;
 
-function _dump ($object, $depth = 0) {
-    $indent = str_repeat(' ', ($depth + 1) * 4);
+if (php_sapi_name() !== 'cli') { exit; }
+
+
+
+function _dump ($object, $id, $depth = 0) {
+    ksort($object);
+
+    $keyMaxLen = 0;
     foreach($object as $k => $v) {
-        echo $indent . "\e[1m" .  $k .  "\e[0m => ";
+        $keyMaxLen = max($keyMaxLen, strlen($k));
+    }
+
+    $indent = str_repeat(' ', ($depth + 1) * 4);
+    if ($depth === 0) { echo "\e[1m\e[7m--- Item ID $id ---\e[0m\n"; }
+    foreach($object as $k => $v) {
+        echo $indent . "\e[1m$k\e[0m" . str_repeat(' ', $keyMaxLen - strlen($k)) . ": ";
         if (is_array($v)) {
             echo "\n";
-            _dump($v, $depth + 1);
+            _dump($v, $id, $depth + 1);
         } elseif (is_object($v)) {
             echo "\n";
-            _dump($v, $depth + 1);
+            _dump(get_object_vars($v), $id, $depth + 1);
         } else {
             $first = true;
+            if (is_bool($v)) {
+                $v = $v ? 'true' : 'false';
+            }
+            if (is_string($v) && strlen($v) > 80 - ((($depth + 1) * 4) + $keyMaxLen + 2)) {
+                $v = wordwrap($v, 80 - ((($depth + 1) * 4) + $keyMaxLen + 2) , "\n", true);
+            }
             foreach(preg_split('/\n/', $v) as $line) {
                 if (!$first) {
-                    echo $indent . str_repeat(' ', strlen($k . ' => ')). $line . "\n";
+                    echo $indent . str_repeat(' ', $keyMaxLen + 2). "$line\n";
                 } else {
-                    echo $line . "\n";
+                    echo "$line\n";
                 }
                 $first = false;
             }
@@ -31,8 +49,8 @@ function _dump ($object, $depth = 0) {
 }
 
 function dump ($object) {
-    $content = $object->toObject();
-    _dump($content);
+    $content = get_object_vars($object->toObject());
+    _dump($content, $object->getId());
 }
 
 function getResource ($BexioCTX, $resource) {
@@ -60,7 +78,6 @@ function search ($ctx, $args) {
     $first = true;
     foreach ($col->search($query) as $item) {
         if (!$first) { echo "\n"; }
-        echo "\e[1mITEM(" . $i++ . "\e[0m)\n";
         dump($item, 1);
         $first = false;
     }
@@ -77,7 +94,6 @@ function dolist ($ctx, $args) {
         if (empty($items)) { break; }
         foreach ($items as $item) {
             if (!$first) { echo "\n"; }
-            echo "\e[1mITEM(" . $i++ . "\e[0m)\n";
             dump($item, 1);
             $first = false;
         }
@@ -96,10 +112,12 @@ while (!$quit) {
     $command = array_shift($args);
     try {
         switch ($command) {
+            case 'exit':
             case 'quit': $quit = true; break;
             case 'get': get($BexioCTX, $args); break;
             case 'search': search($BexioCTX, $args); break;
             case 'list': dolist($BexioCTX, $args); break;
+            default: echo "ERROR: Unknown command: $command\n";
         }
     } catch (Exception|Error $e) {
         echo 'ERROR: ' . $e->getMessage() . "\n";
