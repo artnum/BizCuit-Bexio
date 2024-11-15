@@ -1,5 +1,9 @@
 # BizCuit-Bexio, bexio API in PHP
 
+If you are looking to move away from [Bexio](https://bexio.com), there is
+another project [bx-sync](https://github.com/artnum/bx-sync) which aims to 
+do just that.
+
 This library allow to access [Bexio API](https://docs.bexio.com/). Constructed
 arround cURL, it uses token authentication and provide a great deal of features.
 
