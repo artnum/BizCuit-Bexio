@@ -326,7 +326,7 @@ trait tBexioV4Api {
 	 * 
 	 * @see tBexioCollection::search()
 	 */
-	function search (BXQuery $query, Int $offset = 0, Int $limit = 100):array {
+	function search (BXQuery $query, Int|array $offset = 0, Int $limit = 100):array {
 		/* 
 			## API or Documenation bug, this should work but it doesn't (but sometime it does)
 			$limit = 100;
@@ -371,7 +371,11 @@ trait tBexioV4Api {
 	 * 
 	 * @see tBexioCollection::list()
 	 */
-	function list (Int $offset, Int $limit):array {
+	function list (Int|array $offset, Int $limit = 0):array {
+		if (is_array($offset)) {
+			$limit = $offset['limit'] ?? 100;
+			$offset = $offset['offset'] ?? 0;
+		}
 		return $this->search($this->newQuery(), $offset, $limit);
 	}
 
