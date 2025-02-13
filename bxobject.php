@@ -140,6 +140,7 @@ class StockLocation extends ROObject { }
 class BusinessActivity extends ROObject { }
 class CommunicationType extends ROObject { }
 class BankAccount extends ROObject { }
+class Taxes extends ROObject {}
 
 class Country extends BXObject {
     const NR = null;

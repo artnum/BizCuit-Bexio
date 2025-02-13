@@ -404,6 +404,63 @@ trait tBexioV4Api {
 	}
 }
 
+trait tBexioQuerySearchV3Api {
+	/**
+	 * Search request for version 3 that use query string (instead of POST body) of the API.
+	 * 
+	 * @see tBexioCollection::search()
+	 */
+	function search (?BXQuery $query, Int|array $offset = 0, Int $limit = 100):array {
+		if (is_array($offset)) {
+			$limit = $offset['limit'] ?? 100;
+			$offset = $offset['offset'] ?? 0;
+		}
+
+		$search_str_array = ['offset' => $offset, 'limit' => $limit ];
+		if ($query) {
+			foreach($query->getRawQuery() as $query) {
+				$field = urlencode($query->field);
+				$term = urlencode($query->value);
+
+				if (!isset($search_str_array[$field])) { $search_str_array[$field] = $term; }
+			}
+		}
+
+
+		$a = [];
+		foreach($search_str_array as $k => $v) { $a[] = $k . '=' . $v; }
+		$qs = '?' . join('&', $a);
+
+		$this->ctx->url = $this::api_version . '/' . $this::type . $qs;
+		$this->ctx->method = 'get';
+		$result = $this->ctx->fetch();
+		return array_map(
+			fn(array|stdClass $e) => is_array($e)
+				? new $this->className((object)$e) 
+				: new $this->className($e),
+			$result
+		);
+	}
+
+	/**
+	 * List request for version 3 that use query string of the API.
+	 * 
+	 * @see tBexioCollection::list()
+	 */
+	function list (Int|array $offset, Int $limit = 0):array {
+		if (is_array($offset)) {
+			$limit = $offset['limit'] ?? 100;
+			$offset = $offset['offset'] ?? 0;
+		}
+		return $this->search(null, $offset, $limit);
+	}
+
+	function newQuery() :BXquery {
+		return new $this->query;
+	}
+}
+
+
 trait tBexioUpload {
 	function upload (string $filepath):stdClass|string|Array {
 		$headers = [
@@ -1152,4 +1209,12 @@ class BexioContactGroup extends BexioAPI {
 
 
 	use tBexioV2Api, tBexioObject, tBexioCollection;
+}
+
+class BexioTaxes extends BexioAPI {
+	const type='taxes';
+	protected string $className = 'BizCuit\BXObject\Taxes';
+	protected string $query = 'BizCuit\BXQuery\Taxes';
+
+	use tBexioV3Api, tBexioObject, tBexioQuerySearchV3Api;
 }
