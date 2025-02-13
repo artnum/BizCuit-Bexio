@@ -135,7 +135,13 @@ while (!$quit) {
             default: echo "ERROR: Unknown command: $command\n";
         }
     } catch (Exception|Error $e) {
-        echo 'ERROR: ' . $e->getMessage() . "\n";
+        
+        printf(
+            "ERROR: %s (%s:%d)\n",
+            $e->getMessage(),
+            $e->getFile(),
+            $e->getLine()
+        );
     }
 
 }

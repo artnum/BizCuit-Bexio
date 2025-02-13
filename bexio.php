@@ -327,13 +327,13 @@ trait tBexioV4Api {
 	 * @see tBexioCollection::search()
 	 */
 	function search (BXQuery $query, Int|array $offset = 0, Int $limit = 100):array {
-		/* 
-			## API or Documenation bug, this should work but it doesn't (but sometime it does)
-			$limit = 100;
-			$page_num = ($offset + $limit) / $limit;
-			$search_str_array = ['search_term' => null, 'page' => $page_num, 'limit' => $limit]; 
-		*/
-		$search_str_array = ['search_term' => null ];
+		if (is_array($offset)) {
+			$limit = $offset['limit'] ?? 100;
+			$offset = $offset['offset'] ?? 0;
+		}
+		$offset = ($offset / $limit) + 1;
+
+		$search_str_array = ['page' => $offset, 'limit' => $limit, 'search_term' => null ];
 		$fields = [];
 
 		foreach($query->getRawQuery() as $query) {
@@ -341,10 +341,10 @@ trait tBexioV4Api {
 			$term = urlencode($query->value);
 			if (in_array($query->field, $this->search_fields)) {
 				if (in_array($field, $fields)) { continue; }
-				/*$fields[] = $field;
+				$fields[] = $field;
 				if (!$search_str_array['search_term']) {
 					$search_str_array['search_term'] = $term;
-				}*/
+				}
 				$search_str_array[$field] = $term;
 				continue;
 			}
@@ -358,12 +358,17 @@ trait tBexioV4Api {
 
 		$a = [];
 		foreach($search_str_array as $k => $v) { $a[] = $k . '=' . $v; }
-		$qs = '?' . join(',', $a);
+		$qs = '?' . join('&', $a);
 
 		$this->ctx->url = $this::api_version . '/' . $this::type . $qs;
 		$this->ctx->method = 'get';
 		$result = $this->ctx->fetch();
-		return array_map(fn(array $e) => new $this->className($e), $result->data);
+		return array_map(
+			fn(array|stdClass $e) => is_array($e)
+				? new $this->className((object)$e) 
+				: new $this->className($e),
+			$result->data
+		);
 	}
 
 	/**
@@ -726,7 +731,7 @@ trait tBexioArchiveable {
 	}
 
 	function unarchive (BXObject $content):bool {
-		if ($content::readonly) { return false; }
+		if ($content->isReadonly()) { return false; }
 		if (!$content->getId()) { return false; }
 		$this->ctx->url = $this::api_version .'/' . $this::type . '/' .  $content->getId() . '/reactivate';
 		$this->ctx->method = 'post';
