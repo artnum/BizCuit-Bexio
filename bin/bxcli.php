@@ -142,6 +142,14 @@ while (!$quit) {
             $e->getFile(),
             $e->getLine()
         );
+        while($e = $e->getPrevious()) {
+            printf(
+                "\tERROR: %s (%s:%d)\n",
+                $e->getMessage(),
+                $e->getFile(),
+                $e->getLine()
+            );
+        }
     }
 
 }
