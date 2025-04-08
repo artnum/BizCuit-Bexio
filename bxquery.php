@@ -151,7 +151,7 @@ class Project extends BXQuery {
 	}
 }
 
-class File extends BXQuery {
+class Files extends BXQuery {
 	function __construct() {
 		parent::__construct([
 			'id',

@@ -126,7 +126,7 @@ class ROObject extends BXObject {
 }
 
 
-class File extends ROObject {}
+class Files extends ROObject {}
 class ProjectType extends ROObject {}
 class ProjectStatus extends ROObject {}
 class Title extends ROObject {}

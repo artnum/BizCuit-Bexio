@@ -1152,10 +1152,10 @@ class BexioBills extends BexioAPI {
  * @link https://docs.bexio.com/#tag/Files
  * @api
  */
-class BexioFile extends BexioAPI {
+class BexioFiles extends BexioAPI {
 	const type = 'files';
-	protected string $className = 'BizCuit\BXObject\File';
-	protected string $query = 'BizCuit\BXQuery\File';
+	protected string $className = 'BizCuit\BXObject\Files';
+	protected string $query = 'BizCuit\BXQuery\Files';
 	protected $uuid;
 
 	function getId() {
