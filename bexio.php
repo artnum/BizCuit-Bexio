@@ -230,12 +230,22 @@ class BexioCTX {
 			$data = curl_exec($this->c);
 			if ($data === false) { throw new Exception(curl_error($this->c), curl_errno($this->c)); }
 			$code = curl_getinfo($this->c,  CURLINFO_HTTP_CODE);
-			$type = curl_getinfo($this->c, CURLINFO_CONTENT_TYPE);
-			$this->ratelimits = $ratelimits;
-			if ($this->sleepPercent > 0 && $ratelimits['remaining'] > 0 && $ratelimits['reset'] > 0) {
-				$sleep = (($ratelimits['reset'] * 1000000) / $ratelimits['remaining']) * $this->sleepPercent / 100;
-				usleep($sleep);
-			}
+            $type = curl_getinfo($this->c, CURLINFO_CONTENT_TYPE);
+            
+            $this->ratelimits = $ratelimits;
+            if (defined('BEXIO_IS_NOT_SHIT')) {
+                if ($this->sleepPercent > 0 && $ratelimits['remaining'] > 0 && $ratelimits['reset'] > 0) {
+                    $sleep = (($ratelimits['reset'] * 1000000) / $ratelimits['remaining']) * $this->sleepPercent / 100;
+                    usleep($sleep);
+                }
+            } else {
+                /* it was 1000req/min, so it's 60'000us between 2 requests. */
+                if (!defined('BEXIO_LOWEST_USLEEP_TIME') {
+                    define('BEXIO_LOWEST_USLEEP_TIME', 60000);
+                    define('BEXIO_SOME_RANDOM_MARGIN', 5);
+                }
+                usleep(BEXIO_LOWEST_USLEEP_TIME * BEXIO_SOME_RANDOM_MARGIN);
+            }
 			$this->reset();
 		} catch (Exception $e) {
 			throw new Exception('Program error', 0, $e);
